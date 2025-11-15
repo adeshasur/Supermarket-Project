@@ -5,7 +5,13 @@ import com.supermarket.inventory.inventory_service.service.InventoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List; // Make sure this is imported
+import java.util.List; 
+
+// --- ADD THESE TWO LINES ---
+import org.springframework.web.bind.annotation.CrossOrigin;
+
+@CrossOrigin(origins = "http://localhost:3000") // This allows your React app to connect
+// --- END OF ADDITION ---
 
 @RestController
 @RequestMapping("/inventory")
@@ -14,21 +20,16 @@ public class InventoryController {
     @Autowired
     private InventoryService inventoryService;
 
-    // --- NEW ENDPOINT ---
-    // API: Get ALL stock items
     @GetMapping("/all")
     public List<Inventory> getAllInventory() {
         return inventoryService.getAllInventory();
     }
-    // --- END NEW ENDPOINT ---
 
-    // API: Get stock by product ID
     @GetMapping("/{productId}")
     public Inventory getInventoryByProductId(@PathVariable int productId) {
         return inventoryService.getInventoryByProductId(productId);
     }
 
-    // API: Update stock
     @PostMapping
     public Inventory updateInventory(@RequestBody Inventory inventoryItem) {
         return inventoryService.updateInventory(inventoryItem);

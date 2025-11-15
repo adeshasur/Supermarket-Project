@@ -5,7 +5,7 @@ import com.supermarket.inventory.inventory_service.data.Inventory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List; // Make sure this is imported
+import java.util.List; // <-- Make sure this is imported
 import java.util.Optional;
 
 @Service
@@ -15,7 +15,6 @@ public class InventoryService {
     private InventoryRepository inventoryRepo;
 
     // --- NEW METHOD ---
-    // This method just gets all items from the database
     public List<Inventory> getAllInventory() {
         return inventoryRepo.findAll();
     }
@@ -26,11 +25,11 @@ public class InventoryService {
         Optional<Inventory> inv = inventoryRepo.findByProductId(productId);
         return inv.orElse(null);
     }
-
+    
     // Update stock
     public Inventory updateInventory(Inventory inventoryItem) {
         Optional<Inventory> existingInv = inventoryRepo.findByProductId(inventoryItem.getProductId());
-
+        
         if (existingInv.isPresent()) {
             // It exists, so update the quantity
             Inventory inv = existingInv.get();
