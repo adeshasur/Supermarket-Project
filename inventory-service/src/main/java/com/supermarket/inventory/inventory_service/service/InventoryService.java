@@ -1,43 +1,48 @@
 package com.supermarket.inventory.inventory_service.service;
 
-import com.supermarket.inventory.inventory_service.InventoryRepository;
 import com.supermarket.inventory.inventory_service.data.Inventory;
+import com.supermarket.inventory.inventory_service.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List; // <-- Make sure this is imported
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class InventoryService {
 
     @Autowired
-    private InventoryRepository inventoryRepo;
+    private InventoryRepository inventoryRepository;
 
-    // --- NEW METHOD ---
+    // 1. Get All
     public List<Inventory> getAllInventory() {
-        return inventoryRepo.findAll();
+        return inventoryRepository.findAll();
     }
-    // --- END NEW METHOD ---
 
-    // Get stock for a product
+    // 2. Search by Product ID
     public Inventory getInventoryByProductId(int productId) {
-        Optional<Inventory> inv = inventoryRepo.findByProductId(productId);
-        return inv.orElse(null);
+        // If not found, we return null (or you could throw an error)
+        return inventoryRepository.findByProductId(productId).orElse(null);
     }
-    
-    // Update stock
+
+    // 3. Insert (Add New Stock)
+    public Inventory addInventory(Inventory inventory) {
+        return inventoryRepository.save(inventory);
+    }
+
+    // 4. Update (Change Stock)
     public Inventory updateInventory(Inventory inventoryItem) {
-        Optional<Inventory> existingInv = inventoryRepo.findByProductId(inventoryItem.getProductId());
-        
-        if (existingInv.isPresent()) {
-            // It exists, so update the quantity
-            Inventory inv = existingInv.get();
-            inv.setQuantity(inventoryItem.getQuantity());
-            return inventoryRepo.save(inv);
+        // First, find the existing item by Product ID
+        Optional<Inventory> existingInventory = inventoryRepository.findByProductId(inventoryItem.getProductId());
+
+        if (existingInventory.isPresent()) {
+            // If it exists, update the quantity of the EXISTING database row
+            Inventory inventory = existingInventory.get();
+            inventory.setQuantity(inventoryItem.getQuantity());
+            return inventoryRepository.save(inventory);
         } else {
-            // It's new, just save it
-            return inventoryRepo.save(inventoryItem);
+            // If it doesn't exist, just create a new one (Insert)
+            return inventoryRepository.save(inventoryItem);
         }
     }
 }

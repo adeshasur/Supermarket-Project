@@ -1,4 +1,4 @@
-package com.supermarket.inventory.inventory_service;
+package com.supermarket.inventory.inventory_service.repository;
 
 import com.supermarket.inventory.inventory_service.data.Inventory;
 import org.springframework.data.jpa.repository.JpaRepository;
