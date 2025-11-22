@@ -1,19 +1,195 @@
-.App {
-  /* Sidebar එකේ පළල (240px) මෙතනින් content එක දකුණට තල්ලු කරනවා */
-  padding-left: 240px; 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+  background-color: #f4f6f8;
 }
 
+/* Sidebar Space Fix */
 .page-content {
-  max-width: 1400px;
-  margin: 0 auto;
+  margin-left: 240px; 
   padding: 30px;
+  width: calc(100% - 240px);
+  min-height: 100vh;
+  background-color: #f4f6f8;
+  transition: margin-left 0.3s ease;
 }
 
-.page-title {
-  font-size: 2rem;
+/* Page Title Style */
+h1.page-title, h1 {
+  font-size: 1.8rem;
   font-weight: 700;
-  color: #333;
-  padding-bottom: 10px;
-  border-bottom: 3px solid #007aff; /* Apple blue */
+  color: #1a1a1a;
   margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #007aff;
+  display: inline-block;
 }
+
+/* Inventory Page Layout */
+.inventory-page {
+  width: 100%;
+}
+
+.inventory-content {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start; /* Sticky fix */
+}
+
+/* Form Section (Left) */
+.inventory-form-section {
+  flex: 0 0 350px;
+  max-width: 350px;
+}
+
+/* List Section (Right) */
+.inventory-list-section {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Search Bar Group */
+.inventory-search-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+  max-width: 600px;
+}
+
+.inventory-search-input {
+    flex-grow: 1; 
+    padding: 10px 12px;
+    border: 1px solid #ccc; 
+    border-radius: 8px; 
+    font-size: 16px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05); 
+    transition: border-color 0.2s;
+}
+
+.inventory-search-input:focus {
+    border-color: #007aff; 
+    outline: none;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #007aff; 
+    color: white;
+    border: none;
+    border-radius: 8px; 
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.2; 
+    transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+    background-color: #0056b3;
+}
+
+/* Table Styles */
+.inventory-table-container {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+    padding: 30px; 
+    margin-top: 0 !important; 
+    overflow: hidden; 
+}
+
+.inventory-table-container h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e9ecef;
+}
+
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse; 
+}
+
+.inventory-table thead th {
+    padding: 16px 20px; 
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f8f9fa; 
+    border-bottom: 2px solid #e9ecef; 
+    text-align: left;
+}
+
+.inventory-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle; 
+    background-color: white; 
+    font-size: 1rem; 
+    color: #212529;
+}
+
+.inventory-table tbody tr:hover td {
+    background-color: #f8f9fa !important; 
+    cursor: default;
+}
+
+/* Alignment */
+.inventory-table th:first-child,
+.inventory-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+}
+
+.inventory-table th:nth-child(2) {
+    text-align: center; 
+}
+.inventory-table td:nth-child(2) {
+    text-align: right; 
+    font-weight: 700;
+    font-size: 1.1rem; 
+    color: #343a40; 
+}
+
+.inventory-table th:last-child,
+.inventory-table td:last-child {
+    text-align: center;
+}
+
+/* Status Styles */
+.status-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px; 
+    font-weight: 600; 
+    font-size: 0.95rem; 
+    white-space: nowrap; 
+    background: transparent; 
+    padding: 0;
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Colors */
+.low-stock .quantity-cell { color: #dc3545 !important; }
+.low-stock .status-dot { background-color: #dc3545; }
+.low-stock .status-cell { color: #dc3545; } 
+
+.medium-stock .quantity-cell { color: #f59e0b !important; }
+.medium-stock .status-dot { background-color: #f59e0b; }
+.medium-stock .status-cell { color: #d97706; } 
+
+.in-stock .quantity-cell { color: #10b981 !important; }
+.in-stock .status-dot { background-color: #10b981; }
+.in-stock .status-cell { color: #059669; }

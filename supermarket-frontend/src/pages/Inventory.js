@@ -2,26 +2,17 @@ import React, { useState } from 'react';
 import InventoryList from '../components/InventoryList';
 import StockUpdateForm from '../components/StockUpdateForm';
 
-// Assuming you have a common CSS file or placed your styles in App.css
-// import './Inventory.css'; 
-
 function Inventory() {
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [refreshKey, setRefreshKey] = useState(0); 
   const [inputTerm, setInputTerm] = useState('');
   const [finalSearchTerm, setFinalSearchTerm] = useState('');
 
-  /**
-   * Triggers a refresh of the inventory list data.
-   * This function is passed to StockUpdateForm and called after a successful update.
-   */
   const handleStockUpdate = () => {
     setRefreshKey(oldKey => oldKey + 1);
   };
 
-  /**
-   * Updates the final search term when the Search button is clicked.
-   */
   const handleSearchClick = () => {
+    // Trigger the search action and pass the final term to the list
     setFinalSearchTerm(inputTerm);
   };
 

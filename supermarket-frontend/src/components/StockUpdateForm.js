@@ -21,17 +21,17 @@ function StockUpdateForm({ onStockUpdated }) {
     };
 
     try {
-      // Endpoint is correct: http://localhost:8082/inventory/add
       await axios.post('http://localhost:8082/inventory/add', payload);
       
       setProductId('');
       setQuantity('');
-      setMessage('Stock Updated Successfully! ✅');
+      // Unique class added here:
+      setMessage('Stock Updated Successfully!'); 
       
       onStockUpdated(); 
       
-      // Clear success message after 10 seconds
-      setTimeout(() => setMessage(null), 10000); 
+      // Clear success message after 3 seconds
+      setTimeout(() => setMessage(null), 3000); 
 
     } catch (err) {
       setIsError(true);
@@ -47,7 +47,7 @@ function StockUpdateForm({ onStockUpdated }) {
 
   return (
     <div className="form-container">
-      <h3>Add / Update Stock</h3> {/* UPDATED TITLE */}
+      <h3>Add / Update Stock</h3>
       <p>Enter a Product ID and the new quantity.</p>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -73,12 +73,15 @@ function StockUpdateForm({ onStockUpdated }) {
           />
         </div>
         
-        {message && <p className={`form-message ${isError ? 'error' : 'success'}`}>{message}</p>}
-
+        {/* The message will render inside a fixed container */}
         <button type="submit" className="submit-btn" disabled={submitting}>
-          {submitting ? 'Saving...' : 'Save Stock'} {/* UPDATED BUTTON TEXT */}
+          {submitting ? 'Saving...' : 'Save Stock'}
         </button>
       </form>
+      
+      {/* This message element will be styled as a popup/toast */}
+      {message && <div className={`popup-toast ${isError ? 'error-toast' : 'success-toast'}`}>{message}</div>}
+      
     </div>
   );
 }

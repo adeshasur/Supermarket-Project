@@ -1,96 +1,261 @@
-.list-container {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 30px;
-  overflow-x: auto; 
+.inventory-table-container {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    padding: 30px; 
+    margin-top: 25px; 
+    overflow: hidden; 
 }
 
-.list-container h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #343a40;
-  margin-top: 0;
-  margin-bottom: 25px;
+.inventory-table-container h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+    letter-spacing: -0.5px;
 }
 
 .inventory-table {
-  width: 100%;
-  border-collapse: collapse; /* Cleaner lines */
-}
-
-.inventory-table th,
-.inventory-table td {
-  padding: 16px;
-  text-align: left;
-  border-bottom: 1px solid #dee2e6; /* Light gray lines */
+    width: 100%;
+    border-collapse: collapse; 
 }
 
 .inventory-table thead th {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #495057;
-  text-transform: uppercase;
-  background-color: #f8f9fa;
-  border-top: 1px solid #dee2e6;
+    padding: 16px 20px; 
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f8f9fa; 
+    border-bottom: 2px solid #e9ecef; 
+    text-align: left;
 }
 
-.inventory-table tbody tr {
-  transition: background-color 0.2s;
+.inventory-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle; 
+    background-color: white; 
+    font-size: 0.95rem;
+    color: #212529;
 }
 
-.inventory-table tbody tr:hover {
-  background-color: #f1f3f5; /* Light hover effect */
+/* Row Hover Effect */
+.inventory-table tbody tr:hover td {
+    background-color: #f8f9fa !important; /* Clean hover effect */
+    cursor: default;
 }
 
-.quantity-cell {
-  font-weight: 700;
+/* --- 🔴 ALIGNMENT RULES --- */
+
+/* Product ID (Left) */
+.inventory-table th:first-child,
+.inventory-table td:first-child {
+    text-align: left;
+    font-weight: 600;
 }
+
+/* Quantity (Right) */
+.inventory-table th:nth-child(2) {
+    text-align: right; 
+}
+.inventory-table td:nth-child(2) {
+    text-align: right; 
+    font-weight: 700;
+    font-size: 1.1rem; /* Slightly larger numbers */
+    color: #343a40; /* Default dark color */
+}
+
+/* Status (Center) */
+.inventory-table th:last-child,
+.inventory-table td:last-child {
+    text-align: center;
+}
+
+/* --- 🔴 STATUS BADGE STYLING (The Modern Look) --- */
 
 .status-cell {
-  display: flex;
-  align-items: center;
-  font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px; /* Pill shape */
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap; /* Prevents wrapping */
 }
 
 .status-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  margin-right: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
 }
 
-/* In Stock (Green) */
-.in-stock .status-dot {
-  background-color: #28a745;
-}
-.in-stock .quantity-cell {
-  color: #28a745;
-}
+/* --- 🔴 COLOR CODING LOGIC --- */
 
-/* Medium Stock (Yellow) */
-.medium-stock .status-dot {
-  background-color: #ffc107;
-}
-.medium-stock .quantity-cell {
-  color: #dda600;
-}
-.medium-stock:hover {
-  background-color: #fff9e6;
-}
-
-/* Low Stock (Red) */
-.low-stock {
-  background-color: #fff5f5;
-  color: #dc3545;
-}
-.low-stock .status-dot {
-  background-color: #dc3545;
+/* 1. LOW STOCK (Red) */
+.inventory-table tr.low-stock td {
+    background-color: #fff5f5 !important; /* Light Red Row Background */
 }
 .low-stock .quantity-cell {
-  color: #dc3545;
-  font-weight: 700;
+    color: #dc3545 !important; /* Red Quantity Text */
 }
-.low-stock:hover {
-  background-color: #ffeaea;
+.low-stock .status-cell {
+    background-color: #ffe5e8; /* Red Badge Background */
+    color: #c92a38; /* Red Badge Text */
 }
+.low-stock .status-dot {
+    background-color: #dc3545;
+    box-shadow: 0 0 0 2px rgba(220, 53, 69, 0.2); /* Glow effect */
+}
+
+/* 2. MEDIUM STOCK (Yellow/Orange) */
+.inventory-table tr.medium-stock td {
+    background-color: #fffbf0 !important; /* Light Yellow Row Background */
+}
+.medium-stock .quantity-cell {
+    color: #f59e0b !important; 
+}
+.medium-stock .status-cell {
+    background-color: #fef3c7; 
+    color: #d97706; 
+}
+.medium-stock .status-dot {
+    background-color: #f59e0b;
+    box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+/* 3. IN STOCK (Green - Clean White Row) */
+.inventory-table tr.in-stock td {
+    background-color: white !important; /* Keep row white */
+}
+.in-stock .quantity-cell {
+    color: #10b981 !important; 
+}
+.in-stock .status-cell {
+    background-color: #d1fae5; 
+    color: #059669; 
+}
+.in-stock .status-dot {
+    background-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+/* --- Container & Header --- */
+.inventory-table-container {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); 
+    padding: 30px; 
+    margin-top: 25px; 
+    overflow: hidden; 
+}
+
+.inventory-table-container h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+    letter-spacing: -0.5px;
+}
+
+/* --- Table Structure --- */
+.inventory-table {
+    width: 100%;
+    border-collapse: collapse; 
+}
+
+/* --- Table Headers (TH) --- */
+.inventory-table thead th {
+    padding: 16px 20px; 
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #f8f9fa; 
+    border-bottom: 2px solid #e9ecef; 
+    text-align: left;
+}
+
+/* --- Table Rows (TD) --- */
+.inventory-table td {
+    padding: 18px 20px;
+    border-bottom: 1px solid #f1f3f5;
+    vertical-align: middle; 
+    background-color: white; 
+    font-size: 0.95rem;
+    color: #212529;
+}
+
+/* Row Hover Effect */
+.inventory-table tbody tr:hover td {
+    background-color: #f8f9fa !important; 
+    cursor: default;
+}
+
+/* --- 🔴 ALIGNMENT RULES (ALL CENTERED) --- */
+
+/* Product ID (Left) */
+.inventory-table th:first-child,
+.inventory-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+}
+
+/* 🔴 Quantity (Center Header & Center Data) - FIXED HERE */
+.inventory-table th:nth-child(2),
+.inventory-table td:nth-child(2) {
+    text-align: center !important; /* බලෙන්ම මැදට ගත්තා */
+    font-weight: 700;
+    font-size: 1.1rem; 
+    color: #343a40; 
+}
+
+/* Status (Center) */
+.inventory-table th:last-child,
+.inventory-table td:last-child {
+    text-align: center;
+}
+
+/* --- STATUS BADGE STYLING --- */
+
+.status-cell {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 6px 16px;
+    border-radius: 20px; 
+    font-weight: 600;
+    font-size: 0.85rem;
+    white-space: nowrap; 
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+/* --- COLOR CODING --- */
+
+/* Low Stock (Red) */
+.inventory-table tr.low-stock td { background-color: #fff5f5 !important; }
+.low-stock .quantity-cell { color: #dc3545 !important; }
+.low-stock .status-cell { background-color: #ffe5e8; color: #c92a38; }
+.low-stock .status-dot { background-color: #dc3545; }
+
+/* Medium Stock (Yellow) */
+.inventory-table tr.medium-stock td { background-color: #fffbf0 !important; }
+.medium-stock .quantity-cell { color: #f59e0b !important; }
+.medium-stock .status-cell { background-color: #fef3c7; color: #d97706; }
+.medium-stock .status-dot { background-color: #f59e0b; }
+
+/* In Stock (Green) */
+.inventory-table tr.in-stock td { background-color: white !important; }
+.in-stock .quantity-cell { color: #10b981 !important; }
+.in-stock .status-cell { background-color: #d1fae5; color: #059669; }
+.in-stock .status-dot { background-color: #10b981; }

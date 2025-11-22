@@ -1,72 +1,105 @@
+/* --- Form Card Styles (Matching the desired aesthetic) --- */
+
 .form-container {
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  padding: 30px;
-  position: sticky;
-  top: 30px; /* Page padding එකට match වෙන්න */
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    padding: 30px;
+
+    top: 30px;
+    height: fit-content;
 }
 
 .form-container h3 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #007bff;
-  margin-top: 0;
-  margin-bottom: 10px;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #007bff;
+    margin-bottom: 10px;
 }
 
 .form-container p {
-  font-size: 0.9rem;
-  color: #6c757d;
-  margin-bottom: 25px;
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 25px;
 }
 
+/* Form Inputs */
 .form-group {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .form-group label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 500;
-  color: #343a40;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #343a40;
 }
 
 .form-group input {
-  width: 100%;
-  padding: 12px 15px;
-  font-size: 1rem;
-  border: 1px solid #ced4da;
-  border-radius: 8px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-group input:focus {
-  outline: none;
-  border-color: #007bff;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2);
 }
 
+/* Submit Button */
 .submit-btn {
-  width: 100%;
-  padding: 12px 15px;
-  font-size: 1rem;
-  font-weight: 700;
-  color: #ffffff;
-  background-color: #007bff;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+    width: 100%;
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #ffffff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
 }
 
 .submit-btn:hover {
-  background-color: #0056b3;
-  transform: translateY(-2px); /* Slight lift on hover */
+    background-color: #0056b3;
+    transform: translateY(-2px);
 }
 
-.form-error {
-  color: #dc3545;
-  font-weight: bold;
-  margin-top: 10px;
+.popup-toast {
+    position: fixed; 
+    top: 20px; 
+    left: 50%;
+    transform: translateX(-50%); 
+    z-index: 1000; 
+    
+    padding: 10px 20px; 
+    border-radius: 50px; 
+    font-size: 0.95rem; 
+    font-weight: 600;
+    
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    color: white;
+    animation: slide-down 0.5s ease-out, fade-out 0.5s ease-in 2.5s forwards;
+}
+
+.success-toast {
+    background-color: #28a745; 
+}
+
+.error-toast {
+    background-color: #dc3545; 
+}
+
+@keyframes slide-down {
+    from { top: -50px; opacity: 0; }
+    to { top: 20px; opacity: 1; }
+}
+
+@keyframes fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
 }
