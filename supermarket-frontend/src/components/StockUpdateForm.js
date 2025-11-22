@@ -6,8 +6,8 @@ function StockUpdateForm({ onStockUpdated }) {
   const [productId, setProductId] = useState('');
   const [quantity, setQuantity] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState(null); // Use message instead of error
-  const [isError, setIsError] = useState(false); // State to track success/error status
+  const [message, setMessage] = useState(null); 
+  const [isError, setIsError] = useState(false); 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +21,7 @@ function StockUpdateForm({ onStockUpdated }) {
     };
 
     try {
-      // Corrected the endpoint to the functional /inventory/add
+      // Endpoint is correct: http://localhost:8082/inventory/add
       await axios.post('http://localhost:8082/inventory/add', payload);
       
       setProductId('');
@@ -30,8 +30,8 @@ function StockUpdateForm({ onStockUpdated }) {
       
       onStockUpdated(); 
       
-      // Clear success message after 3 seconds
-      setTimeout(() => setMessage(null), 3000); 
+      // Clear success message after 10 seconds
+      setTimeout(() => setMessage(null), 10000); 
 
     } catch (err) {
       setIsError(true);
@@ -47,7 +47,7 @@ function StockUpdateForm({ onStockUpdated }) {
 
   return (
     <div className="form-container">
-      <h3>Update Stock</h3>
+      <h3>Add / Update Stock</h3> {/* UPDATED TITLE */}
       <p>Enter a Product ID and the new quantity.</p>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -76,7 +76,7 @@ function StockUpdateForm({ onStockUpdated }) {
         {message && <p className={`form-message ${isError ? 'error' : 'success'}`}>{message}</p>}
 
         <button type="submit" className="submit-btn" disabled={submitting}>
-          {submitting ? 'Updating...' : 'Update Stock'}
+          {submitting ? 'Saving...' : 'Save Stock'} {/* UPDATED BUTTON TEXT */}
         </button>
       </form>
     </div>
