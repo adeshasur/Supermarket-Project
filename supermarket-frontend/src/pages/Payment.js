@@ -4,17 +4,23 @@ import PaymentForm from '../components/PaymentForm';
 
 function Payment() {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [inputTerm, setInputTerm] = useState('');
-  const [finalSearchTerm, setFinalSearchTerm] = useState('');
+  const [inputTerm, setInputTerm] = useState(''); // Input field එකේ අගය
+  const [finalSearchTerm, setFinalSearchTerm] = useState(''); // PaymentList එකට යවන අගය
 
   const handlePaymentAdded = () => {
     setRefreshKey(prev => prev + 1);
-    // අලුත් Payment එකක් දැම්මම ඒ Order ID එකෙන් Auto Search වෙන්න හදමු
-    // (මේක Optional, ඕන නම් අයින් කරන්න පුළුවන්)
   };
 
   const handleSearchClick = () => {
+    // Search Button එක එබුවම විතරක් finalSearchTerm එක update වෙනවා
     setFinalSearchTerm(inputTerm);
+  };
+
+  // අමතර දෙයක්: Input එකේ Enter ගැහුවත් Search වෙන්න හැදුවා (User Experience එකට හොඳයි)
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+        handleSearchClick();
+    }
   };
 
   return (
@@ -29,6 +35,7 @@ function Payment() {
           className="inventory-search-input"
           value={inputTerm}
           onChange={(e) => setInputTerm(e.target.value)}
+          onKeyDown={handleKeyDown} 
         />
         <button className="search-btn" onClick={handleSearchClick}>Search</button>
       </div>
@@ -40,11 +47,14 @@ function Payment() {
         </div>
 
         <div className="inventory-list-section">
-          {/* මෙතන searchTerm එක inputTerm එකටම සමාන කලා, 
-              එතකොට Type කරනකොටම Real-time ලිස්ට් එක එනවා (List Component එකේ delay එකක් තියෙන නිසා අවුලක් නෑ) */}
+          
+          {/* මෙතන දැන් යවන්නේ finalSearchTerm එක. 
+              ඒ නිසා Type කරද්දිම ලිස්ට් එක වෙනස් වෙන්නේ නෑ. 
+              Search Button එක එබුවම විතරයි වෙනස් වෙන්නේ. */}
+              
           <PaymentList
             refreshKey={refreshKey}
-            searchTerm={inputTerm}
+            searchTerm={finalSearchTerm} 
           />
         </div>
       </div>

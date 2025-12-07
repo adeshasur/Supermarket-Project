@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/TableStyles.css'; // ✅ Corrected Path
+import API_BASE_URLS from '../config/api'; // <--- 1. Gateway Config Import kala
+import '../styles/TableStyles.css';
 
 function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) { 
     const [inventory, setInventory] = useState([]);
@@ -26,11 +27,16 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
             try {
                 setLoading(true); 
                 setError(null);
-                // Backend URL (Port 8082)
-                const response = await axios.get('http://localhost:8082/inventory/all');
+                
+                // <--- 2. URL eka Gateway ekata update kala
+                // Kalin: http://localhost:8082/inventory/all
+                // Aluth: http://localhost:8080/inventory/inventory/all
+                // (Meka API Gateway -> Inventory Service -> Controller ekata yanawa)
+                const response = await axios.get(`${API_BASE_URLS.INVENTORY}/inventory/all`);
+                
                 setInventory(response.data);
             } catch (err) {
-                setError('Could not fetch inventory. Is Inventory Service (8082) running?');
+                setError('Could not fetch inventory. Is Gateway (8080) or Inventory Service running?');
                 console.error(err);
             }
             setLoading(false);
@@ -38,11 +44,10 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
         fetchInventory();
     }, [refreshKey]); 
 
-    // Mock Data (If backend fails, show empty or handle error)
-    // You can uncomment mock data here if you want to test UI without backend
-
+    // Client-side filtering logic
     const filteredInventory = inventory.filter(item => {
         const itemStatus = getStatusString(item.quantity);
+        // Product ID eka string ekak karala check karanawa
         const matchesSearch = item.productId.toString().includes(searchTerm);
         const matchesStatus = statusFilter === '' || itemStatus === statusFilter;
         return matchesSearch && matchesStatus;
@@ -58,7 +63,7 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
 
     if (error) {
         return (
-            <div className="inventory-table-container" style={{ borderColor: '#dc3545' }}>
+            <div className="inventory-table-container" style={{ borderColor: '#dc3545', padding: '20px' }}>
                 <h3 style={{ color: '#dc3545' }}>Error</h3>
                 <p>{error}</p>
             </div>
@@ -92,7 +97,7 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
                                 </td>
                                 <td className="status-cell-wrapper">
                                     <div className="status-cell">
-                                        <span className="status-dot"></span>
+                                        <span className={`status-dot ${getStockClass(item.quantity)}`}></span>
                                         {getStatusString(item.quantity)}
                                     </div>
                                 </td>

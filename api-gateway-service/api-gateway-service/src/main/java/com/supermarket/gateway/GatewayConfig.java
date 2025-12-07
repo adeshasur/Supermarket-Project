@@ -14,12 +14,12 @@ public class GatewayConfig {
 
                 // Product Service (Updated)
                 .route("product-service", r -> r.path("/product/**")
-                        .filters(f -> f.stripPrefix(1)) // <--- MEKA ONI (product kalla ain karanna)
+                        .filters(f -> f.stripPrefix(1)) 
                         .uri("lb://product-service"))
 
                 // Inventory Service (Updated)
                 .route("inventory-service", r -> r.path("/inventory/**")
-                        .filters(f -> f.stripPrefix(1)) // <--- MEKATH UPDATE KALA
+                        .filters(f -> f.stripPrefix(1)) 
                         .uri("lb://inventory-service"))
 
                 // Customer Service
@@ -27,7 +27,7 @@ public class GatewayConfig {
                         .filters(f -> f.stripPrefix(1))
                         .uri("lb://customer-service"))
 
-                // Order Service (Meka kalinma hariyata thibba)
+                // Order Service 
                 .route("order-service", r -> r.path("/orders/**")
                         .filters(f -> f.stripPrefix(1))
                         .uri("lb://ORDER-SERVICE"))

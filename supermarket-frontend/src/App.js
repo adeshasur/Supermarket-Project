@@ -12,10 +12,15 @@ import Orders from './pages/Orders';
 import Users from './pages/Users';
 import Payment from './pages/Payment';
 import Login from './pages/Login';
-import Cart from './pages/Cart'; // <--- 1. Aluth Cart Page eka import kala
+import Cart from './pages/Cart';
 
-// Context
-import { CartProvider } from './context/CartContext'; // <--- 2. Cart Context eka import kala
+// Pages Import
+import Profile from './pages/Profile';
+import Settings from './pages/Settings';
+
+// Context Imports
+import { CartProvider } from './context/CartContext';
+import { ThemeProvider } from './context/ThemeContext'; // <--- 1. ThemeProvider Import කළා
 
 import './styles/App.css';
 
@@ -24,40 +29,46 @@ function App() {
   const [userRole, setUserRole] = useState(null);
 
   return (
-    <Router>
-      {/* User kenek nathnam Login Page eka witharak pennanna */}
-      {!userRole ? (
-        <Login onLogin={(role) => setUserRole(role)} />
-      ) : (
-        /* User kenek innawa nam Main App eka pennanna */
-        
-        /* <--- 3. CartProvider eken Main App eka wrap karanna */
-        <CartProvider> 
-          <div className="app-container">
-            <Sidebar />
-            <main className="page-content">
-              <Header />
-              <div className="content-wrapper">
-                <Routes>
-                  <Route path="/" element={<Dashboard />} />
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/inventory" element={<Inventory />} />
-                  <Route path="/orders" element={<Orders />} />
-                  <Route path="/users" element={<Users />} />
-                  <Route path="/payment" element={<Payment />} />
-                  
-                  {/* <--- 4. Cart Route eka add kala */}
-                  <Route path="/cart" element={<Cart />} />
-                  
-                  <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-              </div>
-              <Footer />
-            </main>
-          </div>
-        </CartProvider>
-      )}
-    </Router>
+    // <--- 2. මුළු App එකම ThemeProvider එකෙන් වට කළා (Wrap)
+    <ThemeProvider>
+      <Router>
+        {/* User kenek nathnam Login Page eka witharak pennanna */}
+        {!userRole ? (
+          <Login onLogin={(role) => setUserRole(role)} />
+        ) : (
+          /* User kenek innawa nam Main App eka pennanna */
+          
+          /* CartProvider eken Main App eka wrap karanna */
+          <CartProvider> 
+            <div className="app-container">
+              <Sidebar />
+              <main className="page-content">
+                <Header />
+                <div className="content-wrapper">
+                  <Routes>
+                    <Route path="/" element={<Dashboard />} />
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/inventory" element={<Inventory />} />
+                    <Route path="/orders" element={<Orders />} />
+                    <Route path="/users" element={<Users />} />
+                    <Route path="/payment" element={<Payment />} />
+                    <Route path="/cart" element={<Cart />} />
+                    
+                    {/* අලුත් Routes දෙක */}
+                    <Route path="/profile" element={<Profile />} />
+                    <Route path="/settings" element={<Settings />} />
+                    
+                    {/* වැරදි URL එකක් ගැහුවොත් Dashboard එකට යවන්න */}
+                    <Route path="*" element={<Navigate to="/" />} />
+                  </Routes>
+                </div>
+                <Footer />
+              </main>
+            </div>
+          </CartProvider>
+        )}
+      </Router>
+    </ThemeProvider>
   );
 }
 

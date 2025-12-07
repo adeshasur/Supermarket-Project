@@ -201,3 +201,52 @@ body {
   cursor: pointer;
   font-weight: 600;
 }
+
+/* --- DARK MODE VARIABLES --- */
+
+/* මූලික පාටවල් (Light Mode - Default) */
+:root {
+  --bg-color: #f4f7f6;
+  --text-color: #333;
+  --card-bg: #ffffff;
+  --sidebar-bg: #ffffff;
+  --border-color: #eee;
+  --input-bg: #fff;
+}
+
+/* Dark Mode Active වුනාම පාටවල් මාරු වෙන විදිය */
+body.dark-mode {
+  --bg-color: #121212;        /* කළු පසුබිම */
+  --text-color: #e0e0e0;      /* සුදු අකුරු */
+  --card-bg: #1e1e1e;         /* කාඩ්පත් සඳහා තද අළු පාට */
+  --sidebar-bg: #1e1e1e;
+  --border-color: #333;
+  --input-bg: #2d2d2d;
+}
+
+/* මුළු Body එකටම අදාල පාට සෙට් කිරීම */
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s; /* Smooth මාරු වීමක් */
+}
+
+/* කාඩ්පත් සහ බොක්ස් වලට අදාල Styles (Inline Styles වෙනුවට මේවා පාවිච්චි වෙයි) */
+.card, .inventory-page div[style*="background: white"], .form-container, .profile-dropdown {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+}
+
+/* Input Fields Dark Mode */
+body.dark-mode input, 
+body.dark-mode select {
+  background-color: var(--input-bg);
+  color: var(--text-color);
+  border: 1px solid #444;
+}
+
+body.dark-mode .app-header {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}

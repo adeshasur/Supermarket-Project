@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/FormStyles.css'; // ✅ Corrected Path
+import API_BASE_URLS from '../config/api'; // <--- 1. Gateway Config Import kala
+import '../styles/FormStyles.css';
 
 function StockUpdateForm({ onStockUpdated }) {
   const [productId, setProductId] = useState('');
@@ -21,25 +22,32 @@ function StockUpdateForm({ onStockUpdated }) {
     };
 
     try {
-      // Backend URL (Port 8082)
-      await axios.post('http://localhost:8082/inventory/add', payload);
+      // <--- 2. Gateway URL eka saha Endpoint eka update kala
+      // Pattern: Gateway URL + Service Prefix + Controller Path
+      // URL: http://localhost:8080/inventory/inventory/update
+      // Note: "PUT" use karanne oyage Controller eke update method eka PUT nisa
+      await axios.put(`${API_BASE_URLS.INVENTORY}/inventory/update`, payload);
       
       setProductId('');
       setQuantity('');
       setMessage('Stock Updated Successfully!'); 
       
-      onStockUpdated(); 
+      // List eka refresh karanna signal eka yawana
+      if (onStockUpdated) onStockUpdated(); 
       
       setTimeout(() => setMessage(null), 3000); 
 
     } catch (err) {
       setIsError(true);
+      console.error("Update Error:", err);
+      
       if (err.code === 'ERR_NETWORK') {
-        setMessage('Error: Could not connect to Inventory Service (Port 8082).');
+        setMessage('Error: Could not connect to Gateway (Port 8080).');
+      } else if (err.response && err.response.status === 404) {
+        setMessage('Error: Service not found (Check Gateway Routes).');
       } else {
         setMessage('Update failed. Check Product ID.');
       }
-      console.error("Update Error:", err);
     }
     setSubmitting(false);
   };
@@ -73,7 +81,7 @@ function StockUpdateForm({ onStockUpdated }) {
         </div>
         
         <button type="submit" className="submit-btn" disabled={submitting}>
-          {submitting ? 'Saving...' : 'Save Stock'}
+          {submitting ? 'Saving...' : 'Update Stock'}
         </button>
       </form>
       
