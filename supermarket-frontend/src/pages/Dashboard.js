@@ -13,8 +13,13 @@ function Dashboard() {
 
   const [loading, setLoading] = useState(true);
 
-  // Note: Profile Dropdown states (showProfile, toggleProfile) අයින් කළා.
-  // මොකද දැන් ඒවා Header.js එකෙන් පාලනය වෙන්නේ.
+  // --- Date Logic (අද දිනය) ---
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 
   // --- 2. Data Fetching Logic ---
   useEffect(() => {
@@ -65,13 +70,11 @@ function Dashboard() {
 
   return (
     <div>
-      {/* Header Section එක සම්පූර්ණයෙන්ම අයින් කළා.
-         දැන් 'Welcome Back' මැසේජ් එකයි, Profile එකයි පෙන්නන්නේ App.js එකේ Header component එකෙන්.
-      */}
+      <h1 className="page-title" style={{ marginBottom: '5px' }}>Dashboard Overview</h1>
       
-      <h1 className="page-title">Dashboard Overview</h1>
-      <p style={{ marginBottom: '30px', color: 'var(--text-color)', opacity: 0.8 }}>
-        Welcome back! Here is what's happening with your store today.
+      {/* --- මෙතනට දිනය දැම්මා --- */}
+      <p style={{ marginTop: '0', marginBottom: '30px', color: 'var(--text-color)', opacity: 0.7, fontSize: '0.95rem' }}>
+        📅 {currentDate} &nbsp;|&nbsp; Here is what's happening with your store today.
       </p>
 
       {/* ================= STATS CARDS SECTION ================= */}
