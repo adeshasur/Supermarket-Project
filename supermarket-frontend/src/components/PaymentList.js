@@ -1,114 +1,106 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/TableStyles.css';
+import { useCart } from '../context/CartContext'; // <--- 1. Context eka import kala
+import '../styles/TableStyles.css'; 
 
-function PaymentList({ refreshKey, searchTerm }) {
-    const [payments, setPayments] = useState([]);
-    const [loading, setLoading] = useState(false);
+function ProductList({ refreshKey, searchTerm = '' }) { 
+    const [products, setProducts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    const fetchPayments = async () => {
-        // Search Term එකක් නැත්නම් මුකුත් නොකර ඉමු (Backend එකේ getAll නැති නිසා)
-        if (!searchTerm) {
-            setPayments([]);
-            return;
-        }
+    // <--- 2. Cart function eka gaththa
+    const { addToCart } = useCart();
 
-        try {
-            setLoading(true);
-            // Endpoint: /api/payments/order/{orderId}
-            const res = await axios.get(`http://localhost:8085/api/payments/order/${searchTerm}`);
-            setPayments(res.data);
-        } catch (err) {
-            console.error(err);
-            setPayments([]); // Error නම් ලිස්ට් එක හිස් කරමු
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // searchTerm වෙනස් වෙනකොට හෝ refreshKey වෙනස් වෙනකොට Call එක යන්න
     useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            fetchPayments();
-        }, 500); // Type කරලා ඉවර වෙනකම් තත්පර 0.5ක් ඉන්නවා
-
-        return () => clearTimeout(delayDebounceFn);
-    }, [searchTerm, refreshKey]);
-
-    const handleDelete = async (id) => {
-        if (window.confirm("Delete Payment ID: " + id + "?")) {
+        const fetchProducts = async () => {
             try {
-                await axios.delete(`http://localhost:8085/api/payments/${id}`);
-                fetchPayments(); // Refresh
-            } catch (error) {
-                alert("Failed to delete payment.");
+                setLoading(true); 
+                setError(null);
+                // Backend URL
+                const response = await axios.get('http://localhost:8081/products');
+                setProducts(response.data);
+            } catch (err) {
+                setError('Could not fetch products. Is Product Service (8081) running?');
+                console.error(err);
             }
-        }
-    };
+            setLoading(false);
+        };
+        fetchProducts();
+    }, [refreshKey]); 
+
+    // Mock Data for testing (Backend නැති වෙලාවට පෙන්නන්න)
+    if(error && products.length === 0) {
+       // setProducts([{id:1, name:"Test Product", description:"No Backend", price:0}]);
+    }
+
+    const filteredProducts = products.filter(item => {
+        return item.name.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+
+    if (loading) {
+        return (
+            <div className="inventory-table-container" style={{ textAlign: 'center', padding: '50px' }}>
+                <h3>Loading Products...</h3>
+            </div>
+        );
+    }
 
     return (
         <div className="inventory-table-container">
-            <h3>Payment History</h3>
-
-            {/* පොඩි උපදෙසක් */}
-            {!searchTerm && <p style={{ color: '#666', marginBottom: '15px', fontStyle: 'italic' }}>Type an Order ID in the search bar to view payments.</p>}
-
-            {loading ? (
-                <p style={{ textAlign: 'center' }}>Loading...</p>
-            ) : (
-                <table className="inventory-table">
-                    <thead>
+            <h3>Product Catalog</h3>
+             {/* Error Message */}
+             {error && <p style={{color: 'red', textAlign: 'center'}}>{error}</p>}
+            
+            <table className="inventory-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Product Name</th>
+                        <th>Description</th>
+                        <th>Price (LKR)</th>
+                        <th>Action</th> {/* <--- 3. Aluth Column Header eka */}
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredProducts.length === 0 ? (
                         <tr>
-                            <th>Pay ID</th>
-                            <th>Order ID</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                            <th>Date</th>
-                            <th>Action</th>
+                            <td colSpan="5" style={{ textAlign: 'center' }}> {/* colSpan 5 kala mokada aluth column ekak awa nisa */}
+                                No products found.
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {payments.length === 0 ? (
-                            <tr><td colSpan="6" style={{ textAlign: 'center' }}>No payments found for this Order ID.</td></tr>
-                        ) : (
-                            payments.map((pay) => (
-                                <tr key={pay.id}>
-                                    <td>#{pay.id}</td>
-                                    <td>{pay.orderId}</td>
-                                    <td style={{ textAlign: 'right', fontWeight: 'bold' }}>
-                                        {pay.amount.toFixed(2)}
-                                    </td>
-                                    <td style={{ textAlign: 'center' }}>
-                                        <span style={{
-                                            background: '#d1fae5', color: '#059669',
-                                            padding: '4px 8px', borderRadius: '12px', fontSize: '0.8rem', fontWeight: 'bold'
-                                        }}>
-                                            {pay.paymentStatus}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        {pay.paymentDate ? new Date(pay.paymentDate).toLocaleDateString() : 'N/A'}
-                                    </td>
-                                    <td style={{ textAlign: 'center' }}>
-                                        <button
-                                            onClick={() => handleDelete(pay.id)}
-                                            style={{
-                                                background: 'transparent', border: '1px solid #dc3545',
-                                                color: '#dc3545', padding: '5px 10px', borderRadius: '5px',
-                                                cursor: 'pointer', fontWeight: '600'
-                                            }}
-                                        >
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            )}
+                    ) : (
+                        filteredProducts.map((item) => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td style={{ fontWeight: '600', color: '#343a40' }}>{item.name}</td>
+                                <td style={{ color: '#666' }}>{item.description}</td>
+                                <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#007aff' }}>
+                                    {item.price.toFixed(2)}
+                                </td>
+                                {/* <--- 4. Aluth Add to Cart Button eka */}
+                                <td style={{ textAlign: 'center' }}>
+                                    <button 
+                                        onClick={() => addToCart(item)}
+                                        style={{
+                                            backgroundColor: '#28a745',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '6px 12px',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            fontSize: '13px'
+                                        }}
+                                    >
+                                        Add to Cart
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 }
 
-export default PaymentList;
+export default ProductList;

@@ -11,39 +11,51 @@ import Inventory from './pages/Inventory';
 import Orders from './pages/Orders';
 import Users from './pages/Users';
 import Payment from './pages/Payment';
-import Login from './pages/Login'; // 1. Login Page එක Import කලා
+import Login from './pages/Login';
+import Cart from './pages/Cart'; // <--- 1. Aluth Cart Page eka import kala
+
+// Context
+import { CartProvider } from './context/CartContext'; // <--- 2. Cart Context eka import kala
 
 import './styles/App.css';
 
 function App() {
-  // 2. User කෙනෙක් ඉන්නවද බලන්න State එකක් (null = no user)
+  // User kenek innawada balanna State eka (null = no user)
   const [userRole, setUserRole] = useState(null);
 
   return (
     <Router>
-      {/* 3. User කෙනෙක් නැත්නම් Login Page එක විතරක් පෙන්නන්න */}
+      {/* User kenek nathnam Login Page eka witharak pennanna */}
       {!userRole ? (
         <Login onLogin={(role) => setUserRole(role)} />
       ) : (
-        /* 4. User කෙනෙක් ඉන්නවා නම් Main App එක පෙන්නන්න */
-        <div className="app-container">
-          <Sidebar />
-          <main className="page-content">
-            <Header />
-            <div className="content-wrapper">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/inventory" element={<Inventory />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/payment" element={<Payment />} />
-                <Route path="*" element={<Navigate to="/" />} />
-              </Routes>
-            </div>
-            <Footer />
-          </main>
-        </div>
+        /* User kenek innawa nam Main App eka pennanna */
+        
+        /* <--- 3. CartProvider eken Main App eka wrap karanna */
+        <CartProvider> 
+          <div className="app-container">
+            <Sidebar />
+            <main className="page-content">
+              <Header />
+              <div className="content-wrapper">
+                <Routes>
+                  <Route path="/" element={<Dashboard />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/inventory" element={<Inventory />} />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/payment" element={<Payment />} />
+                  
+                  {/* <--- 4. Cart Route eka add kala */}
+                  <Route path="/cart" element={<Cart />} />
+                  
+                  <Route path="*" element={<Navigate to="/" />} />
+                </Routes>
+              </div>
+              <Footer />
+            </main>
+          </div>
+        </CartProvider>
       )}
     </Router>
   );
