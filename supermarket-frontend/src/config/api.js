@@ -1,8 +1,8 @@
 const API_BASE_URLS = {
     PRODUCTS: 'http://localhost:8081',
-    ORDERS: 'http://localhost:8082',
-    INVENTORY: 'http://localhost:8083',
-    USERS: 'http://localhost:8084',
+    ORDERS: 'http://localhost:8084',
+    INVENTORY: 'http://localhost:8082',
+    USERS: 'http://localhost:8083',
     PAYMENT: 'http://localhost:8085',
 };
 

@@ -1,143 +1,130 @@
-.inventory-table-container {
+.order-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.order-card {
     background: #ffffff;
     border-radius: 16px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    padding: 30px;
-    /* margin-top: 25px;  <-- මේක තමයි අවුල, මම මේක අයින් කලා */
-    margin-top: 0;
-    /* දැන් margin නෑ */
+    padding: 20px;
     overflow: hidden;
-    height: 100%;
-    /* Form එකේ උසට සමාන වෙන්න උදව් වෙනවා */
+    transition: transform 0.2s;
 }
 
-.inventory-table-container h3 {
-    font-size: 1.5rem;
-    font-weight: 700;
+.order-card:hover {
+    transform: translateY(-2px);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.order-header strong {
+    font-size: 1.2rem;
     color: #1a1a1a;
-    margin-bottom: 25px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e9ecef;
 }
 
-.inventory-table {
+.order-header small {
+    color: #6c757d;
+    display: block;
+}
+
+.order-actions button {
+    margin-left: 10px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.order-actions button:hover {
+    opacity: 0.8;
+}
+
+.order-actions button:first-child {
+    background-color: #0d6efd;
+    color: white;
+}
+
+.order-actions button:last-child {
+    background-color: #dc3545;
+    color: white;
+}
+
+.order-items {
+    margin-top: 10px;
+}
+
+.order-items table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 10px;
 }
 
-.inventory-table thead th {
-    padding: 16px 20px;
+.order-items thead th {
+    padding: 12px 15px;
     font-size: 0.9rem;
     font-weight: 700;
-    color: #6c757d;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    color: #6c757d;
     background-color: #f8f9fa;
     border-bottom: 2px solid #e9ecef;
     text-align: left;
 }
 
-.inventory-table td {
-    padding: 18px 20px;
-    border-bottom: 1px solid #f1f3f5;
-    vertical-align: middle;
-    background-color: white;
+.order-items td {
+    padding: 12px 15px;
     font-size: 1rem;
     color: #212529;
+    border-bottom: 1px solid #f1f3f5;
+    gap: 30px;
 }
 
-.inventory-table tbody tr:hover td {
-    background-color: #f8f9fa !important;
-    cursor: default;
+.order-items tbody tr:hover td {
+    background-color: #f8f9fa;
 }
 
-/* Alignment */
-.inventory-table th:first-child,
-.inventory-table td:first-child {
-    text-align: left;
-    font-weight: 600;
-}
-
-.inventory-table th:nth-child(2),
-.inventory-table td:nth-child(2) {
-    text-align: right;
-    font-weight: 700;
-    font-size: 1.1rem;
-    color: #343a40;
-}
-
-.inventory-table th:last-child,
-.inventory-table td:last-child {
+.order-items td:last-child {
     text-align: center;
+    
 }
 
-/* Status Badges */
-.status-cell {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    padding: 6px 16px;
-    border-radius: 20px;
+.modal-content input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+.modal-content small {
+    display: block;
+    color: #6c757d;
+}
+
+.modal-footer button {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
     font-weight: 600;
-    font-size: 0.85rem;
-    white-space: nowrap;
 }
 
-.status-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+.modal-footer button:first-child {
+    background-color: #6c757d;
+    color: white;
 }
 
-/* Colors */
-.low-stock .quantity-cell {
-    color: #dc3545 !important;
-}
-
-.low-stock .status-dot {
-    background-color: #dc3545;
-}
-
-.low-stock .status-cell {
-    background-color: #ffe5e8;
-    color: #c92a38;
-}
-
-.low-stock .status-dot {
-    background-color: #dc3545;
-}
-
-.medium-stock .quantity-cell {
-    color: #f59e0b !important;
-}
-
-.medium-stock .status-dot {
-    background-color: #f59e0b;
-}
-
-.medium-stock .status-cell {
-    background-color: #fef3c7;
-    color: #d97706;
-}
-
-.medium-stock .status-dot {
-    background-color: #f59e0b;
-}
-
-.in-stock .quantity-cell {
-    color: #10b981 !important;
-}
-
-.in-stock .status-dot {
-    background-color: #10b981;
-}
-
-.in-stock .status-cell {
-    background-color: #d1fae5;
-    color: #059669;
-}
-
-.in-stock .status-dot {
-    background-color: #10b981;
+.modal-footer button:last-child {
+    background-color: #0d6efd;
+    color: white;
 }

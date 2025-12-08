@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios'; 
-import API_BASE_URLS from '../config/api'; // <--- Gateway Config Import kala
-import '../styles/FormStyles.css'; // Make sure this CSS file exists
+import API_BASE_URLS from '../config/api';
+import '../styles/FormStyles.css';
 
 function ProductForm({ onProductAdded }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
-  const [imageFile, setImageFile] = useState(null); // <--- New state for image
+  const [imageUrl, setImageUrl] = useState(''); // Image URL state
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -18,27 +18,35 @@ function ProductForm({ onProductAdded }) {
     setMessage(null);
     setIsError(false);
 
-    try {
-      const formData = new FormData();
-      formData.append("name", name);
-      formData.append("description", description);
-      formData.append("price", parseFloat(price));
-      if (imageFile) {
-        formData.append("image", imageFile); // <--- Image added to formData
-      }
+    // Trim inputs
+    const trimmedName = name.trim();
+    const trimmedDescription = description.trim();
+    const trimmedImageUrl = imageUrl.trim();
+    const parsedPrice = parseFloat(price);
 
-      // <--- Gateway URL Update
-      await axios.post(
-        `${API_BASE_URLS.PRODUCTS}/api/products`,
-        formData,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+    // Frontend validation
+    if (!trimmedName || !trimmedDescription || isNaN(parsedPrice) || parsedPrice <= 0) {
+      setIsError(true);
+      setMessage("Please fill all fields correctly. Price must be positive.");
+      setSubmitting(false);
+      return;
+    }
+
+    const productData = {
+      name: trimmedName,
+      description: trimmedDescription,
+      price: parsedPrice,
+      imageUrl: trimmedImageUrl
+    };
+
+    try {
+      await axios.post(`${API_BASE_URLS.PRODUCTS}/api/products`, productData);
 
       setMessage('Product Added Successfully!');
       setName('');
       setDescription('');
       setPrice('');
-      setImageFile(null); // <--- Clear image after submit
+      setImageUrl('');
 
       if (onProductAdded) onProductAdded();
 
@@ -47,13 +55,16 @@ function ProductForm({ onProductAdded }) {
     } catch (err) {
       setIsError(true);
       console.error("Add Product Error:", err);
-      
-      if (err.code === 'ERR_NETWORK') {
+
+      if (err.response && err.response.data) {
+        setMessage(`Failed: ${err.response.data}`);
+      } else if (err.code === 'ERR_NETWORK') {
         setMessage('Error: Could not connect to Gateway (Port 8080).');
       } else {
         setMessage('Failed to add product. Please try again.');
       }
     }
+
     setSubmitting(false);
   };
 
@@ -86,27 +97,16 @@ function ProductForm({ onProductAdded }) {
           />
         </div>
 
-        {/* Product Image */}
+        {/* Image URL */}
         <div className="form-group">
-          <label>Product Image:</label>
+          <label>Image URL:</label>
           <input
-            type="file"
-            
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0])}
+            type="text"
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            placeholder="Enter image URL"
           />
         </div>
-
-        {/* Image Preview */}
-        {imageFile && (
-          <div className="image-preview">
-            <img 
-              src={URL.createObjectURL(imageFile)} 
-              alt="Preview" 
-              style={{ width: '100px', marginTop: '10px' }} 
-            />
-          </div>
-        )}
 
         {/* Price */}
         <div className="form-group">
