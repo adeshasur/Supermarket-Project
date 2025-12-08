@@ -26,7 +26,9 @@ import { ThemeProvider } from './context/ThemeContext';
 import './styles/App.css';
 
 function App() {
-  const [userRole, setUserRole] = useState(null);
+  // ✅ CHANGE IS HERE: We set the default value to 'admin' instead of null.
+  // This bypasses the login screen entirely.
+  const [userRole, setUserRole] = useState('admin'); 
 
   return (
     <ThemeProvider>
@@ -34,11 +36,11 @@ function App() {
 
         <Routes>
 
-          {/* PUBLIC ROUTES (No login required) */}
+          {/* PUBLIC ROUTES */}
           <Route path="/" element={<SupermarketLanding />} />
           <Route path="/auth" element={<Login onLogin={(role) => setUserRole(role)} />} />
 
-          {/* PRIVATE (ADMIN) ROUTES — Only show if logged in */}
+          {/* PRIVATE (ADMIN) ROUTES */}
           {userRole && (
             <Route
               path="/*"
@@ -50,6 +52,9 @@ function App() {
                       <Header />
                       <div className="content-wrapper">
                         <Routes>
+                          {/* Redirect root to dashboard */}
+                          <Route path="/" element={<Navigate to="/dashboard" />} />
+                          
                           <Route path="/dashboard" element={<Dashboard />} />
                           <Route path="/products" element={<Products />} />
                           <Route path="/inventory" element={<Inventory />} />
@@ -60,7 +65,7 @@ function App() {
                           <Route path="/profile" element={<Profile />} />
                           <Route path="/settings" element={<Settings />} />
 
-                          {/* Invalid admin URL → go to dashboard */}
+                          {/* Invalid URL -> go to dashboard */}
                           <Route path="*" element={<Navigate to="/dashboard" />} />
                         </Routes>
                       </div>
@@ -72,7 +77,7 @@ function App() {
             />
           )}
 
-          {/* If NOT logged in and tries an admin URL → redirect to /auth */}
+          {/* If for some reason userRole becomes null, redirect to auth */}
           {!userRole && (
             <Route path="/dashboard/*" element={<Navigate to="/auth" />} />
           )}

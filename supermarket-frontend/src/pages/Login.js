@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Register link
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Login.css';
 
@@ -32,16 +32,25 @@ function Login({ onLogin }) {
 
         try {
             const response = await axios.post(url, payload);
-            if (response.data) {
+            
+            // Check if response data exists and possibly check a specific property like 'token' or 'success'
+            // Adjust this condition based on your actual backend response structure
+            if (response.data) { 
                 onLogin('customer');
             } else {
                 setError('Invalid Email or Password.');
             }
         } catch (err) {
             console.error("Login Error:", err);
-            setError('Login failed. Please check your credentials.');
+            // Customize error message based on error response if available
+            if (err.response && err.response.data && err.response.data.message) {
+                 setError(err.response.data.message);
+            } else {
+                 setError('Login failed. Please check your credentials or server connection.');
+            }
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
     return (
@@ -54,14 +63,16 @@ function Login({ onLogin }) {
                 {/* Toggle Buttons */}
                 <div className="user-type-toggle">
                     <button
+                        type="button" // Add type="button" to prevent form submission
                         className={`toggle-btn ${userType === 'admin' ? 'active' : ''}`}
-                        onClick={() => setUserType('admin')}
+                        onClick={() => { setUserType('admin'); setError(''); }} // Clear error on toggle
                     >
                         Admin
                     </button>
                     <button
+                        type="button" // Add type="button" to prevent form submission
                         className={`toggle-btn ${userType === 'customer' ? 'active' : ''}`}
-                        onClick={() => setUserType('customer')}
+                        onClick={() => { setUserType('customer'); setError(''); }} // Clear error on toggle
                     >
                         Customer
                     </button>
@@ -105,7 +116,7 @@ function Login({ onLogin }) {
                     )}
 
                     {/* Error Message */}
-                    {error && <div className="error-msg">{error}</div>}
+                    {error && <div className="error-msg" style={{ color: 'red', marginBottom: '10px' }}>{error}</div>}
 
                     {/* Submit Button */}
                     <button type="submit" className="submit-btn" disabled={loading}>
