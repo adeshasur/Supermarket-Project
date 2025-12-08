@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 function Dashboard() {
-  // 1. Data තියාගන්න State හදමු
+  // --- 1. Data States (Backend එකෙන් එන දත්ත) ---
   const [stats, setStats] = useState({
     income: 0,
     orders: 0,
@@ -13,27 +13,32 @@ function Dashboard() {
 
   const [loading, setLoading] = useState(true);
 
-  // 2. ඔක්කොම Microservices වලින් Data අදින්න useEffect ලියමු
+  // --- Date Logic (අද දිනය) ---
+  const currentDate = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+
+  // --- 2. Data Fetching Logic ---
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // --- A. Orders Service (Income & Order Count) ---
+        // A. Orders Service (Port 8084)
         const ordersRes = await axios.get('http://localhost:8084/api/orders');
         const orders = ordersRes.data;
+        const totalIncome = orders.reduce((sum, order) => sum + (order.totalAmount || order.amount || 0), 0);
 
-        // Income එක හදන්න (හැම Order එකේම totalAmount එකතු කරනවා)
-        const totalIncome = orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+        // B. Product Service (Port 8081)
+        const productsRes = await axios.get('http://localhost:8081/products');
+        const products = productsRes.data;
+        const lowStockCount = products.filter(p => (p.stock || p.quantity || 0) < 20).length;
 
-        // --- B. Product Service (Low Stock Count) ---
-        const productsRes = await axios.get('http://localhost:8081/api/products');
-        // Stock එක 20 ට අඩු ඒවා ගණන් කරනවා
-        const lowStockCount = productsRes.data.filter(p => p.stock < 20).length;
-
-        // --- C. User Service (User Count) ---
+        // C. User Service (Port 8083)
         const usersRes = await axios.get('http://localhost:8083/api/customers');
         const userCount = usersRes.data.length;
 
-        // State Update කරමු
         setStats({
           income: totalIncome,
           orders: orders.length,
@@ -42,8 +47,7 @@ function Dashboard() {
         });
 
       } catch (error) {
-        console.error("Error loading dashboard data:", error);
-        // Error ආවොත් බය වෙන්න දෙයක් නෑ, පරණ (0) අගයන්ම තියෙයි
+        console.error("Dashboard Data Loading Error:", error);
       } finally {
         setLoading(false);
       }
@@ -52,41 +56,57 @@ function Dashboard() {
     fetchData();
   }, []);
 
+  // --- Styles Objects (Dark Mode Compatible) ---
+  const statCardStyle = {
+    background: 'var(--card-bg)', // Dark mode variable
+    padding: '20px',
+    borderRadius: '10px',
+    boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
+    flex: 1,
+    minWidth: '200px',
+    textAlign: 'center',
+    color: 'var(--text-color)' // Text color variable
+  };
+
   return (
     <div>
-      <h1 className="page-title">Dashboard Overview</h1>
-      <p style={{ marginBottom: '30px', color: '#666' }}>Welcome back! Here is what's happening with your store today.</p>
+      <h1 className="page-title" style={{ marginBottom: '5px' }}>Dashboard Overview</h1>
+      
+      {/* --- මෙතනට දිනය දැම්මා --- */}
+      <p style={{ marginTop: '0', marginBottom: '30px', color: 'var(--text-color)', opacity: 0.7, fontSize: '0.95rem' }}>
+        📅 {currentDate} &nbsp;|&nbsp; Here is what's happening with your store today.
+      </p>
 
-      {/* --- STATS CARDS SECTION --- */}
+      {/* ================= STATS CARDS SECTION ================= */}
       <div style={{ display: 'flex', gap: '20px', marginBottom: '40px', flexWrap: 'wrap' }}>
 
-        {/* Card 1: Total Income */}
-        <div style={{ ...statCardStyle, borderLeft: '5px solid #28a745' }}>
-          <h3 style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>Total Income</h3>
+        {/* Total Income */}
+        <div style={{ ...statCardStyle, borderTop: '4px solid #28a745' }}>
+          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Total Income</h3>
           <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#28a745' }}>
             Rs. {loading ? '...' : stats.income.toLocaleString()}
           </h2>
         </div>
 
-        {/* Card 2: Total Orders */}
-        <div style={{ ...statCardStyle, borderLeft: '5px solid #007aff' }}>
-          <h3 style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>Total Orders</h3>
+        {/* Total Orders */}
+        <div style={{ ...statCardStyle, borderTop: '4px solid #007aff' }}>
+          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Total Orders</h3>
           <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#007aff' }}>
             {loading ? '...' : stats.orders}
           </h2>
         </div>
 
-        {/* Card 3: Low Stock Warning */}
-        <div style={{ ...statCardStyle, borderLeft: '5px solid #dc3545' }}>
-          <h3 style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>Low Stock Items</h3>
+        {/* Low Stock Items */}
+        <div style={{ ...statCardStyle, borderTop: '4px solid #dc3545' }}>
+          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Low Stock Items</h3>
           <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#dc3545' }}>
             {loading ? '...' : stats.lowStock}
           </h2>
         </div>
 
-        {/* Card 4: Total Users */}
-        <div style={{ ...statCardStyle, borderLeft: '5px solid #ffc107' }}>
-          <h3 style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>Active Users</h3>
+        {/* Active Users */}
+        <div style={{ ...statCardStyle, borderTop: '4px solid #ffc107' }}>
+          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Active Users</h3>
           <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#ffc107' }}>
             {loading ? '...' : stats.users}
           </h2>
@@ -94,8 +114,8 @@ function Dashboard() {
 
       </div>
 
-      {/* --- NAVIGATION CARDS --- */}
-      <h3 style={{ marginBottom: '20px', color: '#333' }}>Quick Access</h3>
+      {/* ================= NAVIGATION CARDS ================= */}
+      <h3 style={{ marginBottom: '20px', color: 'var(--text-color)' }}>Quick Access</h3>
       <div className="dashboard-grid">
         <Link to="/products" className="card">
           <h2>📦</h2>
@@ -126,15 +146,5 @@ function Dashboard() {
     </div>
   );
 }
-
-// පොඩි CSS කෑල්ලක් මේ ෆයිල් එක ඇතුලෙම ලියමු (ලේසි වෙන්න)
-const statCardStyle = {
-  background: 'white',
-  padding: '20px',
-  borderRadius: '10px',
-  boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-  flex: 1,
-  minWidth: '200px'
-};
 
 export default Dashboard;

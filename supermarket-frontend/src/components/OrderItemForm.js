@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import API_BASE_URLS from '../config/api'; // <--- 1. Config Import
 import '../styles/FormStyles.css';
 
 function OrderItemForm({ orders, onItemAdded }) {
@@ -27,8 +28,9 @@ function OrderItemForm({ orders, onItemAdded }) {
         };
 
         try {
-            // Backend Endpoint: /api/orders/{orderId}/items
-            await axios.post(`http://localhost:8084/api/orders/${selectedOrderId}/items`, payload);
+            // <--- 2. Gateway URL Update
+            // Pattern: http://localhost:8080/orders/api/orders/{orderId}/items
+            await axios.post(`${API_BASE_URLS.ORDERS}/api/orders/${selectedOrderId}/items`, payload);
 
             setMessage('Item Added Successfully! ✅');
             setProductId('');
@@ -40,7 +42,7 @@ function OrderItemForm({ orders, onItemAdded }) {
 
         } catch (err) {
             console.error(err);
-            setMessage('Failed to add item. Check Backend.');
+            setMessage('Failed to add item. Check Gateway.');
         }
         setSubmitting(false);
     };

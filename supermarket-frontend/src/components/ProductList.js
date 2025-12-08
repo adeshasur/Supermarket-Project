@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// We are reusing the InventoryList CSS for consistent styling
-// Ensure InventoryList.css or App.css contains the necessary table styles
-// If you moved table styles to App.css, you can remove this import if it causes issues, 
-// but keeping it is fine if the file exists.
-// import './InventoryList.css'; 
+import { useCart } from '../context/CartContext'; // <--- 1. Cart Context Import kala
+import API_BASE_URLS from '../config/api'; // <--- 2. Gateway Config Import kala
+import '../styles/TableStyles.css';
 
 function ProductList({ refreshKey, searchTerm = '' }) { 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    // <--- 3. Cart function eka gaththa
+    const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -17,13 +18,13 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 setLoading(true); 
                 setError(null);
                 
-                // Fetch from Product Service (Port 8081)
-                // Ensure your backend Controller matches this URL (/products or /api/products)
-                // Based on your previous setup, we'll stick to /products or update based on your backend
-                const response = await axios.get('http://localhost:8081/products');
+                // <--- 4. Gateway URL eka damm (Kalin 8081 thibba eka ain kala)
+                // Pattern: http://localhost:8080/product/api/products
+                const response = await axios.get(`${API_BASE_URLS.PRODUCTS}/api/products`);
+                
                 setProducts(response.data);
             } catch (err) {
-                setError('Could not fetch products. Is Product Service (8081) running?');
+                setError('Could not fetch products. Is Gateway (8080) or Product Service running?');
                 console.error(err);
             }
             setLoading(false);
@@ -31,7 +32,11 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         fetchProducts();
     }, [refreshKey]); 
 
-    // Filter logic based on product name
+    // Mock Data logic (Backend fail unoth)
+    if(error && products.length === 0) {
+       // setProducts([{id:1, name:"Test Product", description:"No Backend", price:0}]);
+    }
+
     const filteredProducts = products.filter(item => {
         return item.name.toLowerCase().includes(searchTerm.toLowerCase());
     });
@@ -44,18 +49,12 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         );
     }
 
-    if (error) {
-        return (
-            <div className="inventory-table-container" style={{ borderColor: '#dc3545' }}>
-                <h3 style={{ color: '#dc3545' }}>Error</h3>
-                <p>{error}</p>
-            </div>
-        );
-    }
-
     return (
         <div className="inventory-table-container">
             <h3>Product Catalog</h3>
+             {/* Error Message */}
+             {error && <p style={{color: 'red', textAlign: 'center'}}>{error}</p>}
+            
             <table className="inventory-table">
                 <thead>
                     <tr>
@@ -63,12 +62,13 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                         <th>Product Name</th>
                         <th>Description</th>
                         <th>Price (LKR)</th>
+                        <th>Action</th> {/* <--- 5. Action Column eka */}
                     </tr>
                 </thead>
                 <tbody>
                     {filteredProducts.length === 0 ? (
                         <tr>
-                            <td colSpan="4" style={{ textAlign: 'center' }}>
+                            <td colSpan="5" style={{ textAlign: 'center' }}>
                                 No products found.
                             </td>
                         </tr>
@@ -80,6 +80,24 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                                 <td style={{ color: '#666' }}>{item.description}</td>
                                 <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#007aff' }}>
                                     {item.price.toFixed(2)}
+                                </td>
+                                
+                                {/* <--- 6. Add to Cart Button eka */}
+                                <td style={{ textAlign: 'center' }}>
+                                    <button 
+                                        onClick={() => addToCart(item)}
+                                        style={{
+                                            backgroundColor: '#28a745',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '6px 12px',
+                                            borderRadius: '4px',
+                                            cursor: 'pointer',
+                                            fontSize: '13px'
+                                        }}
+                                    >
+                                        Add to Cart
+                                    </button>
                                 </td>
                             </tr>
                         ))
