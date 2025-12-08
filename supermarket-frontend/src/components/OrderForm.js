@@ -4,58 +4,34 @@ import '../styles/FormStyles.css';
 
 function OrderForm({ onOrderUpdate }) {
   const [customerId, setCustomerId] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [message, setMessage] = useState(null);
+  const API = "http://localhost:8084/api/orders";
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSubmitting(true);
-    setMessage(null);
-
-    // Backend එකේ Order Model එකට අනුව Payload එක හදමු
-    const payload = {
-      customerId: parseInt(customerId) // Backend එක Long ඉල්ලන නිසා Number කලා
-    };
-
+  const handleCreateOrder = async () => {
+    if (!customerId) return alert("Enter Customer ID");
     try {
-      // Backend URL (Port 8084)
-      await axios.post('http://localhost:8084/api/orders', payload);
-
-      setMessage('Order Created Successfully! ✅');
+      await axios.post(API, { customerId: Number(customerId) });
       setCustomerId('');
-
-      // List එක Refresh කරන්න Signal එකක් යවමු
-      if (onOrderUpdate) onOrderUpdate();
-
-      setTimeout(() => setMessage(null), 3000);
-
+      onOrderUpdate(); // refresh orders list
     } catch (err) {
       console.error(err);
-      setMessage('Error: Could not create order. Check Backend (8084).');
+      alert("Failed to create order.");
     }
-    setSubmitting(false);
   };
 
   return (
     <div className="form-container">
-      <h3>Create New Order</h3>
-      <p>Enter Customer ID to start a new order.</p>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Customer ID:</label>
-          <input
-            type="number"
-            value={customerId}
-            onChange={(e) => setCustomerId(e.target.value)}
-            required
-            placeholder="e.g. 1"
-          />
-        </div>
-        <button type="submit" className="submit-btn" disabled={submitting}>
-          {submitting ? 'Creating...' : 'Create Order'}
-        </button>
-      </form>
-      {message && <div className="popup-toast success-toast" style={{ background: message.includes('Error') ? '#dc3545' : '#28a745' }}>{message}</div>}
+      <h3>Create Order</h3>
+      <p>Enter Customer ID to create a new order</p>
+      <div className="form-group">
+        <label>Customer ID</label>
+        <input
+          type="number"
+          value={customerId}
+          onChange={(e) => setCustomerId(e.target.value)}
+          placeholder="Enter Customer ID"
+        />
+      </div>
+      <button className="submit-btn" onClick={handleCreateOrder}>Create Order</button>
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/FormStyles.css';
+import API_BASE_URLS from '../config/api'; // <--- 1. Gateway Config Import kala
+import '../styles/TableStyles.css';
 
 function PaymentForm({ onPaymentAdded }) {
     const [orderId, setOrderId] = useState('');

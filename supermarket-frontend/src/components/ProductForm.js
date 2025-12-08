@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import API_BASE_URLS from '../config/api'; // <--- 1. Gateway Config Import kala
+import axios from 'axios'; 
+import API_BASE_URLS from '../config/api'; // <--- Gateway Config Import kala
 import '../styles/FormStyles.css'; // Make sure this CSS file exists
 
 function ProductForm({ onProductAdded }) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState('');
+  const [imageFile, setImageFile] = useState(null); // <--- New state for image
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState(null);
   const [isError, setIsError] = useState(false);
@@ -17,30 +18,30 @@ function ProductForm({ onProductAdded }) {
     setMessage(null);
     setIsError(false);
 
-    // Backend Model eka anuwa data hadanawa
-    const productData = {
-      name: name,
-      description: description,
-      price: parseFloat(price),
-      imageUrl: "" // Image url danata hiswa yawamu
-    };
-
     try {
-      // <--- 2. Gateway URL Update
-      // Pattern: Gateway (8080) + Service Prefix (/product) + Controller Path (/api/products)
-      // Full URL: http://localhost:8080/product/api/products
-      await axios.post(`${API_BASE_URLS.PRODUCTS}/api/products`, productData);
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("description", description);
+      formData.append("price", parseFloat(price));
+      if (imageFile) {
+        formData.append("image", imageFile); // <--- Image added to formData
+      }
 
-      // Success
+      // <--- Gateway URL Update
+      await axios.post(
+        `${API_BASE_URLS.PRODUCTS}/api/products`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      );
+
       setMessage('Product Added Successfully!');
       setName('');
       setDescription('');
       setPrice('');
-      
-      // List eka refresh karanna parent component ekata kiyanawa
+      setImageFile(null); // <--- Clear image after submit
+
       if (onProductAdded) onProductAdded();
 
-      // Clear message after 3 seconds
       setTimeout(() => setMessage(null), 3000);
 
     } catch (err) {
@@ -84,6 +85,28 @@ function ProductForm({ onProductAdded }) {
             required
           />
         </div>
+
+        {/* Product Image */}
+        <div className="form-group">
+          <label>Product Image:</label>
+          <input
+            type="file"
+            
+            accept="image/*"
+            onChange={(e) => setImageFile(e.target.files[0])}
+          />
+        </div>
+
+        {/* Image Preview */}
+        {imageFile && (
+          <div className="image-preview">
+            <img 
+              src={URL.createObjectURL(imageFile)} 
+              alt="Preview" 
+              style={{ width: '100px', marginTop: '10px' }} 
+            />
+          </div>
+        )}
 
         {/* Price */}
         <div className="form-group">
