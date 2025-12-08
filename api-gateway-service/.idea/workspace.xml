@@ -4,31 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fa9138ff-a08c-4333-85eb-52de4e161459" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/api-gateway-service.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api-gateway-service/target/classes/com/supermarket/gateway/GatewayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway-service/target/classes/com/supermarket/gateway/GatewayConfig.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/.gitattributes" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/HELP.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/mvnw.cmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/InventoryServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/InventoryServiceApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/controller/InventoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/controller/InventoryController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/data/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/data/Inventory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/service/InventoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/service/InventoryService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../inventory-service/src/test/java/com/supermarket/inventory/inventory_service/InventoryServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/test/java/com/supermarket/inventory/inventory_service/InventoryServiceApplicationTests.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../product-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" afterDir="false" />
+    <list default="true" id="fa9138ff-a08c-4333-85eb-52de4e161459" name="Changes" comment="new">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway-service/src/main/java/com/supermarket/gateway/GatewayConfig.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway-service/target/classes/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway-service/target/classes/com/supermarket/gateway/ApiGatewayApplication.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway-service/target/classes/com/supermarket/gateway/GatewayConfig.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway-service/target/test-classes/com/supermarket/gateway/ApiGatewayApplicationTests.class" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,6 +32,9 @@
     &quot;accountId&quot;: &quot;36085f9a-7e19-4b36-b3e7-6126ca5aab2d&quot;
   }
 }</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="ProjectErrors" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -63,24 +48,13 @@
     &quot;Application.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
     &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_opened_file_path&quot;: &quot;D:/supermarket_project/api-gateway-service&quot;
   }
 }</component>
-  <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="api-gateway-service" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="api-gateway-service" />
-      <option name="filePath" />
-      <method v="2" />
-    </configuration>
-  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -96,6 +70,27 @@
       <option name="presentableId" value="Default" />
       <updated>1765167461197</updated>
     </task>
+    <task id="LOCAL-00001" summary="new">
+      <option name="closed" value="true" />
+      <created>1765185792412</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1765185792412</updated>
+    </task>
+    <task id="LOCAL-00002" summary="new">
+      <option name="closed" value="true" />
+      <created>1765185809994</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1765185809994</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="new" />
+    <option name="LAST_COMMIT_MESSAGE" value="new" />
   </component>
 </project>
