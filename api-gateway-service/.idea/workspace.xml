@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="fa9138ff-a08c-4333-85eb-52de4e161459" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/api-gateway-service.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/api-gateway-service/target/classes/com/supermarket/gateway/GatewayConfig.class" beforeDir="false" afterPath="$PROJECT_DIR$/api-gateway-service/target/classes/com/supermarket/gateway/GatewayConfig.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/.gitattributes" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/.gitattributes" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/.mvn/wrapper/maven-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/.mvn/wrapper/maven-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/HELP.md" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/HELP.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/mvnw.cmd" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/mvnw.cmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/InventoryServiceApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/InventoryServiceApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/controller/InventoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/controller/InventoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/data/Inventory.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/data/Inventory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/service/InventoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/service/InventoryService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/test/java/com/supermarket/inventory/inventory_service/InventoryServiceApplicationTests.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/test/java/com/supermarket/inventory/inventory_service/InventoryServiceApplicationTests.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../product-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "shakya122"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/adeshasur/Supermarket-Project.git",
+    "accountId": "36085f9a-7e19-4b36-b3e7-6126ca5aab2d"
+  }
+}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 1
+}</component>
+  <component name="ProjectId" id="36XyxuKKW4yAfrAuaaHMqfkPBwK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.ApiGatewayApplication.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/supermarket_project/api-gateway-service&quot;
+  }
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.26830.84" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="fa9138ff-a08c-4333-85eb-52de4e161459" name="Changes" comment="" />
+      <created>1765167461197</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1765167461197</updated>
+    </task>
+    <servers />
+  </component>
+</project>
