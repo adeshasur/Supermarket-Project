@@ -1,3 +1,6 @@
+/* =========================================
+   1. ORDER PAGE STYLES (Restored)
+   ========================================= */
 .order-list-container {
     display: flex;
     flex-direction: column;
@@ -94,23 +97,197 @@
 
 .order-items td:last-child {
     text-align: center;
-    
+}
+
+/* =========================================
+   2. INVENTORY & PRODUCT TABLE STYLES (New)
+   ========================================= */
+
+/* Container Setup */
+.inventory-table-container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.inventory-table-container h3 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  border-bottom: 2px solid #f0f2f5;
+  padding-bottom: 10px;
+}
+
+/* Table Design */
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  min-width: 600px;
+}
+
+.inventory-table th {
+  background-color: #f8f9fa;
+  color: #555;
+  font-weight: 600;
+  text-align: left;
+  padding: 15px;
+  border-bottom: 2px solid #eee;
+}
+
+.inventory-table td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+  color: #444;
+}
+
+.inventory-table tbody tr:hover {
+  background-color: #f9fcff;
+}
+
+/* Input Styles (For Quantity Edits) */
+.inventory-table input[type="number"] {
+  width: 80px;
+  padding: 8px 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  text-align: center;
+  font-size: 1rem;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.inventory-table input[type="number"]:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Status Badges */
+.status-cell-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.status-cell {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  background-color: #f0f0f0;
+}
+
+.status-dot {
+  height: 8px;
+  width: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+
+/* Status Colors */
+tr.low-stock .status-cell { background-color: #ffeaea; color: #d63031; }
+tr.low-stock .status-dot { background-color: #d63031; }
+tr.low-stock input[type="number"] { border-color: #ffadad; background-color: #fff5f5; }
+
+tr.medium-stock .status-cell { background-color: #fff8e1; color: #f39c12; }
+tr.medium-stock .status-dot { background-color: #f39c12; }
+
+tr.in-stock .status-cell { background-color: #e6fffa; color: #00b894; }
+tr.in-stock .status-dot { background-color: #00b894; }
+
+/* Action Buttons (Shared) */
+.action-btn {
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  margin-right: 5px;
+}
+
+.update-btn {
+  background-color: #007bff;
+  color: white;
+}
+.update-btn:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.delete-btn {
+  background-color: #ff4757;
+  color: white;
+}
+.delete-btn:hover {
+  background-color: #e84118;
+}
+
+/* =========================================
+   3. MODAL STYLES (Common for All Pages)
+   ========================================= */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: slideIn 0.3s ease;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.modal-content .form-group {
+  margin-bottom: 15px;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: #555;
 }
 
 .modal-content input {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #ced4da;
-    margin-top: 5px;
-    margin-bottom: 10px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  font-size: 1rem;
 }
 
-.modal-content small {
-    display: block;
-    color: #6c757d;
+.modal-content input:focus {
+  outline: none;
+  border-color: #007bff;
 }
 
+/* Old Modal Footer styles (Kept for compatibility) */
 .modal-footer button {
     padding: 8px 14px;
     border-radius: 8px;
@@ -118,13 +295,67 @@
     cursor: pointer;
     font-weight: 600;
 }
+.modal-footer button:first-child { background-color: #6c757d; color: white; }
+.modal-footer button:last-child { background-color: #0d6efd; color: white; }
 
-.modal-footer button:first-child {
-    background-color: #6c757d;
-    color: white;
+/* New Modal Actions styles */
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 25px;
 }
 
-.modal-footer button:last-child {
-    background-color: #0d6efd;
-    color: white;
+.cancel-btn {
+  padding: 10px 20px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.save-btn {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Quick Add Form Container */
+.quick-add-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #e9ecef;
+}
+.quick-add-container h4 {
+  margin: 0;
+  margin-right: 15px;
+  color: #555;
+  font-weight: 600;
+}
+.quick-add-container button {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.quick-add-container button:hover {
+  background-color: #27ae60;
 }

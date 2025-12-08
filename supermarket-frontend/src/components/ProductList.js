@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useCart } from '../context/CartContext';
 import API_BASE_URLS from '../config/api';
-import '../styles/TableStyles.css';
+import '../styles/TableStyles.css'; // Link to the CSS file
 
 function ProductList({ refreshKey, searchTerm = '' }) { 
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // Modal state
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentProduct, setCurrentProduct] = useState(null);
-    const { addToCart } = useCart();
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -21,7 +20,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 const response = await axios.get(`${API_BASE_URLS.PRODUCTS}/api/products`);
                 setProducts(response.data);
             } catch (err) {
-                setError('Could not fetch products. Is Gateway (8080) or Product Service running?');
+                setError('Could not fetch products. Is Product Service (8081) running?');
                 console.error(err);
             }
             setLoading(false);
@@ -33,7 +32,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // Delete Product
+    // --- Delete ---
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
         try {
@@ -45,13 +44,13 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         }
     };
 
-    // Open Update Modal
+    // --- Update Setup ---
     const handleUpdate = (product) => {
         setCurrentProduct(product);
         setIsModalOpen(true);
     };
 
-    // Handle Update form submit
+    // --- Update Submit ---
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -62,8 +61,11 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 imageUrl: currentProduct.imageUrl || ''
             };
             await axios.put(`${API_BASE_URLS.PRODUCTS}/api/products/${currentProduct.id}`, updatedProduct);
-            setProducts(products.map(p => (p.id === currentProduct.id ? updatedProduct : p)));
+            
+            // Refresh UI without full reload
+            setProducts(products.map(p => (p.id === currentProduct.id ? { ...p, ...updatedProduct } : p)));
             setIsModalOpen(false);
+            alert("Product Updated Successfully!");
         } catch (err) {
             console.error('Update failed:', err);
             alert('Failed to update product.');
@@ -73,7 +75,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
     if (loading) {
         return (
             <div className="inventory-table-container" style={{ textAlign: 'center', padding: '50px' }}>
-                <h3>Loading Products...</h3>
+                <p>Loading Products...</p>
             </div>
         );
     }
@@ -97,9 +99,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 <tbody>
                     {filteredProducts.length === 0 ? (
                         <tr>
-                            <td colSpan="6" style={{ textAlign: 'center' }}>
-                                No products found.
-                            </td>
+                            <td colSpan="6" style={{ textAlign: 'center' }}>No products found.</td>
                         </tr>
                     ) : (
                         filteredProducts.map((item) => (
@@ -110,58 +110,18 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                                         <img 
                                             src={item.imageUrl} 
                                             alt={item.name} 
-                                            style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '4px' }} 
+                                            style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} 
                                         />
-                                    ) : 'No Image'}
+                                    ) : <span style={{color:'#ccc'}}>No Img</span>}
                                 </td>
-                                <td style={{ fontWeight: '600', color: '#343a40' }}>{item.name}</td>
-                                <td style={{ color: '#666' }}>{item.description}</td>
-                                <td style={{ textAlign: 'right', fontWeight: 'bold', color: '#007aff' }}>
-                                    {item.price.toFixed(2)}
-                                </td>
-                                <td style={{ textAlign: 'center' }}>
-                                    <button 
-                                        onClick={() => addToCart(item)}
-                                        style={{
-                                            backgroundColor: '#28a745',
-                                            color: 'white',
-                                            border: 'none',
-                                            padding: '6px 12px',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                            fontSize: '13px',
-                                            marginRight: '5px'
-                                        }}
-                                    >
-                                        Add to Cart
-                                    </button>
-                                    <button 
-                                        onClick={() => handleUpdate(item)}
-                                        style={{
-                                            backgroundColor: '#ffc107',
-                                            color: 'white',
-                                            border: 'none',
-                                            padding: '6px 12px',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                            fontSize: '13px',
-                                            marginRight: '5px'
-                                        }}
-                                    >
+                                <td style={{ fontWeight: '600', color: '#333' }}>{item.name}</td>
+                                <td style={{ color: '#666', fontSize:'0.9rem' }}>{item.description}</td>
+                                <td style={{ fontWeight: 'bold', color: '#007aff' }}>{item.price.toFixed(2)}</td>
+                                <td>
+                                    <button className="action-btn update-btn" onClick={() => handleUpdate(item)}>
                                         Update
                                     </button>
-                                    <button 
-                                        onClick={() => handleDelete(item.id)}
-                                        style={{
-                                            backgroundColor: '#dc3545',
-                                            color: 'white',
-                                            border: 'none',
-                                            padding: '6px 12px',
-                                            borderRadius: '4px',
-                                            cursor: 'pointer',
-                                            fontSize: '13px'
-                                        }}
-                                    >
+                                    <button className="action-btn delete-btn" onClick={() => handleDelete(item.id)}>
                                         Delete
                                     </button>
                                 </td>
@@ -171,7 +131,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 </tbody>
             </table>
 
-            {/* Update Modal */}
+            {/* --- Update Modal --- */}
             {isModalOpen && currentProduct && (
                 <div className="modal-overlay">
                     <div className="modal-content">
@@ -212,8 +172,11 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                                     onChange={(e) => setCurrentProduct({ ...currentProduct, imageUrl: e.target.value })}
                                 />
                             </div>
-                            <button type="submit" className="submit-btn">Save</button>
-                            <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                            
+                            <div className="modal-actions">
+                                <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
+                                <button type="submit" className="save-btn">Save Changes</button>
+                            </div>
                         </form>
                     </div>
                 </div>
