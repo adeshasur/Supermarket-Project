@@ -78,14 +78,6 @@ function Header({ onLogout }) {
           )}
         </div>
 
-        {/* --- 2. CART ICON --- */}
-        <Link to="/cart" className="icon-wrapper" style={{ textDecoration: 'none', color: 'inherit' }}>
-          <span className="icon">🛒</span>
-          {cartItems.length > 0 && (
-            <span className="badge">{cartItems.length}</span>
-          )}
-        </Link>
-
         {/* --- 3. PROFILE SECTION --- */}
         <div 
           className="profile-section" 

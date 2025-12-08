@@ -32,7 +32,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    // --- Delete ---
+    // --- Delete Handler ---
     const handleDelete = async (id) => {
         if (!window.confirm('Are you sure you want to delete this product?')) return;
         try {
@@ -44,13 +44,12 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         }
     };
 
-    // --- Update Setup ---
+    // --- Update Handlers ---
     const handleUpdate = (product) => {
         setCurrentProduct(product);
         setIsModalOpen(true);
     };
 
-    // --- Update Submit ---
     const handleUpdateSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -62,7 +61,6 @@ function ProductList({ refreshKey, searchTerm = '' }) {
             };
             await axios.put(`${API_BASE_URLS.PRODUCTS}/api/products/${currentProduct.id}`, updatedProduct);
             
-            // Refresh UI without full reload
             setProducts(products.map(p => (p.id === currentProduct.id ? { ...p, ...updatedProduct } : p)));
             setIsModalOpen(false);
             alert("Product Updated Successfully!");
@@ -105,18 +103,21 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                         filteredProducts.map((item) => (
                             <tr key={item.id}>
                                 <td>{item.id}</td>
-                                <td style={{ textAlign: 'center' }}>
+                                <td className="product-image-cell"> {/* Cell for the image */}
                                     {item.imageUrl ? (
                                         <img 
                                             src={item.imageUrl} 
                                             alt={item.name} 
-                                            style={{ width: '50px', height: '50px', objectFit: 'cover', borderRadius: '6px' }} 
+                                            className="product-img" // CSS class එක දැම්මා
                                         />
                                     ) : <span style={{color:'#ccc'}}>No Img</span>}
                                 </td>
-                                <td style={{ fontWeight: '600', color: '#333' }}>{item.name}</td>
-                                <td style={{ color: '#666', fontSize:'0.9rem' }}>{item.description}</td>
-                                <td style={{ fontWeight: 'bold', color: '#007aff' }}>{item.price.toFixed(2)}</td>
+                                
+                                {/* Inline styles ඔක්කොම අයින් කළා */}
+                                <td>{item.name}</td>
+                                <td>{item.description}</td>
+                                <td>{item.price.toFixed(2)}</td>
+                                
                                 <td>
                                     <button className="action-btn update-btn" onClick={() => handleUpdate(item)}>
                                         Update

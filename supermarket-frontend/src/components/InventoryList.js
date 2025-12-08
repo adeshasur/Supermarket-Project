@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/TableStyles.css';
+import '../styles/TableStyles.css'; // Final CSS Link
 
 function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
   const [inventory, setInventory] = useState([]);
   const [products, setProducts] = useState([]); 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
   const [newItem, setNewItem] = useState({ productId: '', quantity: '' });
 
   // --- Helpers ---
@@ -22,20 +23,19 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
     return 'in-stock';
   };
 
-  // --- 1. DATA FETCHING (Service දෙකෙන්ම) ---
+  // --- Data Fetching (Service දෙකෙන්ම) ---
   const fetchData = async () => {
     try {
       setLoading(true);
       setError(null);
-
+      
       // Inventory Service (Port 8082)
       const inventoryRes = await axios.get("http://localhost:8082/inventory/all");
-      
       // Product Service (Port 8081)
       const productsRes = await axios.get("http://localhost:8081/api/products");
 
       setInventory(inventoryRes.data);
-      setProducts(productsRes.data); 
+      setProducts(productsRes.data);
 
     } catch (err) {
       console.error(err);
@@ -54,7 +54,7 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
     return products.find(p => p.id === id); 
   };
 
-  // --- Handlers (Add/Update) ---
+  // --- Add Inventory Handler (වම් පැත්තේ Form එකෙන් Add කළාම) ---
   const handleAddInventory = async () => {
     if (!newItem.productId || newItem.quantity === '') return alert("Please fill all fields!");
     try {
@@ -71,33 +71,15 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
     }
   };
 
-  const handleUpdateQuantity = async (item) => {
-    try {
-      await axios.put("http://localhost:8082/inventory/update", {
-        id: item.id,
-        productId: item.productId,
-        quantity: item.quantity
-      });
-      alert("Stock Updated!");
-      fetchData();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update.");
-    }
-  };
-
-  // --- Filtering Logic (මෙතන තමයි වෙනස කළේ) ---
+  // --- Filtering Logic (Unknown Products Filtered) ---
   const filteredInventory = inventory.filter(item => {
     const productDetails = getProductDetails(item.productId);
     
-    // වැදගත්ම කොටස: Product එකේ විස්තර හොයාගන්න බැරි නම් (Unknown නම්), මේක ලිස්ට් එකෙන් අයින් කරනවා.
-    if (!productDetails) return false;
+    // Product විස්තර නැති නම් (Unknown නම්), ලිස්ට් එකෙන් අයින් කරනවා.
+    if (!productDetails) return false; 
 
-    // Search Logic
     const nameMatch = productDetails.name.toLowerCase().includes(searchTerm.toLowerCase());
     const idMatch = item.productId.toString().includes(searchTerm);
-    
-    // Status Logic
     const itemStatus = getStatusString(item.quantity);
     const matchesStatus = statusFilter === '' || itemStatus === statusFilter;
     
@@ -111,41 +93,17 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
     <div className="inventory-table-container">
       <h3>Inventory Status Dashboard</h3>
 
-      {/* Quick Add Form */}
-      <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-        <h4 style={{marginTop: 0}}>Quick Add (by ID)</h4>
-        <div style={{display:'flex', gap:'10px'}}>
-            <input
-            type="number"
-            placeholder="Prod ID"
-            value={newItem.productId}
-            onChange={(e) => setNewItem({ ...newItem, productId: e.target.value })}
-            style={{ width: '100px', padding: '5px' }}
-            />
-            <input
-            type="number"
-            placeholder="Qty"
-            value={newItem.quantity}
-            onChange={(e) => setNewItem({ ...newItem, quantity: e.target.value })}
-            style={{ width: '100px', padding: '5px' }}
-            />
-            <button onClick={handleAddInventory} style={{cursor:'pointer'}}>Add</button>
-        </div>
-        <small style={{color:'#666'}}>* Use the ID from the Products page to add stock here.</small>
-      </div>
-
       <table className="inventory-table">
         <thead>
           <tr>
-            <th>Product Info</th>
-            <th>Current Stock</th>
+            <th>Product Info</th> 
+            <th>Stock</th>
             <th>Status</th>
-            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {filteredInventory.length === 0 ? (
-            <tr><td colSpan="4" style={{ textAlign: 'center' }}>No data found.</td></tr>
+            <tr><td colSpan="3" style={{ textAlign: 'center' }}>No inventory data found.</td></tr>
           ) : (
             filteredInventory.map((item) => {
               const product = getProductDetails(item.productId);
@@ -153,35 +111,26 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
               return (
                 <tr key={item.id} className={getStockClass(item.quantity)}>
                   <td>
-                    {/* දැන් product එක අනිවාර්යයෙන් තියෙනවා filter කරපු නිසා */}
-                       <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
-                          {product.imageUrl && <img src={product.imageUrl} alt={product.name} style={{width:'40px', height:'40px', objectFit:'cover', borderRadius:'5px'}}/>}
-                          <div>
-                            <strong>{product.name}</strong><br/>
-                            <small style={{color:'#666'}}>ID: {item.productId}</small>
-                          </div>
+                    {/* ✅ FIX: Final alignment class for image/text group */}
+                    <div className="product-info-group"> 
+                       {product.imageUrl && <img src={product.imageUrl} alt={product.name} className="product-img" />}
+                       <div>
+                         <strong>{product.name}</strong><br/>
+                         <small style={{color:'#666'}}>ID: {item.productId}</small>
                        </div>
+                    </div>
                   </td>
+                  
+                  {/* Quantity as simple Text */}
                   <td>
-                    <input
-                      type="number"
-                      value={item.quantity}
-                      onChange={(e) =>
-                        setInventory(prev =>
-                          prev.map(i => i.id === item.id ? { ...i, quantity: Number(e.target.value) } : i)
-                        )
-                      }
-                      style={{ width: '60px', padding: '5px' }}
-                    />
+                    {item.quantity} 
                   </td>
+                  
                   <td className="status-cell-wrapper">
                     <div className="status-cell">
                       <span className={`status-dot ${getStockClass(item.quantity)}`}></span>
                       {getStatusString(item.quantity)}
                     </div>
-                  </td>
-                  <td>
-                    <button className="action-btn update-btn" onClick={() => handleUpdateQuantity(item)}>Update</button>
                   </td>
                 </tr>
               );
