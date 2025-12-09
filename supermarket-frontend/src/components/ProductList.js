@@ -20,7 +20,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 const response = await axios.get(`${API_BASE_URLS.PRODUCTS}/api/products`);
                 setProducts(response.data);
             } catch (err) {
-                setError('Could not fetch products. Is Product Service (8081) running?');
+                setError('Could not fetch products. Is Product Service (8083) running?');
                 console.error(err);
             }
             setLoading(false);

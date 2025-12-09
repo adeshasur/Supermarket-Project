@@ -14,43 +14,58 @@ public class AdminService {
     @Autowired
     private AdminRepository aRepo;
 
-    // ADMIN LOGIN
+    // Admin login
     public Admin loginAdmin(String email, String password) {
         Admin admin = aRepo.findAdminByEmail(email);
-
         if (admin != null && admin.getPassword().equals(password)) {
             return admin; // login success
         }
-
         return null; // login failed
     }
 
+    // Register new admin
+    public Admin saveAdmin(Admin admin){
+        return aRepo.save(admin);
+    }
+
+    // Get all admins
     public List<Admin> getAllAdmins(){
         return aRepo.findAll();
     }
 
-    public Admin getAdminById(int aid) {
-        Optional<Admin> a = aRepo.findById(aid);
-        if (a.isPresent()) {
-            return a.get();
-        }
-        return null;
+    // Get admin by ID
+    public Admin getAdminById(int id) {
+        Optional<Admin> a = aRepo.findById(id);
+        return a.orElse(null);
     }
 
-//   public Admin saveAdmin(Admin aname){
-//        return aRepo.save(aname);
-//    }
-
-    public Admin updateAdmin(Admin aname){
-        return  aRepo.save(aname);
+    // Update admin
+    public Admin updateAdmin(Admin admin){
+        return aRepo.save(admin);
     }
 
+    // Delete admin
     public void deleteAdminById(int id) {
         aRepo.deleteById(id);
     }
 
+    // Get admin by exact email
     public Admin getAdminByEmail(String email) {
         return aRepo.findAdminByEmail(email);
     }
 
+    // Get admins by exact name
+    public List<Admin> getAdminByName(String name) {
+        return aRepo.findByName(name);
+    }
+
+    // Partial search by name
+    public List<Admin> searchAdminByName(String keyword) {
+        return aRepo.searchByNameContainsIgnoreCase(keyword.toLowerCase());
+    }
+
+    // Partial search by email
+    public List<Admin> searchAdminByEmail(String keyword) {
+        return aRepo.searchByEmailContainsIgnoreCase(keyword.toLowerCase());
+    }
 }

@@ -9,7 +9,6 @@ function UserList({ refreshKey, searchTerm }) {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            // CustomerController Endpoint: /api/customers
             const res = await axios.get("http://localhost:8083/api/customers");
             setUsers(res.data);
         } catch (err) {
@@ -19,9 +18,7 @@ function UserList({ refreshKey, searchTerm }) {
         }
     };
 
-    useEffect(() => {
-        fetchUsers();
-    }, [refreshKey]);
+    useEffect(() => { fetchUsers(); }, [refreshKey]);
 
     const filteredUsers = users.filter(user =>
         user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -31,7 +28,6 @@ function UserList({ refreshKey, searchTerm }) {
     const handleDelete = async (id) => {
         if (window.confirm("Delete User ID: " + id + "?")) {
             try {
-                // Delete Endpoint: /api/customers/{id}
                 await axios.delete(`http://localhost:8083/api/customers/${id}`);
                 fetchUsers();
             } catch (error) {
@@ -40,12 +36,12 @@ function UserList({ refreshKey, searchTerm }) {
         }
     };
 
-    if (loading) return <div className="inventory-table-container" style={{ textAlign: 'center', padding: '50px' }}><h3>Loading Users...</h3></div>;
+    if (loading) return <div style={{ textAlign: 'center', padding: '50px' }}>Loading Users...</div>;
 
     return (
-        <div className="inventory-table-container">
+        <div className="app-table-container">
             <h3>Customer Directory</h3>
-            <table className="inventory-table">
+            <table className="app-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -59,23 +55,14 @@ function UserList({ refreshKey, searchTerm }) {
                     {filteredUsers.length === 0 ? (
                         <tr><td colSpan="5" style={{ textAlign: 'center' }}>No users found.</td></tr>
                     ) : (
-                        filteredUsers.map((user) => (
-                            <tr key={user.cid}> {/* Backend uses 'cid' not 'id' */}
-                                <td>{user.cid}</td>
-                                <td style={{ fontWeight: 'bold' }}>{user.name}</td>
-                                <td style={{ color: '#007aff' }}>{user.email}</td>
+                        filteredUsers.map(user => (
+                            <tr key={user.id}>
+                                <td>{user.id}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
                                 <td>{user.address}</td>
                                 <td style={{ textAlign: 'center' }}>
-                                    <button
-                                        onClick={() => handleDelete(user.cid)}
-                                        style={{
-                                            background: 'transparent', border: '1px solid #dc3545',
-                                            color: '#dc3545', padding: '5px 10px', borderRadius: '5px',
-                                            cursor: 'pointer', fontWeight: '600'
-                                        }}
-                                    >
-                                        Delete
-                                    </button>
+                                    <button onClick={() => handleDelete(user.id)} style={{ padding: '5px 10px', background: '#dc3545', color: 'white', borderRadius: '5px', border: 'none', cursor: 'pointer' }}>Delete</button>
                                 </td>
                             </tr>
                         ))

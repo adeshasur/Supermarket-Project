@@ -33,21 +33,9 @@ public class CustomerController {
         service.deleteCustomerById(cid);
     }
 
-    // UPDATE customer info
-    @PutMapping
-    public Customer updateCustomer(@RequestBody Customer customer) {
-        return service.updateCustomer(customer);
-    }
-
     // SEARCH customer by name
-    @GetMapping(params = {"name"})
+    @GetMapping("/searchByName")
     public List<Customer> getCustomerByName(@RequestParam String name) {
         return service.getCustomerByName(name);
-    }
-
-    // SEARCH customer by email
-    @GetMapping(params = {"email"})
-    public Customer getCustomerByEmail(@RequestParam String email) {
-        return service.getCustomerByEmail(email);
     }
 }

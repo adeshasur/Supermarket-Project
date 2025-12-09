@@ -9,9 +9,17 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-    @Query("select c from Customer c where c.email = ?1")
-    public Customer findByEmail(String email);
+    // Exact match by email
+    Customer findByEmail(String email);
 
-    @Query("select c from Customer c where c.name = ?1")
-    public List<Customer> findByName(String name);
+    // Exact match by name
+    List<Customer> findByName(String name);
+
+    // Partial search for realism (name contains keyword)
+    @Query("SELECT c FROM Customer c WHERE LOWER(c.name) LIKE %:keyword%")
+    List<Customer> searchByNameContainsIgnoreCase(String keyword);
+
+    // Partial search for email
+    @Query("SELECT c FROM Customer c WHERE LOWER(c.email) LIKE %:keyword%")
+    List<Customer> searchByEmailContainsIgnoreCase(String keyword);
 }

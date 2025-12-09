@@ -8,40 +8,70 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")  // <-- add this line
+@RequestMapping("/api/admins")  // <-- base path fixed
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdminController {
 
     @Autowired
     private AdminService service;
 
-    // ADMIN LOGIN
-    @PostMapping("/admins/login")
+    // Admin login
+    @PostMapping("/login")
     public Admin loginAdmin(@RequestBody Admin admin) {
         return service.loginAdmin(admin.getEmail(), admin.getPassword());
     }
 
-    @GetMapping(path = "/admins")
+    // Register admin
+    @PostMapping
+    public Admin registerAdmin(@RequestBody Admin admin) {
+        return service.saveAdmin(admin);
+    }
+
+    // Get all admins
+    @GetMapping
     public List<Admin> getAllAdmins() {
         return service.getAllAdmins();
     }
 
-    @GetMapping(path = "/admins/{id}")
-    public Admin getAdminById(@PathVariable("id") int aid) {
-        return service.getAdminById(aid);
+    // Get admin by ID
+    @GetMapping("/{id}")
+    public Admin getAdminById(@PathVariable int id) {
+        return service.getAdminById(id);
     }
 
-    @PutMapping(path = "/admins")
-    public Admin updateAdmin(@RequestBody Admin aname) {
-        return service.updateAdmin(aname);
+    // Update admin
+    @PutMapping
+    public Admin updateAdmin(@RequestBody Admin admin) {
+        return service.updateAdmin(admin);
     }
 
-    @DeleteMapping(path = "/admins/{id}")
-    public void deleteAdmin(@PathVariable("id") int id) {
+    // Delete admin
+    @DeleteMapping("/{id}")
+    public void deleteAdmin(@PathVariable int id) {
         service.deleteAdminById(id);
     }
 
-    @GetMapping(path = "/admins", params = "email")
+    // Search admin by email (exact)
+    @GetMapping(params = "email")
     public Admin getAdminByEmail(@RequestParam String email) {
         return service.getAdminByEmail(email);
+    }
+
+    // Search admin by name (exact)
+    @GetMapping(path = "/searchByName", params = "name")
+    public List<Admin> getAdminByName(@RequestParam String name) {
+        return service.getAdminByName(name);
+    }
+
+    // Partial search by name
+    @GetMapping("/searchByNamePartial")
+    public List<Admin> searchAdminByName(@RequestParam String keyword) {
+        return service.searchAdminByName(keyword);
+    }
+
+    // Partial search by email
+    @GetMapping("/searchByEmailPartial")
+    public List<Admin> searchAdminByEmail(@RequestParam String keyword) {
+        return service.searchAdminByEmail(keyword);
     }
 }

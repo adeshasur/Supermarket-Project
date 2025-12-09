@@ -6,7 +6,6 @@ function UserForm({ onUserAdded }) {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [address, setAddress] = useState('');
 
     const [submitting, setSubmitting] = useState(false);
     const [message, setMessage] = useState(null);
@@ -16,29 +15,19 @@ function UserForm({ onUserAdded }) {
         setSubmitting(true);
         setMessage(null);
 
-        const payload = {
-            name,
-            email,
-            password,
-            address
-        };
+        const payload = { name, email, password };
 
         try {
-            // Backend URL (User Service Port eka check karanna, mn 8083 damma)
-            // CustomerController eke endpoint eka: /api/customers
-            await axios.post('http://localhost:8083/api/customers', payload);
+            await axios.post('http://localhost:8083/api/admins', payload);
+            setMessage('Admin Registered Successfully! ✅');
 
-            setMessage('User Registered Successfully! ✅');
-
-            // Clear Form
-            setName('');
-            setEmail('');
+            // Clear form
+            setName(''); 
+            setEmail(''); 
             setPassword('');
-            setAddress('');
 
             if (onUserAdded) onUserAdded();
             setTimeout(() => setMessage(null), 3000);
-
         } catch (err) {
             console.error(err);
             setMessage('Error: Failed to register. Check Backend.');
@@ -48,36 +37,27 @@ function UserForm({ onUserAdded }) {
 
     return (
         <div className="form-container">
-            <h3>Register Customer</h3>
-            <p>Enter customer details.</p>
+            <h3>Register Admin</h3>
+            <p>Enter admin details.</p>
             <form onSubmit={handleSubmit}>
-
                 <div className="form-group">
                     <label>Name:</label>
-                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Full Name" />
+                    <input type="text" value={name} onChange={e => setName(e.target.value)} required placeholder="Full Name" />
                 </div>
-
                 <div className="form-group">
                     <label>Email:</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="example@mail.com" />
+                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} required placeholder="example@mail.com" />
                 </div>
-
                 <div className="form-group">
                     <label>Password:</label>
-                    <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required placeholder="Secret Password" />
+                    <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="Secret Password" />
                 </div>
-
-                <div className="form-group">
-                    <label>Address:</label>
-                    <input type="text" value={address} onChange={(e) => setAddress(e.target.value)} placeholder="City, Street" />
-                </div>
-
                 <button type="submit" className="submit-btn" disabled={submitting}>
-                    {submitting ? 'Saving...' : 'Register Customer'}
+                    {submitting ? 'Saving...' : 'Register admin'}
                 </button>
             </form>
 
-            {message && <div className="popup-toast success-toast" style={{ background: message.includes('Error') ? '#dc3545' : '#28a745' }}>{message}</div>}
+            {message && <div className={`popup-toast ${message.includes('Error') ? 'error-toast' : 'success-toast'}`}>{message}</div>}
         </div>
     );
 }
