@@ -12,60 +12,30 @@ import java.util.Optional;
 public class CustomerService {
 
     @Autowired
-    private CustomerRepository cRepo;
-
-    // CUSTOMER REGISTRATION
-    public Customer registerCustomer(Customer customer) {
-
-        // Check if email already exists
-        Customer existing = cRepo.findCustomerByEmail(customer.getEmail());
-        if (existing != null) {
-            return null; // Email already exists
-        }
-
-        return cRepo.save(customer);
-    }
-
-    // CUSTOMER LOGIN
-    public Customer loginCustomer(String email, String password) {
-        Customer c = cRepo.findCustomerByEmail(email);
-
-        if (c != null && c.getPassword().equals(password)) {
-            return c;
-        }
-        return null;
-    }
+    private CustomerRepository repository;
 
     public List<Customer> getAllCustomers() {
-        return cRepo.findAll();
+        return repository.findAll();
     }
 
     public Customer getCustomerById(int cid) {
-        Optional<Customer> c = cRepo.findById(cid);
-        if (c.isPresent()) {
-            return c.get();
-        }
-        return null;
+        Optional<Customer> customer = repository.findById(cid);
+        return customer.orElse(null);
     }
 
-//    public Customer saveCustomer(Customer cname) {
-//        return cRepo.save(cname);
-//    }
-
-    public Customer updateCustomer(Customer cname) {
-        return cRepo.save(cname);
+    public Customer updateCustomer(Customer customer) {
+        return repository.save(customer);
     }
 
     public void deleteCustomerById(int cid) {
-        cRepo.deleteById(cid);
+        repository.deleteById(cid);
     }
 
     public List<Customer> getCustomerByName(String name) {
-        return cRepo.findCustomerByName(name);
+        return repository.findByName(name);
     }
 
     public Customer getCustomerByEmail(String email) {
-        return cRepo.findCustomerByEmail(email);
+        return repository.findByEmail(email);
     }
-
 }

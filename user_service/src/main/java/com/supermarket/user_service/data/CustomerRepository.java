@@ -9,9 +9,9 @@ import java.util.List;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
-    @Query("select c from Customer c where c.email=?1")
-    public Customer findCustomerByEmail(String email);
+    @Query("select c from Customer c where c.email = ?1")
+    public Customer findByEmail(String email);
 
-    @Query("select c from Customer c where c.name=?1")
-    public List<Customer> findCustomerByName(String name);
+    @Query("select c from Customer c where c.name = ?1")
+    public List<Customer> findByName(String name);
 }
