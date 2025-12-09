@@ -105,6 +105,19 @@ tr.in-stock .status-dot { background-color: #00b894; }
   margin-top: 0;
   overflow-x: auto;
 }
+/* STACK TABLES VERTICALLY */
+.inventory-content {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    gap: 20px; /* Space between sections */
+}
+
+/* Optional: Make tables full width */
+.inventory-list-section {
+    width: 100%;
+    overflow-x: auto; /* Keep horizontal scroll if table is wide */
+}
+
 
 .app-table-container h3 {
   color: #333;
