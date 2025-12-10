@@ -48,9 +48,9 @@ function Payment() {
 
         <div className="inventory-list-section">
           
-          {/* මෙතන දැන් යවන්නේ finalSearchTerm එක. 
-              ඒ නිසා Type කරද්දිම ලිස්ට් එක වෙනස් වෙන්නේ නෑ. 
-              Search Button එක එබුවම විතරයි වෙනස් වෙන්නේ. */}
+          {
+            
+          }
               
           <PaymentList
             refreshKey={refreshKey}
