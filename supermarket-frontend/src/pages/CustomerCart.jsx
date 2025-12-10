@@ -2,18 +2,20 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { Trash2, ArrowLeft, CreditCard } from 'lucide-react';
-import '../styles/TableStyles.css'; // හෝ වෙනත් style file එකක්
+import '../styles/TableStyles.css';
 
 export default function CustomerCart() {
   const navigate = useNavigate();
-  const { cartItems, removeFromCart, clearCart } = useContext(CartContext);
+  const { cartItems, removeFromCart } = useContext(CartContext);
 
-  // මුළු එකතුව ගණනය කිරීම
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
+  // ✅ Checkout Function එක
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
-    navigate('/payment'); // Payment Page එකට යවන්න (පස්සේ හදමු)
+    
+    // Payment Page එකට යනවා, Total එකත් අරගෙන
+    navigate('/payment', { state: { total: totalAmount } });
   };
 
   return (
@@ -27,11 +29,9 @@ export default function CustomerCart() {
         <h2>My Shopping Cart</h2>
       </div>
 
-      {/* Cart Items */}
       {cartItems.length === 0 ? (
         <div style={{ textAlign: 'center', marginTop: '50px', color: '#666' }}>
           <h3>Your cart is empty</h3>
-          <p>Start adding products from the home page!</p>
           <button 
             onClick={() => navigate('/customer-home')}
             style={{ marginTop: '20px', padding: '10px 20px', background: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
@@ -65,10 +65,7 @@ export default function CustomerCart() {
                     <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                     <td>Rs. {(item.price * item.quantity).toFixed(2)}</td>
                     <td style={{ textAlign: 'center' }}>
-                      <button 
-                        onClick={() => removeFromCart(item.id)}
-                        style={{ background: '#ff4757', color: 'white', border: 'none', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}
-                      >
+                      <button onClick={() => removeFromCart(item.id)} style={{ background: '#ff4757', color: 'white', border: 'none', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
                         <Trash2 size={16} />
                       </button>
                     </td>
@@ -78,7 +75,6 @@ export default function CustomerCart() {
             </table>
           </div>
 
-          {/* Checkout Section */}
           <div style={{ marginTop: '30px', padding: '20px', background: '#f8f9fa', borderRadius: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div>
               <span style={{ fontSize: '1.2rem', color: '#666' }}>Total Amount:</span>
@@ -87,21 +83,10 @@ export default function CustomerCart() {
               </div>
             </div>
             
+            {/* ✅ Checkout Button */}
             <button 
               onClick={handleCheckout}
-              style={{ 
-                padding: '15px 30px', 
-                background: '#007bff', 
-                color: 'white', 
-                border: 'none', 
-                borderRadius: '8px', 
-                fontSize: '1.1rem',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '10px'
-              }}
+              style={{ padding: '15px 30px', background: '#007bff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
             >
               <CreditCard size={20} />
               Checkout Now

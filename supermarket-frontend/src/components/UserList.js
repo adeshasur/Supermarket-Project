@@ -40,7 +40,6 @@ function UserList({ refreshKey, searchTerm }) {
 
     return (
         <div className="app-table-container">
-            <h3>Customer Directory</h3>
             <table className="app-table">
                 <thead>
                     <tr>

@@ -5,7 +5,8 @@ import SupermarketLanding from "./pages/SupermarketLanding.jsx";
 import CustomerAuthForm from "./pages/CustomerAuthForm.jsx";
 import AdminLoginForm from "./pages/AdminLoginForm.jsx";
 import CustomerHome from './pages/CustomerHome.jsx';
-import CustomerCart from "./pages/CustomerCart"; 
+import CustomerCart from "./pages/CustomerCart"; // ✅ 1. Cart Page එක Import කරන්න
+import PaymentPage from "./pages/PaymentPage"; // ✅ 2. Payment Page එක Import කරන්න
 
 import Sidebar from "./layout/Sidebar";
 import Header from "./layout/Header";
@@ -16,8 +17,7 @@ import Products from "./pages/Products";
 import Inventory from "./pages/Inventory";
 import Orders from "./pages/Orders";
 import Users from "./pages/Users";
-import Payment from "./pages/Payment";
-// import Cart from "./pages/Cart"; 
+import Payment from "./pages/Payment"; // Admin Payment View
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 
@@ -48,12 +48,17 @@ function App() {
         <Router>
           <Routes>
 
-            {/* --- Public Routes --- */}
+            {/* --- Public Customer Routes --- */}
             <Route path="/" element={<SupermarketLanding />} />
             <Route path="/auth" element={<CustomerAuthForm />} />
             <Route path="/customer-home" element={<CustomerHome />} />
+            
+            {/* ✅ 3. Customer Cart Route එක දාන්න */}
             <Route path="/customer-cart" element={<CustomerCart />} />
             
+            {/* ✅ 4. Payment Route එක දාන්න */}
+            <Route path="/payment" element={<PaymentPage />} />
+
             <Route
               path="/admin-login"
               element={<AdminLoginForm onLogin={() => setUserRole("admin")} />}
@@ -75,11 +80,7 @@ function App() {
                           <Route path="inventory" element={<Inventory />} />
                           <Route path="orders" element={<Orders />} />
                           <Route path="users" element={<Users />} />
-                          <Route path="payment" element={<Payment />} />
-                          
-                          {/*  */}
-                          {/* <Route path="cart" element={<Cart />} /> */}
-                          
+                          <Route path="payment" element={<Payment />} /> {/* Admin Payment View */}
                           <Route path="profile" element={<Profile />} />
                           <Route path="settings" element={<Settings />} />
                           <Route path="*" element={<Navigate to="/admin/dashboard" />} />
@@ -92,7 +93,6 @@ function App() {
               />
             )}
 
-            {/* Redirect unauthorized users */}
             {!userRole && (
               <Route path="/admin/*" element={<Navigate to="/admin-login" />} />
             )}
