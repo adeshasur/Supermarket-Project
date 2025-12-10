@@ -18,7 +18,7 @@ function UserForm({ onUserAdded }) {
         const payload = { name, email, password };
 
         try {
-            await axios.post('http://localhost:8083/api/admins', payload);
+            await axios.post('http://localhost:8083/admins', payload);
             setMessage('Admin Registered Successfully! ✅');
 
             // Clear form

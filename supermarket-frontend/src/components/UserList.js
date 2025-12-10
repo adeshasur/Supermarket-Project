@@ -9,7 +9,7 @@ function UserList({ refreshKey, searchTerm }) {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const res = await axios.get("http://localhost:8083/api/customers");
+            const res = await axios.get("http://localhost:8083/customers");
             setUsers(res.data);
         } catch (err) {
             console.error(err);
@@ -28,7 +28,7 @@ function UserList({ refreshKey, searchTerm }) {
     const handleDelete = async (id) => {
         if (window.confirm("Delete User ID: " + id + "?")) {
             try {
-                await axios.delete(`http://localhost:8083/api/customers/${id}`);
+                await axios.delete(`http://localhost:8083/customers/${id}`);
                 fetchUsers();
             } catch (error) {
                 alert("Failed to delete user.");

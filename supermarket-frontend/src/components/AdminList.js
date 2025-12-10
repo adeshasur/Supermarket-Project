@@ -9,7 +9,7 @@ function AdminList({ refreshKey, searchTerm }) {
     const fetchAdmins = async () => {
         try {
             setLoading(true);
-            const res = await axios.get("http://localhost:8083/api/admins");
+            const res = await axios.get("http://localhost:8083/admins");
             setAdmins(res.data);
         } catch (err) {
             console.error(err);
