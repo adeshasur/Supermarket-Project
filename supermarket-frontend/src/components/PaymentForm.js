@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import API_BASE_URLS from '../config/api'; // <--- 1. Gateway Config Import kala
+import API_BASE_URLS from '../config/api';
 import '../styles/TableStyles.css';
 
 function PaymentForm({ onPaymentAdded }) {
@@ -16,12 +16,13 @@ function PaymentForm({ onPaymentAdded }) {
 
         const payload = {
             orderId: parseInt(orderId),
-            amount: parseFloat(amount)
+            amount: parseFloat(amount),
+            paymentStatus: 'PAID',
+            last4: '1234'
         };
 
         try {
-            // Backend URL (Assuming Port 8085)
-            await axios.post('http://localhost:8085/api/payments', payload);
+            await axios.post(`${API_BASE_URLS.paymentService}/payments`, payload);
 
             setMessage('Payment Successful! ✅');
             setOrderId('');
@@ -32,8 +33,9 @@ function PaymentForm({ onPaymentAdded }) {
 
         } catch (err) {
             console.error(err);
-            setMessage('Payment Failed. Check Backend (8085).');
+            setMessage('Payment Failed. Check Backend.');
         }
+
         setSubmitting(false);
     };
 
@@ -42,7 +44,6 @@ function PaymentForm({ onPaymentAdded }) {
             <h3>Make Payment</h3>
             <p>Enter Order ID and Amount.</p>
             <form onSubmit={handleSubmit}>
-
                 <div className="form-group">
                     <label>Order ID:</label>
                     <input
@@ -71,7 +72,14 @@ function PaymentForm({ onPaymentAdded }) {
                 </button>
             </form>
 
-            {message && <div className="popup-toast success-toast" style={{ background: message.includes('Failed') ? '#dc3545' : '#28a745' }}>{message}</div>}
+            {message && (
+                <div
+                    className="popup-toast"
+                    style={{ background: message.includes('Failed') ? '#dc3545' : '#28a745' }}
+                >
+                    {message}
+                </div>
+            )}
         </div>
     );
 }
