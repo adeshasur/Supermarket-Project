@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admins")  // <-- base path fixed
 @CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/admins")
+
 public class AdminController {
 
     @Autowired

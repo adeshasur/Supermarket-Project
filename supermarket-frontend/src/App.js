@@ -1,49 +1,63 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 
-// Landing Page + Auth Page
-import SupermarketLanding from './pages/SupermarketLanding';
-import Login from './pages/Login';
+import SupermarketLanding from "./pages/SupermarketLanding.jsx";
+import CustomerAuthForm from "./pages/CustomerAuthForm.jsx";
+import AdminLoginForm from "./pages/AdminLoginForm.jsx";
 
-// Layouts & Pages
-import Sidebar from './layout/Sidebar';
-import Header from './layout/Header';
-import Footer from './layout/Footer';
-import Dashboard from './pages/Dashboard';
-import Products from './pages/Products';
-import Inventory from './pages/Inventory';
-import Orders from './pages/Orders';
-import Users from './pages/Users';
-import Payment from './pages/Payment';
-import Cart from './pages/Cart';
-import Profile from './pages/Profile';
-import Settings from './pages/Settings';
+import Sidebar from "./layout/Sidebar";
+import Header from "./layout/Header";
+import Footer from "./layout/Footer";
 
-// Contexts
-import { CartProvider } from './context/CartContext';
-import { ThemeProvider } from './context/ThemeContext';
+import Dashboard from "./pages/Dashboard";
+import Products from "./pages/Products";
+import Inventory from "./pages/Inventory";
+import Orders from "./pages/Orders";
+import Users from "./pages/Users";
+import Payment from "./pages/Payment";
+import Cart from "./pages/Cart";
+import Profile from "./pages/Profile";
+import Settings from "./pages/Settings";
 
-import './styles/App.css';
+import { CartProvider } from "./context/CartContext";
+import { ThemeProvider } from "./context/ThemeContext";
+
+import "./styles/App.css";
 
 function App() {
-  // ✅ CHANGE IS HERE: We set the default value to 'admin' instead of null.
-  // This bypasses the login screen entirely.
-  const [userRole, setUserRole] = useState('admin'); 
+  const [userRole, setUserRole] = useState(null);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  // Keep admin logged in after refresh
+  useEffect(() => {
+    const admin = localStorage.getItem("admin");
+    if (admin) {
+      setUserRole("admin");
+    }
+    setCheckingAuth(false);
+  }, []);
+
+  if (checkingAuth) {
+    return null; // prevent flash redirect before auth loads
+  }
 
   return (
     <ThemeProvider>
       <Router>
-
         <Routes>
 
-          {/* PUBLIC ROUTES */}
+          {/* Public Routes */}
           <Route path="/" element={<SupermarketLanding />} />
-          <Route path="/auth" element={<Login onLogin={(role) => setUserRole(role)} />} />
+          <Route path="/auth" element={<CustomerAuthForm />} />
+          <Route
+            path="/admin-login"
+            element={<AdminLoginForm onLogin={() => setUserRole("admin")} />}
+          />
 
-          {/* PRIVATE (ADMIN) ROUTES */}
+          {/* Protected Admin Routes */}
           {userRole && (
             <Route
-              path="/*"
+              path="/admin/*"
               element={
                 <CartProvider>
                   <div className="app-container">
@@ -52,21 +66,16 @@ function App() {
                       <Header />
                       <div className="content-wrapper">
                         <Routes>
-                          {/* Redirect root to dashboard */}
-                          <Route path="/" element={<Navigate to="/dashboard" />} />
-                          
-                          <Route path="/dashboard" element={<Dashboard />} />
-                          <Route path="/products" element={<Products />} />
-                          <Route path="/inventory" element={<Inventory />} />
-                          <Route path="/orders" element={<Orders />} />
-                          <Route path="/users" element={<Users />} />
-                          <Route path="/payment" element={<Payment />} />
-                          <Route path="/cart" element={<Cart />} />
-                          <Route path="/profile" element={<Profile />} />
-                          <Route path="/settings" element={<Settings />} />
-
-                          {/* Invalid URL -> go to dashboard */}
-                          <Route path="*" element={<Navigate to="/dashboard" />} />
+                          <Route path="dashboard" element={<Dashboard />} />
+                          <Route path="products" element={<Products />} />
+                          <Route path="inventory" element={<Inventory />} />
+                          <Route path="orders" element={<Orders />} />
+                          <Route path="users" element={<Users />} />
+                          <Route path="payment" element={<Payment />} />
+                          <Route path="cart" element={<Cart />} />
+                          <Route path="profile" element={<Profile />} />
+                          <Route path="settings" element={<Settings />} />
+                          <Route path="*" element={<Navigate to="/admin/dashboard" />} />
                         </Routes>
                       </div>
                       <Footer />
@@ -77,13 +86,12 @@ function App() {
             />
           )}
 
-          {/* If for some reason userRole becomes null, redirect to auth */}
+          {/* Redirect unauthorized users */}
           {!userRole && (
-            <Route path="/dashboard/*" element={<Navigate to="/auth" />} />
+            <Route path="/admin/*" element={<Navigate to="/admin-login" />} />
           )}
 
         </Routes>
-
       </Router>
     </ThemeProvider>
   );
