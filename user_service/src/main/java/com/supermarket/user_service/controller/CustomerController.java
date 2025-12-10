@@ -6,15 +6,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/customers")
-
 public class CustomerController {
 
     @Autowired
     private CustomerService service;
+
+    @PostMapping
+    public Customer registerCustomer(@RequestBody Customer customer) {
+        return service.saveCustomer(customer);
+    }
+
+    @PostMapping("/login")
+    public Customer loginCustomer(@RequestBody Map<String, String> loginData) {
+        String email = loginData.get("email");
+        String password = loginData.get("password");
+        return service.loginCustomer(email, password);
+    }
 
     // GET all customers
     @GetMapping

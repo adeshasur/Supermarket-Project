@@ -22,68 +22,67 @@ export default function CustomerAuthForm() {
   };
 
   const handleSubmit = async () => {
-  setLoading(true);
-  setMessage({ text: '', type: '' });
+    setLoading(true);
+    setMessage({ text: '', type: '' });
 
-  try {
-    const endpoint = isLogin ? '/customers/login' : '/customers';
-    const payload = isLogin
-      ? { email: formData.email, password: formData.password }
-      : formData;
+    try {
+      const endpoint = isLogin ? '/customers/login' : '/customers';
+      const payload = isLogin
+        ? { email: formData.email, password: formData.password }
+        : formData;
 
-    const response = await fetch(`http://localhost:8083${endpoint}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-
-    // SUCCESS when backend returns a Customer object
-    if (data && data.cid) {
-
-      setMessage({
-        text: isLogin
-          ? `Welcome back, ${data.name}!`
-          : "Registration successful!",
-        type: "success"
+      const response = await fetch(`http://localhost:8083${endpoint}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
       });
 
-      // Save customer
-      localStorage.setItem("customer", JSON.stringify({
-        id: data.cid,
-        name: data.name,
-        email: data.email,
-        address: data.address
-      }));
+      const data = await response.json();
 
-      // Redirect after success
-      setTimeout(() => {
-        navigate('/customer-dashboard');
-      }, 1000);
+      // ✅ FIX: data.cid වෙනුවට data.id දැම්මා
+      if (data && data.id) {
 
-      // Reset form
-      setFormData({ name: '', email: '', password: '', address: '' });
-    } 
-    else {
-      // FAILED login or registration
+        setMessage({
+          text: isLogin
+            ? `Welcome back, ${data.name}!`
+            : "Registration successful!",
+          type: "success"
+        });
+
+        // Save customer (cid -> id change here too)
+        localStorage.setItem("customer", JSON.stringify({
+          id: data.id, // ✅ මෙතනත් id කළා
+          name: data.name,
+          email: data.email,
+          address: data.address
+        }));
+
+        // Redirect after success
+        setTimeout(() => {
+          navigate('/customer-home'); // Customer Home එකට යවමු
+        }, 1000);
+
+        // Reset form
+        setFormData({ name: '', email: '', password: '', address: '' });
+      } 
+      else {
+        // FAILED login or registration
+        setMessage({
+          text: "Invalid email or password",
+          type: "error"
+        });
+      }
+
+    } catch (error) {
+      console.error(error);
       setMessage({
-        text: "Invalid email or password",
-        type: "error"
+        text: 'Connection error. Please try again.',
+        type: 'error'
       });
     }
 
-  } catch (error) {
-    setMessage({
-      text: 'Connection error. Please try again.',
-      type: 'error'
-    });
-  }
-
-  setLoading(false);
-};
-
-
+    setLoading(false);
+  };
 
   const toggleForm = () => {
     setIsLogin(!isLogin);

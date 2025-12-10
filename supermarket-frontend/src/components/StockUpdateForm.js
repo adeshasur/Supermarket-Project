@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import API_BASE_URLS from '../config/api'; 
 import '../styles/FormStyles.css';
 
 function StockUpdateForm({ onStockUpdated }) {
@@ -22,23 +21,25 @@ function StockUpdateForm({ onStockUpdated }) {
     };
 
     try {
+      // --- FIX: Correct URL with '/inventory' path ---
       // URL: http://localhost:8082/inventory/update
-      await axios.put(`${API_BASE_URLS.INVENTORY}/inventory/update`, payload);
+      await axios.put("http://localhost:8082/api/inventory/update", payload);
       
       setProductId('');
       setQuantity('');
       setMessage('Stock Updated Successfully!'); 
       setIsError(false);
       
-      // List eka refresh karanna signal eka
+      // List eka refresh karanna parent component ekata kiyanawa
       if (onStockUpdated) onStockUpdated(); 
       
+      // තත්පර 3කින් මැසේජ් එක අයින් කරනවා
       setTimeout(() => setMessage(null), 3000); 
 
     } catch (err) {
       setIsError(true);
       console.error("Update Error:", err);
-      setMessage('Update failed. Check Product ID.');
+      setMessage('Update failed. Check Product ID or Connection.');
     }
     setSubmitting(false);
   };

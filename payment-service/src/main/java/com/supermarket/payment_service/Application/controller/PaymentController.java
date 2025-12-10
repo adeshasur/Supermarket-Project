@@ -1,15 +1,20 @@
-package com.supermarket.payment_service.controller;
+package com.supermarket.payment_service.Application.controller;
+
 
 import com.supermarket.payment_service.Application.dto.request.CreatePaymentDto;
 import com.supermarket.payment_service.Application.dto.response.PaymentGeneralDto;
 import com.supermarket.payment_service.data.entity.Payment;
 import com.supermarket.payment_service.data.service.PaymentService;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+import java.util.HashMap;
+
 @RestController
-@RequestMapping("/api/payment")   // <-- ONLY THIS LINE CHANGED
+@RequestMapping("/payment")
 @CrossOrigin(origins = "http://localhost:3000")
 public class PaymentController {
 
@@ -23,7 +28,6 @@ public class PaymentController {
     public ResponseEntity<Payment> addPayment(@RequestBody CreatePaymentDto createpaymentDto) {
         return paymentService.addPayment(createpaymentDto);
     }
-
     @GetMapping("/get")
     public ResponseEntity<PaymentGeneralDto> getPaymentById(@RequestParam Integer id) {
         return paymentService.getPayment(id);
@@ -38,4 +42,8 @@ public class PaymentController {
     public String hello() {
         return "Hello from Spring Boot!";
     }
+
+
+
+
 }
