@@ -4,6 +4,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import SupermarketLanding from "./pages/SupermarketLanding.jsx";
 import CustomerAuthForm from "./pages/CustomerAuthForm.jsx";
 import AdminLoginForm from "./pages/AdminLoginForm.jsx";
+import CustomerHome from './pages/CustomerHome.jsx';
+
 
 import Sidebar from "./layout/Sidebar";
 import Header from "./layout/Header";
@@ -49,6 +51,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/" element={<SupermarketLanding />} />
           <Route path="/auth" element={<CustomerAuthForm />} />
+          <Route path="/customer-home" element={<CustomerHome />} />
           <Route
             path="/admin-login"
             element={<AdminLoginForm onLogin={() => setUserRole("admin")} />}
