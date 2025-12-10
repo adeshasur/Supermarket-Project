@@ -3,6 +3,7 @@ package com.supermarket.orderservice.controller;
 import com.supermarket.orderservice.model.Order;
 import com.supermarket.orderservice.model.OrderItem;
 import com.supermarket.orderservice.service.OrderService;
+import org.springframework.transaction.annotation.Transactional; // ✅ Import කරන්න
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,7 +17,9 @@ public class OrderController {
 
     public OrderController(OrderService orderService) { this.orderService = orderService; }
 
+
     @GetMapping
+    @Transactional
     public List<Order> getAllOrders() { return orderService.getAllOrders(); }
 
     @GetMapping("/{id}")

@@ -14,15 +14,25 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
-    // ✅ Constructor injection (REQUIRED)
+    // ✅ Constructor injection
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
     }
 
-    // ===========================
-    //  BASIC ORDER OPERATIONS
-    // ===========================
+
+    public Order createOrder(Order order) {
+        if (order.getOrderItems() != null) {
+            for (OrderItem item : order.getOrderItems()) {
+                item.setOrder(order);
+            }
+        }
+
+        order.calculateTotal();
+
+        return orderRepository.save(order);
+    }
+
     public List<Order> getAllOrders() {
         return orderRepository.findAll();
     }
@@ -32,13 +42,6 @@ public class OrderService {
                 .orElseThrow(() -> new RuntimeException("Order not found"));
     }
 
-    public Order createOrder(Order order) {
-        if (order.getTotalAmount() == null) {
-            order.setTotalAmount(0.0);
-        }
-        return orderRepository.save(order);
-    }
-
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
     }
@@ -46,10 +49,7 @@ public class OrderService {
     public List<Order> getOrdersByCustomerId(Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
-
-    // ===========================
-    //  ADD ITEM TO ORDER
-    // ===========================
+    
     public Order addItemToOrder(Long orderId, OrderItem item) {
 
         // Load order
@@ -63,11 +63,17 @@ public class OrderService {
         orderItemRepository.save(item);
 
         // Recalculate total
-        double itemTotal = item.getPrice() * item.getQuantity();
-        order.setTotalAmount(order.getTotalAmount() + itemTotal);
+        order.calculateTotal(); // Use helper method if available in Entity, or logic below
+
+        // Manual calculation fallback if calculateTotal() logic isn't perfect in entity for updates
+        double newTotal = order.getOrderItems().stream()
+                .mapToDouble(i -> i.getPrice() * i.getQuantity())
+                .sum();
+        order.setTotalAmount(newTotal);
 
         return orderRepository.save(order);
     }
+
     public Order deleteItemFromOrder(Long orderId, Long itemId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
@@ -84,5 +90,4 @@ public class OrderService {
 
         return orderRepository.save(order);
     }
-
 }
