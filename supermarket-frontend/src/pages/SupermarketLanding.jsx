@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Clock, MapPin, Phone, Mail, Truck, CreditCard, Shield, ChevronRight, Facebook, Instagram, Twitter } from 'lucide-react';
 import '../styles/SupermarketLanding.css';
@@ -8,6 +8,10 @@ export default function SupermarketLanding() {
 
   const handleGetStarted = () => {
     navigate('/auth');
+  };
+
+  const handleAdminLogin = () => {
+    navigate('/admin-login');
   };
 
   return (
@@ -25,9 +29,14 @@ export default function SupermarketLanding() {
             <a href="#about" className="nav-link">About Us</a>
             <a href="#contact" className="nav-link">Contact</a>
           </nav>
-          <button onClick={handleGetStarted} className="login-btn">
-            Customer Login
-          </button>
+          <div style={{ display: 'flex', gap: '0.75rem' }}>
+            <button onClick={handleGetStarted} className="login-btn">
+              Customer Login
+            </button>
+            <button onClick={handleAdminLogin} className="login-btn" style={{ background: '#7c3aed' }}>
+              Admin Login
+            </button>
+          </div>
         </div>
       </header>
 
