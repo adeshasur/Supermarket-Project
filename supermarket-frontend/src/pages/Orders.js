@@ -1,32 +1,79 @@
 import React, { useState } from 'react';
 import OrderList from '../components/OrderList';
-import '../styles/TableStyles.css';
+// import OrderForm from '../components/OrderForm'; // ❌ Create Order Form එක අයින් කළා
+import OrderItemForm from '../components/OrderItemForm'; // ✅ Add Item Form එක තියාගත්තා
+import '../styles/App.css'; // Styles
 
 function Orders() {
   const [refreshKey, setRefreshKey] = useState(0);
+  const [inputTerm, setInputTerm] = useState('');
+  const [finalSearchTerm, setFinalSearchTerm] = useState('');
+  const [ordersList, setOrdersList] = useState([]); 
 
-  // Refresh Button එකට
-  const handleRefresh = () => {
+  const handleOrderUpdate = () => {
     setRefreshKey(prev => prev + 1);
+  };
+
+  const handleSearchClick = () => {
+    setFinalSearchTerm(inputTerm);
+  };
+
+  const handleClearSearch = () => {
+    setInputTerm('');
+    setFinalSearchTerm('');
   };
 
   return (
     <div className="inventory-page">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h1 className="page-title">Customer Orders Management</h1>
+      <h1 className="page-title">Customer Orders Management</h1>
+
+    {/* Search Bar */}
+      <div className="inventory-search-group">
+        <input 
+          type="text" 
+          placeholder="Search by Customer ID..." 
+          className="inventory-search-input"
+          value={inputTerm}
+          onChange={(e) => setInputTerm(e.target.value)}
+        />
         <button 
-          onClick={handleRefresh} 
-          className="search-btn"
-          style={{ backgroundColor: '#6c757d' }}
+            className="search-btn" 
+            onClick={handleSearchClick}
         >
-          Refresh Orders
+          Search
         </button>
+        {finalSearchTerm && (
+          <button 
+              className="clear-btn"
+              onClick={handleClearSearch}
+          >
+            Clear
+          </button>
+        )}
       </div>
 
-      {/* ✅ මෙතන තිබ්බ Form කෑලි ඔක්කොම අයින් කළා. දැන් List එක විතරයි */}
+      {/* ✅ MAIN SPLIT LAYOUT (Form Left | List Right) */}
       <div className="inventory-content">
-        <div className="inventory-list-section" style={{ width: '100%' }}>
-          <OrderList refreshKey={refreshKey} />
+        {/* --- LEFT COLUMN: Forms --- */}
+        <div className="inventory-form-section">
+
+          {/* ❌ REMOVED: Create Order Form */}
+
+          {/* 2. Add Item Form (KEPT) */}
+          <OrderItemForm 
+            orders={ordersList} 
+            onItemAdded={handleOrderUpdate} 
+          />
+
+        </div>
+
+        {/* --- RIGHT COLUMN: List --- */}
+        <div className="inventory-list-section">
+          <OrderList
+            refreshKey={refreshKey}
+            searchTerm={finalSearchTerm}
+            setOrdersForForm={setOrdersList} // List එකෙන් එන Orders Forms වලට යවනවා
+          />
         </div>
       </div>
     </div>

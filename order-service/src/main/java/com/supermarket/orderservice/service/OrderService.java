@@ -19,6 +19,7 @@ public class OrderService {
         this.orderItemRepository = orderItemRepository;
     }
 
+    // ✅ Order Status Update කරන්න අලුත් Method එක
     @Transactional
     public Order updateOrderStatus(Long orderId, String newStatus) {
         Order order = orderRepository.findById(orderId)
