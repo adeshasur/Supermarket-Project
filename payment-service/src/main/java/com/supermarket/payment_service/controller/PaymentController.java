@@ -1,17 +1,13 @@
-package com.supermarket.payment_service.Application.controller;
+package com.supermarket.payment_service.controller;
 
 
-import com.supermarket.payment_service.Application.dto.request.CreatePaymentDto;
-import com.supermarket.payment_service.Application.dto.response.PaymentGeneralDto;
+import com.supermarket.payment_service.dto.request.CreatePaymentDto;
+import com.supermarket.payment_service.dto.response.PaymentGeneralDto;
 import com.supermarket.payment_service.data.entity.Payment;
-import com.supermarket.payment_service.data.service.PaymentService;
+import com.supermarket.payment_service.service.PaymentService;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
-import java.util.HashMap;
 
 @RestController
 @RequestMapping("/payment")

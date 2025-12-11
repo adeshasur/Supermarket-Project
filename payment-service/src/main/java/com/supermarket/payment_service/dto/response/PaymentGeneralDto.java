@@ -1,4 +1,4 @@
-package com.supermarket.payment_service.Application.dto.response;
+package com.supermarket.payment_service.dto.response;
 
 import lombok.Data;
 
