@@ -1,39 +1,43 @@
 package com.supermarket.productservice.product.service;
 
 import com.supermarket.productservice.product.model.Product;
-import com.supermarket.productservice.product.repo.ProductRepository;
+import com.supermarket.productservice.product.repo.ProductRepository; // ✅ ඔයාගේ import එක තිබ්බ විදිහටම තිබ්බා (repo)
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
+
     private final ProductRepository repo;
 
     public ProductService(ProductRepository repo) {
         this.repo = repo;
     }
 
-    public List<Product> all() {
+    public List<Product> getAllProducts() {
         return repo.findAll();
     }
 
-    public Product one(Long id) {
+    public Product getProductById(Long id) {
         return repo.findById(id).orElse(null);
     }
 
-    public Product create(Product p) {
+    public Product createProduct(Product p) {
         return repo.save(p);
     }
 
-    public Product update(Long id, Product p) {
-        p.setId(id);
-        return repo.save(p);
+    public Product updateProduct(Long id, Product p) {
+        if (repo.existsById(id)) {
+            p.setId(id);
+            return repo.save(p);
+        }
+        return null;
     }
 
-    public boolean delete(Long id) {
-        if (!repo.existsById(id)) return false;
+    // ✅ 5. Delete Product (Controller එක ඉල්ලන්නේ මේ නම)
+    public void deleteProduct(Long id) {
         repo.deleteById(id);
-        return true;
     }
 }

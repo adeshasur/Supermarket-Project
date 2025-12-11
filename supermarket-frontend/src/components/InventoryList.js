@@ -18,7 +18,7 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
       setLoading(true);
       setError(null);
       const [invRes, prodRes] = await Promise.all([
-        axios.get("http://localhost:8082/inventory/all"),
+        axios.get("http://localhost:8082/api/inventory/all"),
         axios.get("http://localhost:8081/api/products")
       ]);
       setInventory(invRes.data);

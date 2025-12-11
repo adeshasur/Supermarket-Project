@@ -1,7 +1,9 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 
-const CartContext = createContext();
+// ✅ FIX: මෙතන 'export' වචනය අනිවාර්යයෙන්ම ඕන
+export const CartContext = createContext();
 
+// Custom hook to use the cart context easily
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {

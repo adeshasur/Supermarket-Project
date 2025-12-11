@@ -14,6 +14,20 @@ public class CustomerService {
     @Autowired
     private CustomerRepository repository;
 
+
+    public Customer saveCustomer(Customer customer) {
+        return repository.save(customer);
+    }
+
+    public Customer loginCustomer(String email, String password) {
+        Customer customer = repository.findByEmail(email);
+
+        if (customer != null && customer.getPassword().equals(password)) {
+            return customer;
+        }
+        return null;
+    }
+
     // Get all customers
     public List<Customer> getAllCustomers() {
         return repository.findAll();
