@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="76b0370f-051f-44ad-ab8f-900980c53e85" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../payment-service/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/components/UserForm.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/components/UserList.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Users.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Users.js" afterDir="false" />
-    </list>
+    <list default="true" id="76b0370f-051f-44ad-ab8f-900980c53e85" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
