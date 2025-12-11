@@ -3,7 +3,7 @@ package com.supermarket.orderservice.controller;
 import com.supermarket.orderservice.model.Order;
 import com.supermarket.orderservice.model.OrderItem;
 import com.supermarket.orderservice.service.OrderService;
-import org.springframework.transaction.annotation.Transactional; // ✅ Import කරන්න
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +27,16 @@ public class OrderController {
 
     @PostMapping
     public Order createOrder(@RequestBody Order order) { return orderService.createOrder(order); }
+
+    // ✅ FIX: Order Status Update කරන්න අලුත් Endpoint එක
+    @PutMapping("/{id}/status")
+    public Order updateOrderStatus(
+            @PathVariable Long id,
+            @RequestBody String status) {
+
+        // Front-end එකෙන් එන String එක කෙලින්ම service එකට යවනවා
+        return orderService.updateOrderStatus(id, status);
+    }
 
     @DeleteMapping("/{id}")
     public void deleteOrder(@PathVariable Long id) { orderService.deleteOrder(id); }

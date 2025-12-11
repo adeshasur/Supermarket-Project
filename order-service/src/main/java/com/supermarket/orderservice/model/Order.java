@@ -21,8 +21,11 @@ public class Order {
     @Column(name = "total_amount")
     private Double totalAmount = 0.0;
 
-    private String paymentStatus; // e.g., "SUCCESS", "PENDING"
-    private String transactionId; // Payment Service එකේ ID එක
+    private String paymentStatus;
+    private String transactionId;
+
+    // ✅ FIX: Order Status field එක එකතු කළා
+    private String orderStatus = "PAID";
 
     @CreationTimestamp
     @Column(name = "order_date", updatable = false)
@@ -49,6 +52,10 @@ public class Order {
 
     public String getTransactionId() { return transactionId; }
     public void setTransactionId(String transactionId) { this.transactionId = transactionId; }
+
+    // ✅ FIX: Getter & Setter for orderStatus
+    public String getOrderStatus() { return orderStatus; }
+    public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
 
     public Timestamp getOrderDate() { return orderDate; }
     public void setOrderDate(Timestamp orderDate) { this.orderDate = orderDate; }

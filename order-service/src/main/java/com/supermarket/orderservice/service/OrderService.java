@@ -5,7 +5,7 @@ import com.supermarket.orderservice.model.OrderItem;
 import com.supermarket.orderservice.repository.OrderItemRepository;
 import com.supermarket.orderservice.repository.OrderRepository;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -14,22 +14,30 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderItemRepository orderItemRepository;
 
-    // ✅ Constructor injection
     public OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
         this.orderRepository = orderRepository;
         this.orderItemRepository = orderItemRepository;
     }
 
+    @Transactional
+    public Order updateOrderStatus(Long orderId, String newStatus) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Order not found"));
 
+        order.setOrderStatus(newStatus);
+
+        return orderRepository.save(order);
+    }
+
+    // ... (Existing createOrder Method) ...
+    @Transactional
     public Order createOrder(Order order) {
         if (order.getOrderItems() != null) {
             for (OrderItem item : order.getOrderItems()) {
                 item.setOrder(order);
             }
         }
-
         order.calculateTotal();
-
         return orderRepository.save(order);
     }
 
@@ -49,23 +57,15 @@ public class OrderService {
     public List<Order> getOrdersByCustomerId(Long customerId) {
         return orderRepository.findByCustomerId(customerId);
     }
-    
-    public Order addItemToOrder(Long orderId, OrderItem item) {
 
-        // Load order
+    @Transactional
+    public Order addItemToOrder(Long orderId, OrderItem item) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-
-        // Link item to order
         item.setOrder(order);
-
-        // Save item
         orderItemRepository.save(item);
+        order.calculateTotal();
 
-        // Recalculate total
-        order.calculateTotal(); // Use helper method if available in Entity, or logic below
-
-        // Manual calculation fallback if calculateTotal() logic isn't perfect in entity for updates
         double newTotal = order.getOrderItems().stream()
                 .mapToDouble(i -> i.getPrice() * i.getQuantity())
                 .sum();
@@ -74,20 +74,17 @@ public class OrderService {
         return orderRepository.save(order);
     }
 
+    @Transactional
     public Order deleteItemFromOrder(Long orderId, Long itemId) {
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new RuntimeException("Order not found"));
-
         order.getOrderItems().removeIf(item -> item.getId().equals(itemId));
-
-        // Recalculate total
+        order.calculateTotal();
         double newTotal = order.getOrderItems()
                 .stream()
                 .mapToDouble(item -> item.getPrice() * item.getQuantity())
                 .sum();
-
         order.setTotalAmount(newTotal);
-
         return orderRepository.save(order);
     }
 }
