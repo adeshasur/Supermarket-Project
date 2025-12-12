@@ -12,7 +12,14 @@ function Orders() {
   };
 
   const handleSearchClick = () => {
-    setFinalSearchTerm(inputTerm);
+    // Ensure only numeric input is searched for Order ID lookup
+    const numericTerm = inputTerm.trim();
+    if (numericTerm === '' || !isNaN(Number(numericTerm))) {
+      setFinalSearchTerm(numericTerm);
+    } else {
+      alert("Please enter a valid numeric Order ID for search.");
+      setFinalSearchTerm(''); // Clear previous search if invalid input
+    }
   };
 
   const handleClearSearch = () => {
@@ -24,11 +31,11 @@ function Orders() {
     <div className="inventory-page">
       <h1 className="page-title">Customer Orders Management</h1>
 
-      {/* Search Bar */}
+      {/* Search Bar - CHANGED PLACEHOLDER */}
       <div className="inventory-search-group">
         <input 
           type="text" 
-          placeholder="Search by Customer ID..." 
+          placeholder="Search by Order ID..." // <--- CHANGED TEXT
           className="inventory-search-input"
           value={inputTerm}
           onChange={(e) => setInputTerm(e.target.value)}
@@ -48,7 +55,8 @@ function Orders() {
         <div className="inventory-list-section">
           <OrderList
             refreshKey={refreshKey}
-            searchTerm={finalSearchTerm}
+            searchTerm={finalSearchTerm} // Pass the term down
+            onOrderUpdated={handleOrderUpdate} // Ensure this prop is available for re-fetching after delete
           />
         </div>
       </div>

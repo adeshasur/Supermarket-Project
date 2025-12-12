@@ -36,21 +36,30 @@ function StockUpdateForm({ onStockUpdated }) {
     const id = Number(productId.trim()); // convert input to number
     const qty = Number(quantity.trim());
 
-    // 2a. Validate input
-    if (isNaN(id) || isNaN(qty)) {
+    // Helper function for quick error display
+    const showError = (msg) => {
       setIsError(true);
-      setMessage('Please enter valid numbers.');
+      setMessage(msg);
       setSubmitting(false);
       setTimeout(() => setMessage(null), 3000);
+    };
+
+    // 2a. Validate input
+    if (isNaN(id) || isNaN(qty)) {
+      showError('Please enter valid numbers.');
       return;
     }
+    
+    // ⭐ NEW VALIDATION: Check for negative quantity ⭐
+    if (qty < 0) {
+      showError('Quantity cannot be a negative number.');
+      return;
+    }
+    // ⭐ END NEW VALIDATION ⭐
 
     // 2b. Check if product exists
     if (!productList.includes(id)) {
-      setIsError(true);
-      setMessage('Invalid Product ID. Cannot update.');
-      setSubmitting(false);
-      setTimeout(() => setMessage(null), 3000);
+      showError('Invalid Product ID. Cannot update.');
       return;
     }
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
-function OrderList({ refreshKey }) {
+// Add 'searchTerm' to props
+function OrderList({ refreshKey, searchTerm }) {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedOrder, setSelectedOrder] = useState(null);
@@ -10,34 +11,56 @@ function OrderList({ refreshKey }) {
     const ORDER_SERVICE_URL = "http://localhost:8084/api/orders";
     const CUSTOMER_SERVICE_URL = "http://localhost:8083/customers";
 
-    // Fetch all orders
+    // Fetch orders (MODIFIED TO HANDLE SEARCH TERM)
     const fetchOrders = async () => {
         try {
             setLoading(true);
-            const res = await axios.get(ORDER_SERVICE_URL);
-            setOrders(res.data);
+            let res;
+
+            if (searchTerm && !isNaN(Number(searchTerm))) {
+                // Mode 1: Search by specific Order ID
+                console.log(`Searching for Order ID: ${searchTerm}`);
+                try {
+                    res = await axios.get(`${ORDER_SERVICE_URL}/${searchTerm}`);
+                    // If successful, wrap the single order object in an array
+                    setOrders([res.data]); 
+                } catch (searchError) {
+                    // Handle 404 (Not Found) or other errors during single lookup
+                    console.error(`Order ID ${searchTerm} not found.`, searchError);
+                    setOrders([]);
+                }
+            } else {
+                // Mode 2: Fetch all orders
+                console.log("Fetching all orders.");
+                res = await axios.get(ORDER_SERVICE_URL);
+                setOrders(res.data);
+            }
+            
             setLoading(false);
         } catch (error) {
             console.error("Error fetching orders:", error);
             setLoading(false);
+            setOrders([]);
         }
     };
 
-    useEffect(() => { fetchOrders(); }, [refreshKey]);
+    // Add searchTerm to dependency array so search triggers a new fetch
+    useEffect(() => { fetchOrders(); }, [refreshKey, searchTerm]);
 
-    // Delete order
+    // Delete order (no change needed here)
     const handleDelete = async (id) => {
         if (window.confirm("Delete this order?")) {
             try {
                 await axios.delete(`${ORDER_SERVICE_URL}/${id}`);
-                fetchOrders();
+                // Use fetchOrders() to refresh based on the current search context
+                fetchOrders(); 
             } catch (err) {
                 alert("Error deleting order");
             }
         }
     };
 
-    // View order + customer details
+    // View order + customer details (no change needed here)
     const viewDetails = async (orderId) => {
         try {
             const orderRes = await axios.get(`${ORDER_SERVICE_URL}/${orderId}`);
@@ -51,14 +74,19 @@ function OrderList({ refreshKey }) {
         }
     };
 
-    // Close modal
+    // Close modal (no change needed here)
     const closeModal = () => {
         setSelectedOrder(null);
         setSelectedCustomer(null);
     };
 
     if (loading) return <p>Loading Orders...</p>;
-    if (orders.length === 0) return <p>No orders found.</p>;
+    
+    // Check if searching returned zero results
+    if (orders.length === 0) {
+        return <p>{searchTerm ? `No orders found for ID: ${searchTerm}.` : 'No orders found.'}</p>;
+    }
+
 
     return (
         <div className="app-table-container">

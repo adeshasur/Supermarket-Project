@@ -124,8 +124,8 @@ function PaymentList({ refreshKey, searchTerm }) {
             <table className="app-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr style={{ background: '#f8f8f8' }}>
-                        <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>ID</th>
                         <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Order ID</th>
+                        {/* REMOVED: Order ID column was here */}
                         <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Amount (Rs.)</th>
                         <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Payment Status</th>
                         <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Transaction ID</th>
@@ -137,7 +137,7 @@ function PaymentList({ refreshKey, searchTerm }) {
                     {payments.map((p) => (
                         <tr key={p.id} style={{ borderBottom: '1px solid #eee' }}>
                             <td style={{ padding: '12px 15px' }}>{p.id}</td>
-                            <td style={{ padding: '12px 15px' }}>{p.orderId}</td>
+                            {/* REMOVED: p.orderId data cell was here */}
                             <td style={{ padding: '12px 15px' }}>{p.amount?.toFixed(2) || '0.00'}</td>
                             <td 
                                 style={{ 
