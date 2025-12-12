@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import { CreditCard, Lock, Calendar } from 'lucide-react';
-import '../styles/FormStyles.css'; 
+import '../styles/FormStyles.css';
 
 export default function PaymentPage() {
   const location = useLocation();
@@ -10,13 +9,12 @@ export default function PaymentPage() {
   const { cartItems, clearCart } = useContext(CartContext);
 
   const totalAmount = location.state?.total || 0;
-  // ... (rest of states: cardNumber, expiry, loading, etc.) ...
   const [cardNumber, setCardNumber] = useState('');
   const [expiry, setExpiry] = useState('');
   const [cvc, setCvc] = useState('');
   const [holderName, setHolderName] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (totalAmount <= 0) {
@@ -24,39 +22,62 @@ export default function PaymentPage() {
     }
   }, [totalAmount, navigate]);
 
+  // VALIDATIONS
+  const validate = () => {
+    const newErrors = {};
 
-  // ✅ 1. NEW FUNCTION: Inventory Stock අඩු කරන්න
+    // Card Number: 16 digits only
+    if (!/^\d{16}$/.test(cardNumber)) {
+      newErrors.cardNumber = "Card Number must be 16 digits.";
+    }
+
+    // Expiry: MM/YY and not expired
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)) {
+      newErrors.expiry = "Expiry must be in MM/YY format.";
+    } else {
+      const [month, year] = expiry.split('/').map(Number);
+      const expDate = new Date(2000 + year, month - 1, 1);
+      const now = new Date();
+      now.setDate(1); // ignore day
+      if (expDate < now) newErrors.expiry = "Card is expired.";
+    }
+
+    // CVV: 3 digits
+    if (!/^\d{3}$/.test(cvc)) {
+      newErrors.cvc = "CVV must be 3 digits.";
+    }
+
+    // Holder Name: letters and spaces only
+    if (!/^[a-zA-Z\s]+$/.test(holderName)) {
+      newErrors.holderName = "Card Holder Name is invalid.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const reduceInventory = async () => {
     try {
-      // Cart එකේ තියෙන හැම Item එකක්ම Deduct කරන්න වෙන වෙනම Call කරන්න ඕන
       const deductionPromises = cartItems.map(item => {
         const reductionPayload = {
           productId: item.id,
-          quantity: item.quantity * -1 // Stock අඩු කරන්න -1 න් ගුණ කරනවා
+          quantity: item.quantity * -1
         };
-
-        // Inventory Service (8082) එකේ 'update' Endpoint එක පාවිච්චි කරනවා යැයි උපකල්පනය කරමු
         return fetch('http://localhost:8082/api/inventory/update', { 
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(reductionPayload)
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(reductionPayload)
         });
       });
-
-      // හැම Call එකක්ම ඉවර වෙනකම් ඉන්නවා
       await Promise.all(deductionPromises);
       console.log("Inventory successfully reduced.");
-
     } catch (error) {
       console.error("Inventory Reduction Failed:", error);
-      // මෙතනදී transaction එක rollback කරන්න බැරි නිසා, අපි Alert එකක් දෙනවා.
       alert("WARNING: Stock deduction failed. Manual inventory update may be required.");
     }
   };
 
-
   const createOrder = async (paymentData) => {
-    // ... (existing createOrder logic remains the same) ...
     try {
       const customer = JSON.parse(localStorage.getItem("customer"));
       const customerId = customer ? customer.id : 1; 
@@ -80,30 +101,30 @@ export default function PaymentPage() {
 
       if (response.ok) {
         console.log("Order saved successfully!");
-        return true; // Success return
+        return true;
       } else {
         console.error("Order save failed");
-        return false; // Failure return
+        return false;
       }
     } catch (error) {
       console.error("Order Service Error:", error);
-      return false; // Failure return
+      return false;
     }
   };
 
   const handlePayment = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    if (!validate()) return;
 
+    setLoading(true);
     const paymentPayload = {
       orderId: Math.floor(Math.random() * 100000), 
       amount: totalAmount,
       paymentStatus: "SUCCESS",
-      last4: cardNumber.slice(-4) || "0000"
+      last4: cardNumber.slice(-4)
     };
 
     try {
-      // Step A: Payment Service (8085)
       const paymentResponse = await fetch('http://localhost:8085/payment/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -113,16 +134,12 @@ export default function PaymentPage() {
       if (paymentResponse.ok) {
         const paymentResult = await paymentResponse.json();
 
-        // Step B: Order එක Save කරනවා
         const orderSuccess = await createOrder({
           paymentStatus: "SUCCESS",
           transactionId: paymentResult.transactionId || "TXN-" + Date.now()
         }); 
         
-        // ✅ Step C: Order එක හැදුන නම් Stock අඩු කරනවා
-        if(orderSuccess) {
-            await reduceInventory();
-        }
+        if(orderSuccess) await reduceInventory();
 
         alert("Transaction Complete! Stock Updated. 🎉");
         clearCart(); 
@@ -130,7 +147,6 @@ export default function PaymentPage() {
       } else {
         alert("Transaction Failed! Payment Service Error.");
       }
-
     } catch (error) {
       console.error("Process Error:", error);
       alert("Connection Error! Check All Services.");
@@ -140,22 +156,26 @@ export default function PaymentPage() {
   };
 
   return (
-    // ... (rest of the PaymentPage UI remains the same) ...
     <div style={{ maxWidth: '500px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '10px' }}>
       <h2 style={{ textAlign: 'center' }}>Secure Payment</h2>
       <div style={{ textAlign: 'center', margin: '20px 0', color: '#007bff' }}>
         <h1>Rs. {totalAmount.toFixed(2)}</h1>
       </div>
-      
+
       <form onSubmit={handlePayment}>
-        {/* Simple Form Fields (Card, Date, CVV) */}
         <input type="text" placeholder="Card Number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required style={inputStyle} maxLength="16"/>
+        {errors.cardNumber && <p style={errorStyle}>{errors.cardNumber}</p>}
+
         <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-            <input type="text" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required style={inputStyle} maxLength="5"/>
-            <input type="password" placeholder="CVV" value={cvc} onChange={e => setCvc(e.target.value)} required style={inputStyle} maxLength="3"/>
+          <input type="text" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required style={inputStyle} maxLength="5"/>
+          <input type="password" placeholder="CVV" value={cvc} onChange={e => setCvc(e.target.value)} required style={inputStyle} maxLength="3"/>
         </div>
+        {errors.expiry && <p style={errorStyle}>{errors.expiry}</p>}
+        {errors.cvc && <p style={errorStyle}>{errors.cvc}</p>}
+
         <input type="text" placeholder="Card Holder Name" value={holderName} onChange={e => setHolderName(e.target.value)} required style={{...inputStyle, marginTop: '10px'}} />
-        
+        {errors.holderName && <p style={errorStyle}>{errors.holderName}</p>}
+
         <button type="submit" disabled={loading} style={btnStyle}>
           {loading ? "Processing..." : "Pay Now"}
         </button>
@@ -167,3 +187,4 @@ export default function PaymentPage() {
 // Simple Styles
 const inputStyle = { width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' };
 const btnStyle = { width: '100%', padding: '15px', background: '#28a745', color: 'white', border: 'none', borderRadius: '5px', marginTop: '20px', fontSize: '18px', cursor: 'pointer' };
+const errorStyle = { color: 'red', fontSize: '14px', marginTop: '3px' };
