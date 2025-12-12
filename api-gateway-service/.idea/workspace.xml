@@ -5,18 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="76b0370f-051f-44ad-ab8f-900980c53e85" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/../payment-service/src/main/java/com/supermarket/payment_service/config/WebSocketConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../payment-service/src/main/java/com/supermarket/payment_service/data/entity/Notification.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../order-service/src/main/java/com/supermarket/orderservice/model/Order.java" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/java/com/supermarket/orderservice/model/Order.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../payment-service/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../payment-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../payment-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/target/classes/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../payment-service/target/test-classes/com/supermarket/payment_service/PaymentServiceApplicationTests.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/components/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/components/OrderList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/components/PaymentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/components/PaymentList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerCart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerCart.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerHome.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerHome.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Orders.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Payment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user_service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../user_service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

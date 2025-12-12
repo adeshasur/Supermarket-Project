@@ -10,11 +10,10 @@ export default function CustomerCart() {
 
   const totalAmount = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
 
-  // ✅ Checkout Function එක
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
     
-    // Payment Page එකට යනවා, Total එකත් අරගෙන
+ 
     navigate('/payment', { state: { total: totalAmount } });
   };
 

@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import OrderList from '../components/OrderList';
-// import OrderForm from '../components/OrderForm'; // ❌ Create Order Form එක අයින් කළා
-import OrderItemForm from '../components/OrderItemForm'; // ✅ Add Item Form එක තියාගත්තා
-import '../styles/App.css'; // Styles
+import '../styles/App.css';
 
 function Orders() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [inputTerm, setInputTerm] = useState('');
   const [finalSearchTerm, setFinalSearchTerm] = useState('');
-  const [ordersList, setOrdersList] = useState([]); 
 
   const handleOrderUpdate = () => {
     setRefreshKey(prev => prev + 1);
@@ -27,7 +24,7 @@ function Orders() {
     <div className="inventory-page">
       <h1 className="page-title">Customer Orders Management</h1>
 
-    {/* Search Bar */}
+      {/* Search Bar */}
       <div className="inventory-search-group">
         <input 
           type="text" 
@@ -36,43 +33,22 @@ function Orders() {
           value={inputTerm}
           onChange={(e) => setInputTerm(e.target.value)}
         />
-        <button 
-            className="search-btn" 
-            onClick={handleSearchClick}
-        >
+        <button className="search-btn" onClick={handleSearchClick}>
           Search
         </button>
         {finalSearchTerm && (
-          <button 
-              className="clear-btn"
-              onClick={handleClearSearch}
-          >
+          <button className="clear-btn" onClick={handleClearSearch}>
             Clear
           </button>
         )}
       </div>
 
-      {/* ✅ MAIN SPLIT LAYOUT (Form Left | List Right) */}
+      {/* Orders List */}
       <div className="inventory-content">
-        {/* --- LEFT COLUMN: Forms --- */}
-        <div className="inventory-form-section">
-
-          {/* ❌ REMOVED: Create Order Form */}
-
-          {/* 2. Add Item Form (KEPT) */}
-          <OrderItemForm 
-            orders={ordersList} 
-            onItemAdded={handleOrderUpdate} 
-          />
-
-        </div>
-
-        {/* --- RIGHT COLUMN: List --- */}
         <div className="inventory-list-section">
           <OrderList
             refreshKey={refreshKey}
             searchTerm={finalSearchTerm}
-            setOrdersForForm={setOrdersList} // List එකෙන් එන Orders Forms වලට යවනවා
           />
         </div>
       </div>

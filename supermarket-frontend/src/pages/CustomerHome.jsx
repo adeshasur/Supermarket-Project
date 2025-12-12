@@ -6,7 +6,7 @@ import '../styles/CustomerHome.css';
 
 export default function CustomerHome() {
   const navigate = useNavigate();
-  // ✅ Global Cart එකට සම්බන්ධ වුණා
+ 
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
@@ -14,7 +14,7 @@ export default function CustomerHome() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
-  // Products Fetching (Product + Inventory Merge Logic)
+  
   useEffect(() => {
     fetchData();
   }, []);
@@ -60,13 +60,13 @@ export default function CustomerHome() {
     }
   }, [searchQuery, products]);
 
-  // ✅ Helper: Cart එකේ මේ බඩුව කොච්චර තියෙනවද කියලා බලනවා
+  
   const getProductQuantity = (productId) => {
     const item = cartItems.find(item => item.id === productId);
     return item ? item.quantity : 0;
   };
 
-  // ✅ Total items count for badge
+  
   const getCartCount = () => {
     return cartItems.reduce((sum, item) => sum + item.quantity, 0);
   };
