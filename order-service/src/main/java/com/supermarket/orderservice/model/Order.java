@@ -14,6 +14,14 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String orderStatus = "PENDING"; // default
+
+    // Getter
+    public String getOrderStatus() { return orderStatus; }
+
+    // Setter
+    public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
+
 
     @Column(name = "customer_id", nullable = false)
     private Long customerId;

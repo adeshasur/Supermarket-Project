@@ -17,7 +17,6 @@ public class OrderController {
 
     public OrderController(OrderService orderService) { this.orderService = orderService; }
 
-
     @GetMapping
     @Transactional
     public List<Order> getAllOrders() { return orderService.getAllOrders(); }
@@ -28,13 +27,11 @@ public class OrderController {
     @PostMapping
     public Order createOrder(@RequestBody Order order) { return orderService.createOrder(order); }
 
-    // ✅ FIX: Order Status Update කරන්න අලුත් Endpoint එක
+    // ✅ Update order status endpoint
     @PutMapping("/{id}/status")
     public Order updateOrderStatus(
             @PathVariable Long id,
             @RequestBody String status) {
-
-        // Front-end එකෙන් එන String එක කෙලින්ම service එකට යවනවා
         return orderService.updateOrderStatus(id, status);
     }
 
@@ -45,14 +42,22 @@ public class OrderController {
     public List<Order> getOrdersByCustomerId(@RequestParam Long customerId) {
         return orderService.getOrdersByCustomerId(customerId);
     }
+
     @PostMapping("/{orderId}/items")
     public Order addItemToOrder(@PathVariable Long orderId, @RequestBody OrderItem item) {
         return orderService.addItemToOrder(orderId, item);
     }
+
     @DeleteMapping("/{orderId}/items/{itemId}")
     public Order deleteItemFromOrder(@PathVariable Long orderId, @PathVariable Long itemId) {
         return orderService.deleteItemFromOrder(orderId, itemId);
     }
 
+    // ✅ NEW: View order details including customer info (frontend will fetch customer separately)
+    @GetMapping("/{id}/details")
+    public Order getOrderDetails(@PathVariable Long id) {
+        // Returns the order object; frontend can use order.customerId to fetch customer info
+        return orderService.getOrderById(id);
+    }
 
 }
