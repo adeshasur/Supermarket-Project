@@ -19,13 +19,17 @@ public class Customer {
     private String address;
     private String password;
 
+    // ✅ Add phone
+    private String phone;
+
     public Customer() {}
 
-    public Customer(String name, String email, String address, String password) {
+    public Customer(String name, String email, String address, String password, String phone) {
         this.name = name;
         this.email = email;
         this.address = address;
         this.password = password;
+        this.phone = phone;
     }
 
     // Getters and Setters
@@ -43,4 +47,7 @@ public class Customer {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public String getPhone() { return phone; }
+    public void setPhone(String phone) { this.phone = phone; }
 }

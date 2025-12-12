@@ -41,7 +41,7 @@ function PaymentForm({ onPaymentAdded }) {
 
     return (
         <div className="form-container">
-            <h3>Make Payment</h3>
+            <h3>Add Payment</h3>
             <p>Enter Order ID and Amount.</p>
             <form onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -68,7 +68,7 @@ function PaymentForm({ onPaymentAdded }) {
                 </div>
 
                 <button type="submit" className="submit-btn" disabled={submitting}>
-                    {submitting ? 'Processing...' : 'Pay Now'}
+                    {submitting ? 'Processing...' : 'save payment'}
                 </button>
             </form>
 

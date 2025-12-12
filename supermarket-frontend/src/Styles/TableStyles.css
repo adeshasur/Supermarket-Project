@@ -333,3 +333,18 @@ tr.in-stock .status-dot { background-color: #00b894; }
 .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px; }
 .cancel-btn { padding: 10px 20px; background-color: #6c757d; color: white; border: none; border-radius: 6px; cursor: pointer; }
 .save-btn { padding: 10px 20px; background-color: #28a745; color: white; border: none; border-radius: 6px; cursor: pointer; }
+/* ===== HORIZONTAL LAYOUT FOR FORM + LIST ===== */
+.inventory-content {
+    display: flex !important;
+    flex-direction: row !important; /* Horizontal */
+    gap: 20px; /* Space between form and list */
+    align-items: flex-start; /* Align top */
+    flex-wrap: wrap; /* If screen is too small, wrap */
+}
+
+.inventory-list-section,
+.quick-add-container,
+.app-table-container {
+    flex: 1; /* Make them share space evenly */
+    min-width: 300px; /* Avoid shrinking too much */
+}
