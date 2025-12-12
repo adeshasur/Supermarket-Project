@@ -5,8 +5,8 @@ import SupermarketLanding from "./pages/SupermarketLanding.jsx";
 import CustomerAuthForm from "./pages/CustomerAuthForm.jsx";
 import AdminLoginForm from "./pages/AdminLoginForm.jsx";
 import CustomerHome from './pages/CustomerHome.jsx';
-import CustomerCart from "./pages/CustomerCart"; // ✅ 1. Cart Page එක Import කරන්න
-import PaymentPage from "./pages/PaymentPage"; // ✅ 2. Payment Page එක Import කරන්න
+import CustomerCart from "./pages/CustomerCart";
+import PaymentPage from "./pages/PaymentPage";
 
 import Sidebar from "./layout/Sidebar";
 import Header from "./layout/Header";
@@ -17,12 +17,13 @@ import Products from "./pages/Products";
 import Inventory from "./pages/Inventory";
 import Orders from "./pages/Orders";
 import Users from "./pages/Users";
-import Payment from "./pages/Payment"; // Admin Payment View
+import Payment from "./pages/Payment";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 
 import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
+import { NotificationProvider } from "./context/NotificationProvider";
 
 import "./styles/App.css";
 
@@ -45,60 +46,50 @@ function App() {
   return (
     <ThemeProvider>
       <CartProvider>
-        <Router>
-          <Routes>
+        <NotificationProvider>
+          <Router>
+            <Routes>
+              <Route path="/" element={<SupermarketLanding />} />
+              <Route path="/auth" element={<CustomerAuthForm />} />
+              <Route path="/customer-home" element={<CustomerHome />} />
+              <Route path="/customer-cart" element={<CustomerCart />} />
+              <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/admin-login" element={<AdminLoginForm onLogin={() => setUserRole("admin")} />} />
 
-            {/* --- Public Customer Routes --- */}
-            <Route path="/" element={<SupermarketLanding />} />
-            <Route path="/auth" element={<CustomerAuthForm />} />
-            <Route path="/customer-home" element={<CustomerHome />} />
-            
-            {/* ✅ 3. Customer Cart Route එක දාන්න */}
-            <Route path="/customer-cart" element={<CustomerCart />} />
-            
-            {/* ✅ 4. Payment Route එක දාන්න */}
-            <Route path="/payment" element={<PaymentPage />} />
+              {userRole && (
+                <Route
+                  path="/admin/*"
+                  element={
+                    <div className="app-container">
+                      <Sidebar />
+                      <main className="page-content">
+                        <Header />
+                        <div className="content-wrapper">
+                          <Routes>
+                            <Route path="dashboard" element={<Dashboard />} />
+                            <Route path="products" element={<Products />} />
+                            <Route path="inventory" element={<Inventory />} />
+                            <Route path="orders" element={<Orders />} />
+                            <Route path="users" element={<Users />} />
+                            <Route path="payment" element={<Payment />} />
+                            <Route path="profile" element={<Profile />} />
+                            <Route path="settings" element={<Settings />} />
+                            <Route path="*" element={<Navigate to="/admin/dashboard" />} />
+                          </Routes>
+                        </div>
+                        <Footer />
+                      </main>
+                    </div>
+                  }
+                />
+              )}
 
-            <Route
-              path="/admin-login"
-              element={<AdminLoginForm onLogin={() => setUserRole("admin")} />}
-            />
-
-            {/* --- Protected Admin Routes --- */}
-            {userRole && (
-              <Route
-                path="/admin/*"
-                element={
-                  <div className="app-container">
-                    <Sidebar />
-                    <main className="page-content">
-                      <Header />
-                      <div className="content-wrapper">
-                        <Routes>
-                          <Route path="dashboard" element={<Dashboard />} />
-                          <Route path="products" element={<Products />} />
-                          <Route path="inventory" element={<Inventory />} />
-                          <Route path="orders" element={<Orders />} />
-                          <Route path="users" element={<Users />} />
-                          <Route path="payment" element={<Payment />} /> {/* Admin Payment View */}
-                          <Route path="profile" element={<Profile />} />
-                          <Route path="settings" element={<Settings />} />
-                          <Route path="*" element={<Navigate to="/admin/dashboard" />} />
-                        </Routes>
-                      </div>
-                      <Footer />
-                    </main>
-                  </div>
-                }
-              />
-            )}
-
-            {!userRole && (
-              <Route path="/admin/*" element={<Navigate to="/admin-login" />} />
-            )}
-
-          </Routes>
-        </Router>
+              {!userRole && (
+                <Route path="/admin/*" element={<Navigate to="/admin-login" />} />
+              )}
+            </Routes>
+          </Router>
+        </NotificationProvider>
       </CartProvider>
     </ThemeProvider>
   );

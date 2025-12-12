@@ -17,10 +17,10 @@ public class Order {
     private String orderStatus = "PENDING"; // default
 
     // Getter
-    public String getOrderStatus() { return orderStatus; }
+    //public String getOrderStatus() { return orderStatus; }
 
     // Setter
-    public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
+    //public void setOrderStatus(String orderStatus) { this.orderStatus = orderStatus; }
 
 
     @Column(name = "customer_id", nullable = false)
@@ -33,7 +33,7 @@ public class Order {
     private String transactionId;
 
     // ✅ FIX: Order Status field එක එකතු කළා
-    private String orderStatus = "PAID";
+    //private String orderStatus = "PAID";
 
     @CreationTimestamp
     @Column(name = "order_date", updatable = false)

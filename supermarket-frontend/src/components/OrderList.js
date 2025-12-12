@@ -5,6 +5,19 @@ function OrderList({ refreshKey }) {
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // 🔥 FIX 1: Add missing adminName
+    const adminName = "Admin";
+
+    // 🔥 FIX 2: Add missing modal states
+    const [selectedOrder, setSelectedOrder] = useState(null);
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
+
+    // 🔥 FIX 3: Add missing closeModal function
+    const closeModal = () => {
+        setSelectedOrder(null);
+        setSelectedCustomer(null);
+    };
+
     const ORDER_SERVICE_URL = "http://localhost:8084/api/orders"; 
 
     // Fetch all orders
@@ -24,11 +37,15 @@ function OrderList({ refreshKey }) {
 
     const handleDelete = async (id) => {
         if(window.confirm("Delete this order?")) {
-            try { await axios.delete(`${ORDER_SERVICE_URL}/${id}`); fetchOrders(); } 
-            catch (err) { alert("Error deleting order"); }
+            try { 
+                await axios.delete(`${ORDER_SERVICE_URL}/${id}`); 
+                fetchOrders(); 
+            } 
+            catch (err) { 
+                alert("Error deleting order"); 
+            }
         }
     };
-
 
     if (loading) return <p>Loading Orders...</p>;
     if (orders.length === 0) return <p>No orders found.</p>;
@@ -42,7 +59,7 @@ function OrderList({ refreshKey }) {
                     <tr>
                         <th>Order ID</th>
                         <th>Total Amount</th>
-                        <th>Payment Status</th> {/* ✅ අලුත් Column එක */}
+                        <th>Payment Status</th>
                         <th>Items</th>
                         <th>Action</th>
                     </tr>
@@ -53,15 +70,25 @@ function OrderList({ refreshKey }) {
                             <td>#{order.id}</td>
                             <td>{order.orderDate ? new Date(order.orderDate).toLocaleString() : 'N/A'}</td>
                             <td>Rs. {order.totalAmount ? order.totalAmount.toFixed(2) : '0.00'}</td>
-                            
-                            {/* ✅ Payment Status පෙන්නනවා */}
+
+                            {/* Payment Status */}
                             <td style={{ fontWeight: 'bold', color: order.paymentStatus === 'SUCCESS' ? 'green' : 'orange' }}>
                                 {order.paymentStatus || 'PENDING'}
                             </td>
 
                             <td>{order.orderItems ? order.orderItems.length : 0} Items</td>
                             <td>
-                                <button onClick={() => handleDelete(order.id)} style={{ padding: '5px 10px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                                <button 
+                                    onClick={() => handleDelete(order.id)} 
+                                    style={{ 
+                                        padding: '5px 10px', 
+                                        background: '#dc3545', 
+                                        color: 'white', 
+                                        border: 'none', 
+                                        borderRadius: '5px', 
+                                        cursor: 'pointer' 
+                                    }}
+                                >
                                     Delete
                                 </button>
                             </td>
@@ -90,11 +117,23 @@ function OrderList({ refreshKey }) {
                         <h4>Items</h4>
                         <ul>
                             {selectedOrder.orderItems.map(item => (
-                                <li key={item.id}>Product #{item.productId} — Qty: {item.quantity} — Price: {item.price}</li>
+                                <li key={item.id}>
+                                    Product #{item.productId} — Qty: {item.quantity} — Price: {item.price}
+                                </li>
                             ))}
                         </ul>
 
-                        <button onClick={closeModal} style={{ padding: '5px 10px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>
+                        <button 
+                            onClick={closeModal} 
+                            style={{ 
+                                padding: '5px 10px',
+                                background: '#6c757d',
+                                color: 'white',
+                                border: 'none',
+                                borderRadius: '5px',
+                                cursor: 'pointer'
+                            }}
+                        >
                             Close
                         </button>
                     </div>
