@@ -54,7 +54,7 @@ export default function CustomerAuthForm() {
           id: data.id, // ✅ මෙතනත් id කළා
           name: data.name,
           email: data.email,
-          address: data.address
+          address: data.password
         }));
 
         // Redirect after success

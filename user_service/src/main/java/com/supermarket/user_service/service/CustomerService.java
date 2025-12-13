@@ -48,4 +48,9 @@ public class CustomerService {
     public List<Customer> getCustomerByName(String name) {
         return repository.findByName(name);
     }
+
+    //Update customer
+    public Customer updateCustomer(Customer customer) {
+        return repository.save(customer);
+    }
 }

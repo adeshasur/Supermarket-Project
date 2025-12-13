@@ -51,4 +51,10 @@ public class CustomerController {
     public List<Customer> getCustomerByName(@RequestParam String name) {
         return service.getCustomerByName(name);
     }
+
+    @PutMapping("/{cid}")
+    public Customer updateCustomer(@PathVariable int cid, @RequestBody Customer customer) {
+        customer.setId(cid);
+        return service.updateCustomer(customer);
+    }
 }

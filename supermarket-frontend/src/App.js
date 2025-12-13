@@ -7,6 +7,8 @@ import AdminLoginForm from "./pages/AdminLoginForm.jsx";
 import CustomerHome from './pages/CustomerHome.jsx';
 import CustomerCart from "./pages/CustomerCart";
 import PaymentPage from "./pages/PaymentPage";
+import CustomerProfile from "./pages/CustomerProfile.jsx"
+
 
 import Sidebar from "./layout/Sidebar";
 import Header from "./layout/Header";
@@ -54,6 +56,7 @@ function App() {
               <Route path="/customer-home" element={<CustomerHome />} />
               <Route path="/customer-cart" element={<CustomerCart />} />
               <Route path="/payment" element={<PaymentPage />} />
+              <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/admin-login" element={<AdminLoginForm onLogin={() => setUserRole("admin")} />} />
 
               {userRole && (

@@ -8,15 +8,12 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // --- Helpers ---
-  const getStatusString = (q) => q < 10 ? 'Low Stock' : q < 50 ? 'Medium Stock' : 'In Stock';
-  const getStockClass = (q) => q < 10 ? 'low-stock' : q < 50 ? 'medium-stock' : 'in-stock';
+  const getStatusString = (q) => q <= 10 ? 'Low Stock' : q < 50 ? 'Medium Stock' : 'In Stock';
+  const getStockClass = (q) => q <= 10 ? 'low-stock' : q < 50 ? 'medium-stock' : 'in-stock';
 
-  // --- Fetch Data ---
   const fetchData = async () => {
     try {
       setLoading(true);
-      setError(null);
       const [invRes, prodRes] = await Promise.all([
         axios.get("http://localhost:8082/api/inventory/all"),
         axios.get("http://localhost:8081/api/products")
@@ -33,15 +30,12 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
 
   useEffect(() => { fetchData(); }, [refreshKey]);
 
-  // --- Filtering ---
   const filteredInventory = inventory.filter(item => {
     const product = products.find(p => p.id === item.productId);
     if (!product) return false; 
-    
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           item.productId.toString().includes(searchTerm);
     const matchesStatus = statusFilter === '' || getStatusString(item.quantity) === statusFilter;
-    
     return matchesSearch && matchesStatus;
   });
 
@@ -51,15 +45,14 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
   return (
     <div className="app-table-container">
       <h3>Inventory Status Dashboard</h3>
-
       <table className="app-table">
         <thead>
           <tr>
-            <th style={{ width: '10%' }}>ID</th>
-            <th style={{ width: '15%', textAlign: 'center' }}>Image</th>
-            <th style={{ width: '40%' }}>Product Name</th>
-            <th style={{ width: '15%', textAlign: 'center' }}>Stock</th>
-            <th style={{ width: '20%', textAlign: 'center' }}>Status</th>
+            <th>ID</th>
+            <th style={{ textAlign: 'center' }}>Image</th>
+            <th>Product Name</th>
+            <th style={{ textAlign: 'center' }}>Stock</th>
+            <th style={{ textAlign: 'center' }}>Status</th>
           </tr>
         </thead>
         <tbody>
@@ -68,40 +61,20 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
           ) : (
             filteredInventory.map((item) => {
               const product = products.find(p => p.id === item.productId);
-              
               return (
                 <tr key={item.id} className={getStockClass(item.quantity)}>
-                  
-                  {/* 1. ID Column */}
                   <td>{item.productId}</td>
-                  
-                  {/* 2. Image Column */}
                   <td style={{ textAlign: 'center' }}>
-                    {product.imageUrl ? (
-                      <img src={product.imageUrl} alt={product.name} className="product-img" />
-                    ) : (
-                      <span className="no-img">No Img</span>
-                    )}
+                    {product.imageUrl ? <img src={product.imageUrl} alt={product.name} className="product-img" /> : <span>No Img</span>}
                   </td>
-                  
-                  {/* 3. Name Column (BOLD අයින් කළා) */}
-                  <td>
-                    {product.name}
-                  </td>
-                  
-                  {/* 4. Stock Column (BOLD අයින් කළා) */}
-                  <td style={{ textAlign: 'center' }}>
-                    {item.quantity}
-                  </td>
-                  
-                  {/* 5. Status Column */}
+                  <td>{product.name}</td>
+                  <td style={{ textAlign: 'center' }}>{item.quantity}</td>
                   <td style={{ textAlign: 'center' }}>
                     <div className="status-cell">
                       <span className={`status-dot ${getStockClass(item.quantity)}`}></span>
                       {getStatusString(item.quantity)}
                     </div>
                   </td>
-
                 </tr>
               );
             })

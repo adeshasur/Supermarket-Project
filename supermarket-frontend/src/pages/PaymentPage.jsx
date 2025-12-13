@@ -141,7 +141,7 @@ export default function PaymentPage() {
         
         if(orderSuccess) await reduceInventory();
 
-        alert("Transaction Complete! Stock Updated. 🎉");
+        alert("Transaction Complete!");
         clearCart(); 
         navigate('/customer-home');
       } else {

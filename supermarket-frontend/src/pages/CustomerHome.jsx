@@ -29,13 +29,14 @@ export default function CustomerHome() {
       const productData = await productRes.json();
       const inventoryData = await inventoryRes.json();
 
-      const mergedData = productData.map(product => {
-        const stockItem = inventoryData.find(item => item.productId === product.id);
-        return {
-          ...product,
-          quantity: stockItem ? stockItem.quantity : 0
-        };
-      });
+      // CustomerHome.js: Find this section
+      const mergedData = productData.map(product => {
+        const stockItem = inventoryData.find(item => item.productId === product.id);
+        return {
+          ...product,
+          quantity: stockItem ? stockItem.quantity : 0 // 🛑 This line is the bug!
+        };
+      });
 
       setProducts(mergedData);
       setFilteredProducts(mergedData);
@@ -123,8 +124,8 @@ export default function CustomerHome() {
                     <div className="product-details">
                       <div>
                         <div className="product-price">Rs. {product.price ? product.price.toFixed(2) : '0.00'}</div>
-                        <div className="product-stock" style={{ color: product.quantity > 0 ? '#28a745' : '#dc3545' }}>
-                          {product.quantity > 0 ? `In Stock: ${product.quantity}` : 'Out of Stock'}
+                        <div className="product-stock" style={{ color: product.stockLevel > 0 ? '#28a745' : '#dc3545' }}>
+                          {product.quantity > 0 ? `In Stock: ${product.stockLevel}` : 'Out of Stock'}
                         </div>
                       </div>
                     </div>
@@ -137,7 +138,7 @@ export default function CustomerHome() {
                         <button 
                           onClick={() => addToCart(product)} 
                           className="cart-btn"
-                          disabled={product.quantity <= qtyInCart}
+                          disabled={product.stockLevel <= qtyInCart}
                         >
                           <Plus size={18} />
                         </button>
@@ -146,7 +147,8 @@ export default function CustomerHome() {
                       <button
                         onClick={() => addToCart(product)}
                         className="add-to-cart-btn"
-                        disabled={product.quantity === 0}
+
+                        disabled={product.stockLevel === 0}
                         style={{ opacity: product.quantity === 0 ? 0.5 : 1, cursor: product.quantity === 0 ? 'not-allowed' : 'pointer' }}
                       >
                         {product.quantity === 0 ? 'Sold Out' : 'Add to Cart'}

@@ -4,6 +4,7 @@ import com.supermarket.inventory.inventory_service.data.Inventory;
 import com.supermarket.inventory.inventory_service.repository.InventoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // 🌟 1. IMPORT ADDED 🌟
 
 import java.util.List;
 import java.util.Optional;
@@ -14,35 +15,54 @@ public class InventoryService {
     @Autowired
     private InventoryRepository inventoryRepository;
 
-    // 1. Get All
+    // Get all inventory
     public List<Inventory> getAllInventory() {
         return inventoryRepository.findAll();
     }
 
-    // 2. Search by Product ID
+    // Get inventory by productId
     public Inventory getInventoryByProductId(int productId) {
-        // If not found, we return null (or you could throw an error)
-        return inventoryRepository.findByProductId(productId).orElse(null);
+        return inventoryRepository.findByProductId(productId)
+                .orElseThrow(() -> new RuntimeException("Inventory not found for productId: " + productId));
     }
 
-    // 3. Insert (Add New Stock)
+    // Add new inventory
     public Inventory addInventory(Inventory inventory) {
+        if (inventory.getQuantity() < 0) inventory.setQuantity(0);
         return inventoryRepository.save(inventory);
     }
 
-    // 4. Update (Change Stock)
+    // Manual stock update (sets the quantity)
     public Inventory updateInventory(Inventory inventoryItem) {
-        // First, find the existing item by Product ID
-        Optional<Inventory> existingInventory = inventoryRepository.findByProductId(inventoryItem.getProductId());
+        Inventory inventory = getInventoryByProductId(inventoryItem.getProductId());
+        int newQuantity = inventoryItem.getQuantity();
+        if (newQuantity < 0) newQuantity = 0; // prevent negative
+        inventory.setQuantity(newQuantity);
+        return inventoryRepository.save(inventory);
+    }
 
-        if (existingInventory.isPresent()) {
-            // If it exists, update the quantity of the EXISTING database row
-            Inventory inventory = existingInventory.get();
-            inventory.setQuantity(inventoryItem.getQuantity());
-            return inventoryRepository.save(inventory);
-        } else {
-            // If it doesn't exist, just create a new one (Insert)
-            return inventoryRepository.save(inventoryItem);
+    // Reduce stock after order (subtracts from current quantity)
+    // 🌟 2. FIX: Added @Transactional to make the operation atomic and safe 🌟
+    @Transactional
+    public Inventory reduceStock(int productId, int quantityToReduce) {
+        Inventory inventory = getInventoryByProductId(productId);
+        int currentQuantity = inventory.getQuantity();
+
+        // 🌟 3. CRITICAL FIX: Explicit check before reduction 🌟
+        if (currentQuantity < quantityToReduce) {
+            // Throwing a RuntimeException triggers a transaction rollback.
+            // This prevents negative stock from being committed if multiple requests hit simultaneously.
+            throw new RuntimeException(
+                    "Insufficient stock for productId: " + productId +
+                            ". Available: " + currentQuantity + ", Requested: " + quantityToReduce
+            );
         }
+
+        int newQuantity = currentQuantity - quantityToReduce;
+        // The check above makes the 'if (newQuantity < 0) newQuantity = 0' logic unnecessary
+        // and safely enforced by the transaction rollback.
+
+        inventory.setQuantity(newQuantity);
+        return inventoryRepository.save(inventory);
     }
 }

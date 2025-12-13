@@ -6,11 +6,17 @@
   <component name="ChangeListManager">
     <list default="true" id="76b0370f-051f-44ad-ab8f-900980c53e85" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/controller/InventoryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/controller/InventoryController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/service/InventoryService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/java/com/supermarket/inventory/inventory_service/service/InventoryService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../inventory-service/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../order-service/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../payment-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../payment-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/target/classes/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../product-service/src/main/java/com/supermarket/productservice/product/web/ProductController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/src/main/java/com/supermarket/productservice/product/web/ProductController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/layout/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/layout/Header.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user_service/src/main/java/com/supermarket/user_service/controller/CustomerController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user_service/src/main/java/com/supermarket/user_service/controller/CustomerController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../user_service/src/main/java/com/supermarket/user_service/service/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../user_service/src/main/java/com/supermarket/user_service/service/CustomerService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user_service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../user_service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
