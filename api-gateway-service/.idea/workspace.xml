@@ -11,12 +11,6 @@
       <change beforePath="$PROJECT_DIR$/../payment-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/src/main/resources/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../payment-service/target/classes/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../payment-service/target/classes/application.properties" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../product-service/src/main/resources/application.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/components/OrderList.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/components/OrderList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/components/PaymentList.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/components/PaymentList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerCart.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerCart.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerHome.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/CustomerHome.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Orders.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Orders.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Payment.js" beforeDir="false" afterPath="$PROJECT_DIR$/../supermarket-frontend/src/pages/Payment.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../user_service/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../user_service/src/main/resources/application.properties" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
