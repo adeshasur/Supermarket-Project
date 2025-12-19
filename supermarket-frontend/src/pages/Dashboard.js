@@ -30,22 +30,22 @@ function Dashboard() {
         // A. Orders Service (Port 8084)
         const ordersRes = await axios.get('http://localhost:8084/api/orders');
         const allOrders = ordersRes.data;
-        
+
         // Income ගණනයට SUCCESSFUL Payment වූ Orders පමණක් ගන්නවා
         const successfulOrders = allOrders.filter(order => order.paymentStatus === 'SUCCESS');
-        
+
         const totalIncome = successfulOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
 
         // B. Inventory Service (Port 8082) for Low Stock Count
         // Product Service වෙනුවට Inventory Service එකෙන් Stock ගන්නවා
-        const inventoryRes = await axios.get('http://localhost:8082/api/inventory'); 
+        const inventoryRes = await axios.get('http://localhost:8082/api/inventory/all');
         const inventoryItems = inventoryRes.data;
-        
+
         // Stock 20ට අඩු Items ගණන් කරනවා
         const lowStockCount = inventoryItems.filter(item => (item.quantity || 0) < 20).length;
 
         // C. User Service (Port 8083)
-        const usersRes = await axios.get('http://localhost:8083/api/customers');
+        const usersRes = await axios.get('http://localhost:8083/customers');
         const userCount = usersRes.data.length;
 
         setStats({
@@ -67,20 +67,20 @@ function Dashboard() {
 
   // --- Styles Objects (Dark Mode Compatible) ---
   const statCardStyle = {
-    background: 'var(--card-bg)', 
+    background: 'var(--card-bg)',
     padding: '20px',
     borderRadius: '10px',
     boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
     flex: 1,
     minWidth: '200px',
     textAlign: 'center',
-    color: 'var(--text-color)' 
+    color: 'var(--text-color)'
   };
 
   return (
     <div>
       <h1 className="page-title" style={{ marginBottom: '5px' }}>Dashboard Overview</h1>
-      
+
       <p style={{ marginTop: '0', marginBottom: '30px', color: 'var(--text-color)', opacity: 0.7, fontSize: '0.95rem' }}>
         📅 {currentDate} &nbsp;|&nbsp; Here is what's happening with your store today.
       </p>
