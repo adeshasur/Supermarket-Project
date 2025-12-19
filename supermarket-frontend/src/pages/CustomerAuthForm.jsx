@@ -93,6 +93,22 @@ export default function CustomerAuthForm() {
 
   return (
     <div className="customer-auth-page">
+      {/* Falling Icons - One by One */}
+      <span className="falling-icon" style={{ left: '10%', animationDelay: '0s' }}>🥕</span>
+      <span className="falling-icon" style={{ left: '20%', animationDelay: '0.5s' }}>🍎</span>
+      <span className="falling-icon" style={{ left: '30%', animationDelay: '1s' }}>🥦</span>
+      <span className="falling-icon" style={{ left: '40%', animationDelay: '1.5s' }}>🍌</span>
+      <span className="falling-icon" style={{ left: '50%', animationDelay: '2s' }}>🍓</span>
+      <span className="falling-icon" style={{ left: '60%', animationDelay: '2.5s' }}>🥬</span>
+      <span className="falling-icon" style={{ left: '70%', animationDelay: '3s' }}>🍊</span>
+      <span className="falling-icon" style={{ left: '80%', animationDelay: '3.5s' }}>🥒</span>
+      <span className="falling-icon" style={{ left: '90%', animationDelay: '4s' }}>🍇</span>
+      <span className="falling-icon" style={{ left: '15%', animationDelay: '4.5s' }}>🥑</span>
+      <span className="falling-icon" style={{ left: '25%', animationDelay: '5s' }}>🌽</span>
+      <span className="falling-icon" style={{ left: '35%', animationDelay: '5.5s' }}>🍅</span>
+      <span className="falling-icon" style={{ left: '45%', animationDelay: '6s' }}>🍋</span>
+      <span className="falling-icon" style={{ left: '55%', animationDelay: '6.5s' }}>🥗</span>
+      <span className="falling-icon" style={{ left: '65%', animationDelay: '7s' }}>🍍</span>
       <div className="customer-auth-container">
         <div className="customer-auth-card">
           {/* Header */}
