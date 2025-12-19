@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import API_BASE_URLS from '../config/api';
-import '../styles/TableStyles.css'; // Link to the CSS file
+import '../Styles/TableStyles.css'; // Link to the CSS file
 
-function ProductList({ refreshKey, searchTerm = '' }) { 
+function ProductList({ refreshKey, searchTerm = '' }) {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
     useEffect(() => {
         const fetchProducts = async () => {
             try {
-                setLoading(true); 
+                setLoading(true);
                 setError(null);
                 const response = await axios.get(`${API_BASE_URLS.PRODUCTS}/api/products`);
                 setProducts(response.data);
@@ -28,7 +28,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
         fetchProducts();
     }, [refreshKey]);
 
-    const filteredProducts = products.filter(item => 
+    const filteredProducts = products.filter(item =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -60,7 +60,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                 imageUrl: currentProduct.imageUrl || ''
             };
             await axios.put(`${API_BASE_URLS.PRODUCTS}/api/products/${currentProduct.id}`, updatedProduct);
-            
+
             setProducts(products.map(p => (p.id === currentProduct.id ? { ...p, ...updatedProduct } : p)));
             setIsModalOpen(false);
             alert("Product Updated Successfully!");
@@ -81,8 +81,8 @@ function ProductList({ refreshKey, searchTerm = '' }) {
     return (
         <div className="inventory-table-container">
             <h3>Product Catalog</h3>
-            {error && <p style={{color: 'red', textAlign: 'center'}}>{error}</p>}
-            
+            {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+
             <table className="inventory-table">
                 <thead>
                     <tr>
@@ -105,19 +105,19 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                                 <td>{item.id}</td>
                                 <td className="product-image-cell"> {/* Cell for the image */}
                                     {item.imageUrl ? (
-                                        <img 
-                                            src={item.imageUrl} 
-                                            alt={item.name} 
+                                        <img
+                                            src={item.imageUrl}
+                                            alt={item.name}
                                             className="product-img" // CSS class එක දැම්මා
                                         />
-                                    ) : <span style={{color:'#ccc'}}>No Img</span>}
+                                    ) : <span style={{ color: '#ccc' }}>No Img</span>}
                                 </td>
-                                
+
                                 {/* Inline styles ඔක්කොම අයින් කළා */}
                                 <td>{item.name}</td>
                                 <td>{item.description}</td>
                                 <td>{item.price.toFixed(2)}</td>
-                                
+
                                 <td>
                                     <button className="action-btn update-btn" onClick={() => handleUpdate(item)}>
                                         Update
@@ -140,7 +140,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                         <form onSubmit={handleUpdateSubmit}>
                             <div className="form-group">
                                 <label>Name:</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={currentProduct.name}
                                     onChange={(e) => setCurrentProduct({ ...currentProduct, name: e.target.value })}
@@ -149,7 +149,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                             </div>
                             <div className="form-group">
                                 <label>Description:</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={currentProduct.description}
                                     onChange={(e) => setCurrentProduct({ ...currentProduct, description: e.target.value })}
@@ -158,7 +158,7 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                             </div>
                             <div className="form-group">
                                 <label>Price:</label>
-                                <input 
+                                <input
                                     type="number"
                                     value={currentProduct.price}
                                     onChange={(e) => setCurrentProduct({ ...currentProduct, price: e.target.value })}
@@ -167,13 +167,13 @@ function ProductList({ refreshKey, searchTerm = '' }) {
                             </div>
                             <div className="form-group">
                                 <label>Image URL:</label>
-                                <input 
+                                <input
                                     type="text"
                                     value={currentProduct.imageUrl || ''}
                                     onChange={(e) => setCurrentProduct({ ...currentProduct, imageUrl: e.target.value })}
                                 />
                             </div>
-                            
+
                             <div className="modal-actions">
                                 <button type="button" className="cancel-btn" onClick={() => setIsModalOpen(false)}>Cancel</button>
                                 <button type="submit" className="save-btn">Save Changes</button>

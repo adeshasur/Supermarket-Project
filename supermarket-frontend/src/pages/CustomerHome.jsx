@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext } from 'react'; // ✅ useContex
 import { useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, Home, Plus, Minus } from 'lucide-react';
 import { CartContext } from '../context/CartContext'; // ✅ CartContext එක import කළා
-import '../styles/CustomerHome.css';
+import '../Styles/CustomerHome.css';
 
 export default function CustomerHome() {
   const navigate = useNavigate();
- 
+
   const { cartItems, addToCart, removeFromCart } = useContext(CartContext);
 
   const [products, setProducts] = useState([]);
@@ -14,7 +14,7 @@ export default function CustomerHome() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
 
-  
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -30,13 +30,13 @@ export default function CustomerHome() {
       const inventoryData = await inventoryRes.json();
 
       // CustomerHome.js: Find this section
-      const mergedData = productData.map(product => {
-        const stockItem = inventoryData.find(item => item.productId === product.id);
-        return {
-          ...product,
-          quantity: stockItem ? stockItem.quantity : 0 // 🛑 This line is the bug!
-        };
-      });
+      const mergedData = productData.map(product => {
+        const stockItem = inventoryData.find(item => item.productId === product.id);
+        return {
+          ...product,
+          quantity: stockItem ? stockItem.quantity : 0 // 🛑 This line is the bug!
+        };
+      });
 
       setProducts(mergedData);
       setFilteredProducts(mergedData);
@@ -61,13 +61,13 @@ export default function CustomerHome() {
     }
   }, [searchQuery, products]);
 
-  
+
   const getProductQuantity = (productId) => {
     const item = cartItems.find(item => item.id === productId);
     return item ? item.quantity : 0;
   };
 
-  
+
   const getCartCount = () => {
     return cartItems.reduce((sum, item) => sum + item.quantity, 0);
   };
@@ -104,13 +104,13 @@ export default function CustomerHome() {
 
               return (
                 <div key={product.id} className="product-card">
-                  
+
                   {/* Image */}
                   <div className="product-image">
                     {product.imageUrl ? (
-                      <img src={product.imageUrl} alt={product.name} style={{width:'100%', height:'100%', objectFit:'cover'}} />
+                      <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
-                      <div style={{fontSize: '3rem', textAlign: 'center', lineHeight: '150px'}}>🛒</div> 
+                      <div style={{ fontSize: '3rem', textAlign: 'center', lineHeight: '150px' }}>🛒</div>
                     )}
                   </div>
 
@@ -135,8 +135,8 @@ export default function CustomerHome() {
                       <div className="cart-controls">
                         <button onClick={() => removeFromCart(product.id)} className="cart-btn"><Minus size={18} /></button>
                         <span className="cart-count">{qtyInCart}</span>
-                        <button 
-                          onClick={() => addToCart(product)} 
+                        <button
+                          onClick={() => addToCart(product)}
                           className="cart-btn"
                           disabled={product.stockLevel <= qtyInCart}
                         >

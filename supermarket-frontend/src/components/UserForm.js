@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/FormStyles.css';
+import '../Styles/FormStyles.css';
 
 function UserForm({ onUserAdded }) {
     const [name, setName] = useState('');
@@ -22,8 +22,8 @@ function UserForm({ onUserAdded }) {
             setMessage('Admin Registered Successfully! ✅');
 
             // Clear form
-            setName(''); 
-            setEmail(''); 
+            setName('');
+            setEmail('');
             setPassword('');
 
             if (onUserAdded) onUserAdded();

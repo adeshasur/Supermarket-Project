@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PaymentList from '../components/PaymentList';
-import '../styles/App.css'; // make sure to keep styles if needed
+import '../Styles/App.css'; // make sure to keep styles if needed
 
 function Payment() {
   const [refreshKey, setRefreshKey] = useState(0);

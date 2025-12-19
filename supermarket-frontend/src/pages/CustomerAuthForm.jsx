@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { User, Mail, Lock, MapPin, Eye, EyeOff } from 'lucide-react';
-import '../styles/CustomerAuthForm.css';
+import '../Styles/CustomerAuthForm.css';
 
 export default function CustomerAuthForm() {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ export default function CustomerAuthForm() {
 
         // Reset form
         setFormData({ name: '', email: '', password: '', address: '' });
-      } 
+      }
       else {
         // FAILED login or registration
         setMessage({
@@ -97,6 +97,9 @@ export default function CustomerAuthForm() {
         <div className="customer-auth-card">
           {/* Header */}
           <div className="customer-auth-header">
+            <div className="customer-icon-wrapper">
+              <User className="customer-user-icon" />
+            </div>
             <h2 className="customer-auth-title">
               {isLogin ? 'Customer Login' : 'Customer Registration'}
             </h2>
@@ -207,6 +210,17 @@ export default function CustomerAuthForm() {
                 {isLogin ? 'Sign Up' : 'Sign In'}
               </button>
             </p>
+            <button
+              onClick={() => navigate('/')}
+              className="customer-back-link"
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer'
+              }}
+            >
+              ← Back to Home
+            </button>
           </div>
         </div>
       </div>

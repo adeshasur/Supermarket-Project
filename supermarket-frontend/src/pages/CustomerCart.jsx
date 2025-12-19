@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { Trash2, ArrowLeft, CreditCard } from 'lucide-react';
-import '../styles/TableStyles.css';
+import '../Styles/TableStyles.css';
 
 export default function CustomerCart() {
   const navigate = useNavigate();
@@ -12,14 +12,14 @@ export default function CustomerCart() {
 
   const handleCheckout = () => {
     if (cartItems.length === 0) return;
-    
- 
+
+
     navigate('/payment', { state: { total: totalAmount } });
   };
 
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      
+
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
         <button onClick={() => navigate('/customer-home')} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>
@@ -31,7 +31,7 @@ export default function CustomerCart() {
       {cartItems.length === 0 ? (
         <div style={{ textAlign: 'center', marginTop: '50px', color: '#666' }}>
           <h3>Your cart is empty</h3>
-          <button 
+          <button
             onClick={() => navigate('/customer-home')}
             style={{ marginTop: '20px', padding: '10px 20px', background: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
           >
@@ -81,9 +81,9 @@ export default function CustomerCart() {
                 Rs. {totalAmount.toFixed(2)}
               </div>
             </div>
-            
+
             {/* ✅ Checkout Button */}
-            <button 
+            <button
               onClick={handleCheckout}
               style={{ padding: '15px 30px', background: '#007bff', color: 'white', border: 'none', borderRadius: '8px', fontSize: '1.1rem', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '10px' }}
             >

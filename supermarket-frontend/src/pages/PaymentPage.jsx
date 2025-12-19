@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import '../styles/FormStyles.css';
+import '../Styles/FormStyles.css';
 
 export default function PaymentPage() {
   const location = useLocation();
@@ -63,7 +63,7 @@ export default function PaymentPage() {
           productId: item.id,
           quantity: item.quantity * -1
         };
-        return fetch('http://localhost:8082/api/inventory/update', { 
+        return fetch('http://localhost:8082/api/inventory/update', {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(reductionPayload)
@@ -80,12 +80,12 @@ export default function PaymentPage() {
   const createOrder = async (paymentData) => {
     try {
       const customer = JSON.parse(localStorage.getItem("customer"));
-      const customerId = customer ? customer.id : 1; 
+      const customerId = customer ? customer.id : 1;
 
       const orderPayload = {
         customerId: customerId,
-        paymentStatus: paymentData.paymentStatus, 
-        transactionId: paymentData.transactionId, 
+        paymentStatus: paymentData.paymentStatus,
+        transactionId: paymentData.transactionId,
         orderItems: cartItems.map(item => ({
           productId: item.id,
           quantity: item.quantity,
@@ -118,7 +118,7 @@ export default function PaymentPage() {
 
     setLoading(true);
     const paymentPayload = {
-      orderId: Math.floor(Math.random() * 100000), 
+      orderId: Math.floor(Math.random() * 100000),
       amount: totalAmount,
       paymentStatus: "SUCCESS",
       last4: cardNumber.slice(-4)
@@ -137,12 +137,12 @@ export default function PaymentPage() {
         const orderSuccess = await createOrder({
           paymentStatus: "SUCCESS",
           transactionId: paymentResult.transactionId || "TXN-" + Date.now()
-        }); 
-        
-        if(orderSuccess) await reduceInventory();
+        });
+
+        if (orderSuccess) await reduceInventory();
 
         alert("Transaction Complete!");
-        clearCart(); 
+        clearCart();
         navigate('/customer-home');
       } else {
         alert("Transaction Failed! Payment Service Error.");
@@ -163,17 +163,17 @@ export default function PaymentPage() {
       </div>
 
       <form onSubmit={handlePayment}>
-        <input type="text" placeholder="Card Number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required style={inputStyle} maxLength="16"/>
+        <input type="text" placeholder="Card Number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required style={inputStyle} maxLength="16" />
         {errors.cardNumber && <p style={errorStyle}>{errors.cardNumber}</p>}
 
         <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-          <input type="text" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required style={inputStyle} maxLength="5"/>
-          <input type="password" placeholder="CVV" value={cvc} onChange={e => setCvc(e.target.value)} required style={inputStyle} maxLength="3"/>
+          <input type="text" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required style={inputStyle} maxLength="5" />
+          <input type="password" placeholder="CVV" value={cvc} onChange={e => setCvc(e.target.value)} required style={inputStyle} maxLength="3" />
         </div>
         {errors.expiry && <p style={errorStyle}>{errors.expiry}</p>}
         {errors.cvc && <p style={errorStyle}>{errors.cvc}</p>}
 
-        <input type="text" placeholder="Card Holder Name" value={holderName} onChange={e => setHolderName(e.target.value)} required style={{...inputStyle, marginTop: '10px'}} />
+        <input type="text" placeholder="Card Holder Name" value={holderName} onChange={e => setHolderName(e.target.value)} required style={{ ...inputStyle, marginTop: '10px' }} />
         {errors.holderName && <p style={errorStyle}>{errors.holderName}</p>}
 
         <button type="submit" disabled={loading} style={btnStyle}>

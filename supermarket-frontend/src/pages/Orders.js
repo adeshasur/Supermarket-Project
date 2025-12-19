@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import OrderList from '../components/OrderList';
-import '../styles/App.css';
+import '../Styles/App.css';
 
 function Orders() {
   const [refreshKey, setRefreshKey] = useState(0);
@@ -33,8 +33,8 @@ function Orders() {
 
       {/* Search Bar - CHANGED PLACEHOLDER */}
       <div className="inventory-search-group">
-        <input 
-          type="text" 
+        <input
+          type="text"
           placeholder="Search by Order ID..." // <--- CHANGED TEXT
           className="inventory-search-input"
           value={inputTerm}

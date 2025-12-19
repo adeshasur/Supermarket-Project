@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/FormStyles.css';
+import '../Styles/FormStyles.css';
 
 function StockUpdateForm({ onStockUpdated }) {
   const [productId, setProductId] = useState('');
@@ -49,7 +49,7 @@ function StockUpdateForm({ onStockUpdated }) {
       showError('Please enter valid numbers.');
       return;
     }
-    
+
     // ⭐ NEW VALIDATION: Check for negative quantity ⭐
     if (qty < 0) {
       showError('Quantity cannot be a negative number.');

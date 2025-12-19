@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios'; 
+import axios from 'axios';
 import API_BASE_URLS from '../config/api';
-import '../styles/FormStyles.css';
+import '../Styles/FormStyles.css';
 
 function ProductForm({ onProductAdded }) {
   const [name, setName] = useState('');
@@ -72,7 +72,7 @@ function ProductForm({ onProductAdded }) {
     <div className="form-container">
       <h3>Add New Product</h3>
       <form onSubmit={handleSubmit}>
-        
+
         {/* Product Name */}
         <div className="form-group">
           <label>Product Name:</label>

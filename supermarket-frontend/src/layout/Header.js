@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { useCart } from '../context/CartContext';
 
-import { useNotifications } from '../context/NotificationProvider';
+import { useNotification } from '../context/NotificationProvider';
 
 
 
@@ -16,7 +16,7 @@ function Header({ onLogout }) {
 
   const { cartItems } = useCart();
 
-  const { notifications } = useNotifications(); // get notifications from context
+  const { notifications } = useNotification(); // get notifications from context
 
 
 

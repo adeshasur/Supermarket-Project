@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/TableStyles.css';
+import '../Styles/TableStyles.css';
 
 function AdminList({ refreshKey, searchTerm }) {
     const [admins, setAdmins] = useState([]);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, Shield } from 'lucide-react';
-import '../styles/AdminLoginForm.css';
+import '../Styles/AdminLoginForm.css';
 
 export default function AdminLoginForm({ onLogin }) {
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ export default function AdminLoginForm({ onLogin }) {
     <div className="admin-login-page">
       <div className="admin-login-container">
         <div className="admin-login-card">
-          
+
           {/* Header */}
           <div className="admin-login-header">
             <div className="admin-icon-wrapper">
@@ -144,11 +144,10 @@ export default function AdminLoginForm({ onLogin }) {
             {/* Message box */}
             {message.text && (
               <div
-                className={`admin-login-message ${
-                  message.type === "success"
+                className={`admin-login-message ${message.type === "success"
                     ? "admin-message-success"
                     : "admin-message-error"
-                }`}
+                  }`}
               >
                 {message.text}
               </div>

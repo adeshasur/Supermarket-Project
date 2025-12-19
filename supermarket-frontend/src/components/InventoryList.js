@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/TableStyles.css';
+import '../Styles/TableStyles.css';
 
 function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
   const [inventory, setInventory] = useState([]);
-  const [products, setProducts] = useState([]); 
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -32,9 +32,9 @@ function InventoryList({ refreshKey, searchTerm = '', statusFilter = '' }) {
 
   const filteredInventory = inventory.filter(item => {
     const product = products.find(p => p.id === item.productId);
-    if (!product) return false; 
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          item.productId.toString().includes(searchTerm);
+    if (!product) return false;
+    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      item.productId.toString().includes(searchTerm);
     const matchesStatus = statusFilter === '' || getStatusString(item.quantity) === statusFilter;
     return matchesSearch && matchesStatus;
   });

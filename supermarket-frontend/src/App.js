@@ -27,7 +27,7 @@ import { CartProvider } from "./context/CartContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { NotificationProvider } from "./context/NotificationProvider";
 
-import "./styles/App.css";
+import "./Styles/App.css";
 
 function App() {
   const [userRole, setUserRole] = useState(null);

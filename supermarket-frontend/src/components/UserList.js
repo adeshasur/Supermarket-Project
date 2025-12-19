@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import '../styles/TableStyles.css';
+import '../Styles/TableStyles.css';
 
 function UserList({ refreshKey, searchTerm }) {
     const [users, setUsers] = useState([]);
@@ -22,8 +22,8 @@ function UserList({ refreshKey, searchTerm }) {
         }
     };
 
-    useEffect(() => { 
-        fetchUsers(); 
+    useEffect(() => {
+        fetchUsers();
     }, [refreshKey]);
 
     const filteredUsers = users.filter(user =>
@@ -36,7 +36,7 @@ function UserList({ refreshKey, searchTerm }) {
             try {
                 // DELETE endpoint: Assuming /customers/{id} is the correct structure
                 await axios.delete(`${API_BASE_URL}/customers/${id}`);
-                
+
                 // Refresh the list after successful deletion
                 fetchUsers();
             } catch (error) {
@@ -75,15 +75,15 @@ function UserList({ refreshKey, searchTerm }) {
                                 <td>{user.address}</td>
                                 <td>{user.phone}</td> {/* 🌟 ADDED DATA 🌟 */}
                                 <td style={{ textAlign: 'center' }}>
-                                    <button 
-                                        onClick={() => handleDelete(user.id)} 
-                                        style={{ 
-                                            padding: '5px 10px', 
-                                            background: '#dc3545', 
-                                            color: 'white', 
-                                            borderRadius: '5px', 
-                                            border: 'none', 
-                                            cursor: 'pointer' 
+                                    <button
+                                        onClick={() => handleDelete(user.id)}
+                                        style={{
+                                            padding: '5px 10px',
+                                            background: '#dc3545',
+                                            color: 'white',
+                                            borderRadius: '5px',
+                                            border: 'none',
+                                            cursor: 'pointer'
                                         }}
                                     >Delete</button>
                                 </td>

@@ -1,16 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ShoppingCart, Clock, MapPin, Phone, Mail, Truck, CreditCard, Shield, ChevronRight, Facebook, Instagram, Twitter } from 'lucide-react';
-import '../styles/SupermarketLanding.css';
+import { ShoppingCart, Clock, MapPin, Phone, Mail, Truck, CreditCard, Shield, ChevronRight, Facebook, Instagram, Twitter, User, X } from 'lucide-react';
+import '../Styles/SupermarketLanding.css';
 
 export default function SupermarketLanding() {
   const navigate = useNavigate();
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
-  const handleGetStarted = () => {
+  const handleLoginClick = () => {
+    setShowLoginModal(true);
+  };
+
+  const handleCustomerLogin = () => {
+    setShowLoginModal(false);
     navigate('/auth');
   };
 
   const handleAdminLogin = () => {
+    setShowLoginModal(false);
     navigate('/admin-login');
   };
 
@@ -29,14 +36,9 @@ export default function SupermarketLanding() {
             <a href="#about" className="nav-link">About Us</a>
             <a href="#contact" className="nav-link">Contact</a>
           </nav>
-          <div style={{ display: 'flex', gap: '0.75rem' }}>
-            <button onClick={handleGetStarted} className="login-btn">
-              Customer Login
-            </button>
-            <button onClick={handleAdminLogin} className="login-btn" style={{ background: '#7c3aed' }}>
-              Admin Login
-            </button>
-          </div>
+          <button onClick={handleLoginClick} className="login-btn">
+            Login
+          </button>
         </div>
       </header>
 
@@ -51,7 +53,7 @@ export default function SupermarketLanding() {
             <p className="hero-description">
               Shop from the comfort of your home. We deliver quality products across Sri Lanka with the freshest produce from local farms.
             </p>
-            <button onClick={handleGetStarted} className="hero-btn">
+            <button onClick={handleCustomerLogin} className="hero-btn">
               <span>Continue to Shop</span>
               <ChevronRight className="btn-icon" />
             </button>
@@ -71,7 +73,7 @@ export default function SupermarketLanding() {
         <div className="section-container">
           <h2 className="section-title">Our Services</h2>
           <p className="section-subtitle">Why choose FreshMart?</p>
-          
+
           <div className="services-grid">
             <div className="service-card service-card-green">
               <Truck className="service-icon" />
@@ -145,7 +147,7 @@ export default function SupermarketLanding() {
       <section id="contact" className="contact-section">
         <div className="section-container">
           <h2 className="contact-title">Contact Us</h2>
-          
+
           <div className="contact-grid">
             <div className="contact-card">
               <MapPin className="contact-icon" />
@@ -225,6 +227,44 @@ export default function SupermarketLanding() {
           </div>
         </div>
       </footer>
+
+      {/* Login Selection Modal */}
+      {showLoginModal && (
+        <div className="modal-overlay" onClick={() => setShowLoginModal(false)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close" onClick={() => setShowLoginModal(false)}>
+              <X className="close-icon" />
+            </button>
+
+            <h2 className="modal-title">Select Login Type</h2>
+            <p className="modal-subtitle">Choose how you want to continue</p>
+
+            <div className="modal-options">
+              <button className="modal-option customer-option" onClick={handleCustomerLogin}>
+                <div className="option-icon-wrapper customer-bg">
+                  <User className="option-icon" />
+                </div>
+                <div className="option-content">
+                  <h3 className="option-title">Customer Login</h3>
+                  <p className="option-description">Shop for groceries and manage orders</p>
+                </div>
+                <ChevronRight className="option-arrow" />
+              </button>
+
+              <button className="modal-option admin-option" onClick={handleAdminLogin}>
+                <div className="option-icon-wrapper admin-bg">
+                  <Shield className="option-icon" />
+                </div>
+                <div className="option-content">
+                  <h3 className="option-title">Admin Login</h3>
+                  <p className="option-description">Access admin dashboard and management</p>
+                </div>
+                <ChevronRight className="option-arrow" />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

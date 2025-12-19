@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import '../styles/FormStyles.css';
+import '../Styles/FormStyles.css';
 
 function OrderItemForm({ orders, onItemAdded }) {
   const [itemForm, setItemForm] = useState({

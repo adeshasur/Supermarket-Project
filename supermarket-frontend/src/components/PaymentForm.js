@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import API_BASE_URLS from '../config/api';
-import '../styles/TableStyles.css';
+import '../Styles/TableStyles.css';
 
 function PaymentForm({ onPaymentAdded }) {
     const [orderId, setOrderId] = useState('');
