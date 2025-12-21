@@ -86,7 +86,7 @@ function CustomerProfile() {
             justifyContent: 'center',
             fontSize: '3rem'
           }}>
-            🍎
+            👤
           </div>
           {!isEditing && (
             <>
