@@ -59,21 +59,28 @@ export default function PaymentPage() {
   const reduceInventory = async () => {
     try {
       const deductionPromises = cartItems.map(item => {
-        const reductionPayload = {
-          productId: item.id,
-          quantity: item.quantity * -1
-        };
-        return fetch('http://localhost:8082/api/inventory/update', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(reductionPayload)
+        // Use the /reduce endpoint with query parameters
+        const url = `http://localhost:8082/api/inventory/reduce?productId=${item.id}&quantity=${item.quantity}`;
+        return fetch(url, {
+          method: 'PUT'
         });
       });
-      await Promise.all(deductionPromises);
+
+      const responses = await Promise.all(deductionPromises);
+
+      // Check if any reduction failed
+      for (const response of responses) {
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Stock reduction failed: ${errorText}`);
+        }
+      }
+
       console.log("Inventory successfully reduced.");
     } catch (error) {
       console.error("Inventory Reduction Failed:", error);
-      alert("WARNING: Stock deduction failed. Manual inventory update may be required.");
+      alert("WARNING: Stock deduction failed. " + error.message);
+      throw error; // Re-throw to prevent order completion
     }
   };
 
@@ -125,7 +132,7 @@ export default function PaymentPage() {
     };
 
     try {
-      const paymentResponse = await fetch('http://localhost:8085/payment/add', {
+      const paymentResponse = await fetch('http://localhost:8085/api/payment/add', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(paymentPayload)
@@ -139,11 +146,20 @@ export default function PaymentPage() {
           transactionId: paymentResult.transactionId || "TXN-" + Date.now()
         });
 
-        if (orderSuccess) await reduceInventory();
-
-        alert("Transaction Complete!");
-        clearCart();
-        navigate('/customer-home');
+        if (orderSuccess) {
+          try {
+            await reduceInventory();
+            alert("Transaction Complete!");
+            clearCart();
+            navigate('/customer-home');
+          } catch (inventoryError) {
+            // Inventory reduction failed - order was created but stock couldn't be reduced
+            alert("Order created but stock update failed. Please contact support.");
+            navigate('/customer-home');
+          }
+        } else {
+          alert("Order creation failed!");
+        }
       } else {
         alert("Transaction Failed! Payment Service Error.");
       }
