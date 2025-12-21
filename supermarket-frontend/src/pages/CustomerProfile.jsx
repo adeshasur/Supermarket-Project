@@ -26,7 +26,6 @@ function CustomerProfile() {
 
   // Save Profile
   const handleSave = () => {
-    // Update localStorage
     const updatedCustomer = { ...customerData, ...userData };
     localStorage.setItem('customer', JSON.stringify(updatedCustomer));
     setIsEditing(false);
@@ -44,135 +43,271 @@ function CustomerProfile() {
   return (
     <>
       <CustomerSidebar />
-      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', marginLeft: '260px' }}>
+      <div style={{
+        padding: '20px',
+        maxWidth: '600px',
+        margin: '0 auto',
+        background: '#f2f2f7',
+        minHeight: '100vh'
+      }}>
 
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
-          <button onClick={() => navigate('/customer-home')} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>
+          <button onClick={() => navigate('/customer-home')} style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            marginRight: '10px',
+            color: '#16a34a',
+            fontSize: '1rem'
+          }}>
             <ArrowLeft size={24} />
           </button>
-          <h2>My Profile</h2>
+          <h2 style={{ margin: 0, fontSize: '1.75rem', fontWeight: '700' }}>Profile</h2>
         </div>
 
-        {/* Profile Picture */}
-        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
-            alt="Customer"
-            style={{
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              border: '5px solid #16a34a'
-            }}
-          />
+        {/* Profile Picture Card */}
+        <div style={{
+          background: 'white',
+          borderRadius: '12px',
+          padding: '24px',
+          marginBottom: '20px',
+          textAlign: 'center',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+        }}>
+          <div style={{
+            width: '100px',
+            height: '100px',
+            margin: '0 auto 16px',
+            background: 'linear-gradient(135deg, #16a34a 0%, #15803d 100%)',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '3rem'
+          }}>
+            🍎
+          </div>
           {!isEditing && (
             <>
-              <h2 style={{ margin: '20px 0 5px 0' }}>{userData.name}</h2>
-              <p style={{ color: '#777' }}>Customer</p>
+              <h2 style={{ margin: '0 0 4px 0', fontSize: '1.5rem', fontWeight: '600' }}>{userData.name}</h2>
+              <p style={{ color: '#8e8e93', fontSize: '0.9rem', margin: '0' }}>Customer</p>
             </>
           )}
         </div>
 
-        {/* Profile Form */}
-        <div>
-          {/* Name Field */}
+        {/* Profile Details Card */}
+        <div style={{
+          background: 'white',
+          borderRadius: '12px',
+          overflow: 'hidden',
+          marginBottom: '20px',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.05)'
+        }}>
+
+          {/* Name Field - iOS List Style */}
           {isEditing && (
-            <div style={{ marginBottom: '20px' }}>
-              <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Full Name</label>
+            <div style={{
+              padding: '12px 16px',
+              borderBottom: '1px solid #e5e5ea'
+            }}>
+              <label style={{
+                fontSize: '0.8rem',
+                color: '#8e8e93',
+                display: 'block',
+                marginBottom: '6px',
+                fontWeight: '500'
+              }}>FULL NAME</label>
               <input
                 type="text"
                 name="name"
                 value={userData.name}
                 onChange={handleChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  padding: '4px 0',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                }}
               />
             </div>
           )}
 
           {/* Email Field */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Email Address</label>
+          <div style={{
+            padding: '12px 16px',
+            borderBottom: '1px solid #e5e5ea'
+          }}>
+            <label style={{
+              fontSize: '0.8rem',
+              color: '#8e8e93',
+              display: 'block',
+              marginBottom: '6px',
+              fontWeight: '500'
+            }}>EMAIL</label>
             {isEditing ? (
               <input
                 type="email"
                 name="email"
                 value={userData.email}
                 onChange={handleChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  padding: '4px 0',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                }}
               />
             ) : (
-              <div style={{ padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>{userData.email}</div>
+              <div style={{ fontSize: '1rem', color: '#000' }}>{userData.email}</div>
             )}
           </div>
 
           {/* Phone Field */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Phone Number</label>
+          <div style={{
+            padding: '12px 16px',
+            borderBottom: '1px solid #e5e5ea'
+          }}>
+            <label style={{
+              fontSize: '0.8rem',
+              color: '#8e8e93',
+              display: 'block',
+              marginBottom: '6px',
+              fontWeight: '500'
+            }}>PHONE</label>
             {isEditing ? (
               <input
                 type="text"
                 name="phone"
                 value={userData.phone}
                 onChange={handleChange}
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  padding: '4px 0',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                }}
               />
             ) : (
-              <div style={{ padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>{userData.phone}</div>
+              <div style={{ fontSize: '1rem', color: '#000' }}>{userData.phone}</div>
             )}
           </div>
 
           {/* Address Field */}
-          <div style={{ marginBottom: '20px' }}>
-            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Delivery Address</label>
+          <div style={{ padding: '12px 16px' }}>
+            <label style={{
+              fontSize: '0.8rem',
+              color: '#8e8e93',
+              display: 'block',
+              marginBottom: '6px',
+              fontWeight: '500'
+            }}>ADDRESS</label>
             {isEditing ? (
               <textarea
                 name="address"
                 value={userData.address}
                 onChange={handleChange}
-                rows="3"
-                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', resize: 'vertical' }}
+                rows="2"
+                style={{
+                  width: '100%',
+                  border: 'none',
+                  outline: 'none',
+                  fontSize: '1rem',
+                  padding: '4px 0',
+                  resize: 'none',
+                  fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+                }}
               />
             ) : (
-              <div style={{ padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>{userData.address}</div>
+              <div style={{ fontSize: '1rem', color: '#000' }}>{userData.address}</div>
             )}
           </div>
         </div>
 
-        {/* Action Buttons */}
-        <div style={{ marginTop: '30px', display: 'flex', gap: '15px' }}>
-          {isEditing ? (
-            <>
-              <button
-                onClick={handleSave}
-                style={{ flex: 1, padding: '12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                💾 Save Changes
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                style={{ flex: 1, padding: '12px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                ✖ Cancel
-              </button>
-            </>
-          ) : (
-            <>
-              <button
-                onClick={() => setIsEditing(true)}
-                style={{ flex: 1, padding: '12px', background: '#16a34a', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                ✏️ Edit Profile
-              </button>
-              <button
-                onClick={handleLogout}
-                style={{ flex: 1, padding: '12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
-              >
-                🚪 Logout
-              </button>
-            </>
-          )}
-        </div>
+        {/* Action Buttons - iOS Style */}
+        {isEditing ? (
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <button
+              onClick={handleSave}
+              style={{
+                flex: 1,
+                padding: '14px',
+                background: '#16a34a',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
+            >
+              Save
+            </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              style={{
+                flex: 1,
+                padding: '14px',
+                background: '#8e8e93',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <>
+            <button
+              onClick={() => setIsEditing(true)}
+              style={{
+                width: '100%',
+                padding: '14px',
+                background: '#16a34a',
+                color: 'white',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                marginBottom: '12px',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
+            >
+              Edit Profile
+            </button>
+            <button
+              onClick={handleLogout}
+              style={{
+                width: '100%',
+                padding: '14px',
+                background: 'white',
+                color: '#ff3b30',
+                border: 'none',
+                borderRadius: '10px',
+                fontSize: '1rem',
+                fontWeight: '600',
+                cursor: 'pointer',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+                fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif'
+              }}
+            >
+              Sign Out
+            </button>
+          </>
+        )}
       </div>
     </>
   );
