@@ -1,5 +1,6 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { LayoutDashboard, Package, Warehouse, ShoppingBag, Users, CreditCard, LogOut } from 'lucide-react';
 import './Sidebar.css';
 
 function Sidebar() {
@@ -16,49 +17,56 @@ function Sidebar() {
     <nav className="sidebar">
       <div className="sidebar-header">
         <span className="logo-dot"></span>
-        Supermarket
+        FreshMart Admin
       </div>
 
       <ul className="sidebar-menu">
         <li>
           <NavLink to="/admin/dashboard">
-            <span>📊</span> Dashboard
+            <LayoutDashboard size={20} />
+            <span>Dashboard</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/admin/products">
-            <span>📦</span> Products
+            <Package size={20} />
+            <span>Products</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/admin/inventory">
-            <span>📋</span> Inventory
+            <Warehouse size={20} />
+            <span>Inventory</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/admin/orders">
-            <span>🛒</span> Orders
+            <ShoppingBag size={20} />
+            <span>Orders</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/admin/users">
-            <span>👥</span> Users
+            <Users size={20} />
+            <span>Users</span>
           </NavLink>
         </li>
 
         <li>
           <NavLink to="/admin/payment">
-            <span>💳</span> Payment
+            <CreditCard size={20} />
+            <span>Payment</span>
           </NavLink>
         </li>
       </ul>
 
       <button className="logout-btn" onClick={handleLogout}>
-        <span>🚪</span> Logout
+        <LogOut size={18} />
+        Logout
       </button>
     </nav>
   );

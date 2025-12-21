@@ -1,4 +1,5 @@
-/* Customer Sidebar - Matching Admin Style */
+/* Customer Sidebar - Green Theme with Modern Design */
+
 .customer-sidebar {
   width: 240px;
   height: 100vh;
@@ -6,31 +7,36 @@
   left: 0;
   top: 0;
   background: #ffffff;
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
   z-index: 100;
+
   display: flex;
   flex-direction: column;
   padding: 20px 15px;
-  overflow-y: auto;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* Header */
 .sidebar-header {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #000;
+  font-size: 1.375rem;
+  font-weight: 600;
+  color: #1d1d1f;
   display: flex;
   align-items: center;
   padding: 10px 5px;
   margin-bottom: 20px;
+  letter-spacing: -0.3px;
 }
 
 .logo-dot {
-  width: 12px;
-  height: 12px;
-  background-color: #16a34a !important;
+  width: 10px;
+  height: 10px;
+  background: linear-gradient(135deg, #30d158 0%, #28a745 100%);
   border-radius: 50%;
   margin-right: 10px;
+  box-shadow: 0 0 8px rgba(48, 209, 88, 0.4);
 }
 
 /* Customer Info Section */
@@ -38,33 +44,40 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px;
-  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  padding: 12px 14px;
+  background: rgba(48, 209, 88, 0.08);
   border-radius: 12px;
   margin-bottom: 20px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.customer-info:hover {
+  background: rgba(48, 209, 88, 0.12);
 }
 
 .customer-avatar {
   width: 40px;
   height: 40px;
-  background: #16a34a;
+  background: linear-gradient(135deg, #30d158 0%, #28a745 100%);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
+  box-shadow: 0 2px 8px rgba(48, 209, 88, 0.25);
 }
 
 .customer-name {
-  font-size: 0.95rem;
+  font-size: 0.9375rem;
   font-weight: 600;
-  color: #333;
+  color: #1d1d1f;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  flex: 1;
 }
 
-/* Menu */
+/* Menu - Matching Admin Design */
 .sidebar-menu {
   list-style: none;
   padding: 0;
@@ -73,37 +86,57 @@
 }
 
 .sidebar-menu li {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
 }
 
 .sidebar-menu li a {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 12px 15px;
+  padding: 12px 14px;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  color: #333;
-  border-radius: 8px;
-  transition: background-color 0.2s, color 0.2s;
+  color: #1d1d1f;
+  border-radius: 10px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
 }
 
+.sidebar-menu li a svg {
+  flex-shrink: 0;
+  color: #86868b;
+  transition: color 0.25s;
+}
+
+.sidebar-menu li a span {
+  flex: 1;
+}
+
 .sidebar-menu li a:hover {
-  background-color: #f0f0f0;
+  background-color: rgba(48, 209, 88, 0.08);
+  color: #30d158;
+}
+
+.sidebar-menu li a:hover svg {
+  color: #30d158;
 }
 
 .sidebar-menu li a.active {
-  background-color: #16a34a !important;
-  color: #fff !important;
+  background: linear-gradient(135deg, #30d158 0%, #28a745 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(48, 209, 88, 0.25);
+}
+
+.sidebar-menu li a.active svg {
+  color: white;
 }
 
 /* Cart Badge */
 .cart-badge {
   position: absolute;
   right: 12px;
-  background: #ef4444;
+  background: #ff3b30;
   color: white;
   border-radius: 50%;
   width: 22px;
@@ -113,14 +146,16 @@
   justify-content: center;
   font-size: 0.75rem;
   font-weight: 700;
+  box-shadow: 0 2px 6px rgba(255, 59, 48, 0.3);
 }
 
 .sidebar-menu li a.active .cart-badge {
   background: white;
-  color: #16a34a;
+  color: #30d158;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-/* Logout Button */
+/* Logout Button - Matching Admin Style */
 .logout-btn {
   display: flex;
   align-items: center;
@@ -129,28 +164,45 @@
   width: 100%;
   padding: 12px;
   margin-top: 20px;
-  background-color: #fee2e2;
-  color: #dc2626;
+  background: rgba(255, 59, 48, 0.08);
+  color: #ff3b30;
   border: none;
-  border-radius: 8px;
-  font-size: 1rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.logout-btn svg {
+  flex-shrink: 0;
 }
 
 .logout-btn:hover {
-  background-color: #fecaca;
+  background: rgba(255, 59, 48, 0.12);
+  transform: translateY(-1px);
+}
+
+.logout-btn:active {
+  transform: translateY(0);
 }
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
   .customer-sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+    width: 200px;
   }
 
-  .customer-sidebar.open {
-    transform: translateX(0);
+  .sidebar-header {
+    font-size: 1.125rem;
+  }
+
+  .sidebar-menu li a {
+    padding: 10px 12px;
+    font-size: 0.875rem;
+  }
+
+  .customer-info {
+    padding: 10px 12px;
   }
 }

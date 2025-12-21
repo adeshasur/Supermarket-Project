@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
+import Toast from '../components/Toast';
 import '../Styles/FormStyles.css';
 
 export default function PaymentPage() {
@@ -15,6 +16,7 @@ export default function PaymentPage() {
   const [holderName, setHolderName] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState(null);
 
   useEffect(() => {
     if (totalAmount <= 0) {
@@ -79,7 +81,7 @@ export default function PaymentPage() {
       console.log("Inventory successfully reduced.");
     } catch (error) {
       console.error("Inventory Reduction Failed:", error);
-      alert("WARNING: Stock deduction failed. " + error.message);
+      setToast({ message: "Stock deduction failed: " + error.message, type: 'error' });
       throw error; // Re-throw to prevent order completion
     }
   };
@@ -149,54 +151,66 @@ export default function PaymentPage() {
         if (orderSuccess) {
           try {
             await reduceInventory();
-            alert("Transaction Complete!");
-            clearCart();
-            navigate('/customer-home');
+            setToast({ message: "Transaction Complete! 🎉", type: 'success' });
+            setTimeout(() => {
+              clearCart();
+              navigate('/customer-home');
+            }, 1500);
           } catch (inventoryError) {
             // Inventory reduction failed - order was created but stock couldn't be reduced
-            alert("Order created but stock update failed. Please contact support.");
-            navigate('/customer-home');
+            setToast({ message: "Order created but stock update failed.", type: 'warning' });
+            setTimeout(() => navigate('/customer-home'), 2000);
           }
         } else {
-          alert("Order creation failed!");
+          setToast({ message: "Order creation failed!", type: 'error' });
         }
       } else {
-        alert("Transaction Failed! Payment Service Error.");
+        setToast({ message: "Payment Service Error", type: 'error' });
       }
     } catch (error) {
       console.error("Process Error:", error);
-      alert("Connection Error! Check All Services.");
+      setToast({ message: "Connection Error! Check Services.", type: 'error' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ maxWidth: '500px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '10px' }}>
-      <h2 style={{ textAlign: 'center' }}>Secure Payment</h2>
-      <div style={{ textAlign: 'center', margin: '20px 0', color: '#007bff' }}>
-        <h1>Rs. {totalAmount.toFixed(2)}</h1>
-      </div>
+    <>
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onClose={() => setToast(null)}
+        />
+      )}
 
-      <form onSubmit={handlePayment}>
-        <input type="text" placeholder="Card Number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required style={inputStyle} maxLength="16" />
-        {errors.cardNumber && <p style={errorStyle}>{errors.cardNumber}</p>}
-
-        <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-          <input type="text" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required style={inputStyle} maxLength="5" />
-          <input type="password" placeholder="CVV" value={cvc} onChange={e => setCvc(e.target.value)} required style={inputStyle} maxLength="3" />
+      <div style={{ maxWidth: '500px', margin: '50px auto', padding: '20px', border: '1px solid #ddd', borderRadius: '10px' }}>
+        <h2 style={{ textAlign: 'center' }}>Secure Payment</h2>
+        <div style={{ textAlign: 'center', margin: '20px 0', color: '#007bff' }}>
+          <h1>Rs. {totalAmount.toFixed(2)}</h1>
         </div>
-        {errors.expiry && <p style={errorStyle}>{errors.expiry}</p>}
-        {errors.cvc && <p style={errorStyle}>{errors.cvc}</p>}
 
-        <input type="text" placeholder="Card Holder Name" value={holderName} onChange={e => setHolderName(e.target.value)} required style={{ ...inputStyle, marginTop: '10px' }} />
-        {errors.holderName && <p style={errorStyle}>{errors.holderName}</p>}
+        <form onSubmit={handlePayment}>
+          <input type="text" placeholder="Card Number" value={cardNumber} onChange={e => setCardNumber(e.target.value)} required style={inputStyle} maxLength="16" />
+          {errors.cardNumber && <p style={errorStyle}>{errors.cardNumber}</p>}
 
-        <button type="submit" disabled={loading} style={btnStyle}>
-          {loading ? "Processing..." : "Pay Now"}
-        </button>
-      </form>
-    </div>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+            <input type="text" placeholder="MM/YY" value={expiry} onChange={e => setExpiry(e.target.value)} required style={inputStyle} maxLength="5" />
+            <input type="password" placeholder="CVV" value={cvc} onChange={e => setCvc(e.target.value)} required style={inputStyle} maxLength="3" />
+          </div>
+          {errors.expiry && <p style={errorStyle}>{errors.expiry}</p>}
+          {errors.cvc && <p style={errorStyle}>{errors.cvc}</p>}
+
+          <input type="text" placeholder="Card Holder Name" value={holderName} onChange={e => setHolderName(e.target.value)} required style={{ ...inputStyle, marginTop: '10px' }} />
+          {errors.holderName && <p style={errorStyle}>{errors.holderName}</p>}
+
+          <button type="submit" disabled={loading} style={btnStyle}>
+            {loading ? "Processing..." : "Pay Now"}
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 
@@ -204,3 +218,4 @@ export default function PaymentPage() {
 const inputStyle = { width: '100%', padding: '10px', border: '1px solid #ccc', borderRadius: '5px' };
 const btnStyle = { width: '100%', padding: '15px', background: '#28a745', color: 'white', border: 'none', borderRadius: '5px', marginTop: '20px', fontSize: '18px', cursor: 'pointer' };
 const errorStyle = { color: 'red', fontSize: '14px', marginTop: '3px' };
+
