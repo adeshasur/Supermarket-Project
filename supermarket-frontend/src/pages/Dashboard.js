@@ -172,13 +172,11 @@ function Dashboard() {
 
     return (
         <div style={styles.container}>
-            <div style={styles.header}>
-                <h1 style={styles.title}>Dashboard</h1>
+            <div style={{ ...styles.header, marginBottom: '1.5rem' }}>
                 <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.75rem',
-                    marginTop: '0.75rem'
+                    gap: '0.75rem'
                 }}>
                     <div style={{
                         background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)',
