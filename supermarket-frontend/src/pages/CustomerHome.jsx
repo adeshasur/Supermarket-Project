@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react'; // ✅ useContex
 import { useNavigate } from 'react-router-dom';
 import { Search, ShoppingCart, User, Home, Plus, Minus } from 'lucide-react';
 import { CartContext } from '../context/CartContext'; // ✅ CartContext එක import කළා
+import CustomerSidebar from '../components/CustomerSidebar';
 import '../Styles/CustomerHome.css';
 
 export default function CustomerHome() {
@@ -73,111 +74,97 @@ export default function CustomerHome() {
   };
 
   return (
-    <div className="customer-home-page">
-      {/* Header */}
-      <div className="home-header">
-        <div className="home-header-content">
-          <h1 className="home-title">FreshMart</h1>
-          <div className="search-container">
-            <Search className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search for products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
+    <>
+      <CustomerSidebar />
+      <div className="customer-home-page">
+        {/* Header */}
+        <div className="home-header">
+          <div className="home-header-content">
+            <h1 className="home-title">FreshMart</h1>
+            <div className="search-container">
+              <Search className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search for products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input"
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Products Grid */}
-      <div className="products-container">
-        {loading ? (
-          <div className="loading-message">Loading products...</div>
-        ) : filteredProducts.length === 0 ? (
-          <div className="empty-message">No products found</div>
-        ) : (
-          <div className="products-grid">
-            {filteredProducts.map(product => {
-              const qtyInCart = getProductQuantity(product.id);
+        {/* Products Grid */}
+        <div className="products-container">
+          {loading ? (
+            <div className="loading-message">Loading products...</div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="empty-message">No products found</div>
+          ) : (
+            <div className="products-grid">
+              {filteredProducts.map(product => {
+                const qtyInCart = getProductQuantity(product.id);
 
-              return (
-                <div key={product.id} className="product-card">
+                return (
+                  <div key={product.id} className="product-card">
 
-                  {/* Image */}
-                  <div className="product-image">
-                    {product.imageUrl ? (
-                      <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    ) : (
-                      <div style={{ fontSize: '3rem', textAlign: 'center', lineHeight: '150px' }}>🛒</div>
-                    )}
-                  </div>
-
-                  {/* Info */}
-                  <div className="product-info">
-                    <h3 className="product-name">{product.name}</h3>
-                    {product.description && (
-                      <p className="product-description">{product.description}</p>
-                    )}
-
-                    <div className="product-details">
-                      <div>
-                        <div className="product-price">Rs. {product.price ? product.price.toFixed(2) : '0.00'}</div>
-                        <div className="product-stock" style={{ color: product.stockLevel > 0 ? '#28a745' : '#dc3545' }}>
-                          {product.quantity > 0 ? `In Stock: ${product.stockLevel}` : 'Out of Stock'}
-                        </div>
-                      </div>
+                    {/* Image */}
+                    <div className="product-image">
+                      {product.imageUrl ? (
+                        <img src={product.imageUrl} alt={product.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      ) : (
+                        <div style={{ fontSize: '3rem', textAlign: 'center', lineHeight: '150px' }}>🛒</div>
+                      )}
                     </div>
 
-                    {/* Cart Controls */}
-                    {qtyInCart > 0 ? (
-                      <div className="cart-controls">
-                        <button onClick={() => removeFromCart(product.id)} className="cart-btn"><Minus size={18} /></button>
-                        <span className="cart-count">{qtyInCart}</span>
+                    {/* Info */}
+                    <div className="product-info">
+                      <h3 className="product-name">{product.name}</h3>
+                      {product.description && (
+                        <p className="product-description">{product.description}</p>
+                      )}
+
+                      <div className="product-details">
+                        <div>
+                          <div className="product-price">Rs. {product.price ? product.price.toFixed(2) : '0.00'}</div>
+                          <div className="product-stock" style={{ color: product.stockLevel > 0 ? '#28a745' : '#dc3545' }}>
+                            {product.quantity > 0 ? `In Stock: ${product.stockLevel}` : 'Out of Stock'}
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Cart Controls */}
+                      {qtyInCart > 0 ? (
+                        <div className="cart-controls">
+                          <button onClick={() => removeFromCart(product.id)} className="cart-btn"><Minus size={18} /></button>
+                          <span className="cart-count">{qtyInCart}</span>
+                          <button
+                            onClick={() => addToCart(product)}
+                            className="cart-btn"
+                            disabled={product.stockLevel <= qtyInCart}
+                          >
+                            <Plus size={18} />
+                          </button>
+                        </div>
+                      ) : (
                         <button
                           onClick={() => addToCart(product)}
-                          className="cart-btn"
-                          disabled={product.stockLevel <= qtyInCart}
+                          className="add-to-cart-btn"
+
+                          disabled={product.stockLevel === 0}
+                          style={{ opacity: product.quantity === 0 ? 0.5 : 1, cursor: product.quantity === 0 ? 'not-allowed' : 'pointer' }}
                         >
-                          <Plus size={18} />
+                          {product.quantity === 0 ? 'Sold Out' : 'Add to Cart'}
                         </button>
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => addToCart(product)}
-                        className="add-to-cart-btn"
-
-                        disabled={product.stockLevel === 0}
-                        style={{ opacity: product.quantity === 0 ? 0.5 : 1, cursor: product.quantity === 0 ? 'not-allowed' : 'pointer' }}
-                      >
-                        {product.quantity === 0 ? 'Sold Out' : 'Add to Cart'}
-                      </button>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
-      </div>
-
-      {/* Bottom Nav */}
-      <div className="bottom-nav">
-        <div className="bottom-nav-content">
-          <button onClick={() => navigate('/customer-home')} className="nav-btn nav-btn-active">
-            <Home size={24} /><span className="nav-label">Home</span>
-          </button>
-          <button onClick={() => navigate('/customer-cart')} className="nav-btn">
-            <ShoppingCart size={24} />
-            {getCartCount() > 0 && <span className="cart-badge">{getCartCount()}</span>}
-            <span className="nav-label">Cart</span>
-          </button>
-          <button onClick={() => navigate('/customer-profile')} className="nav-btn">
-            <User size={24} /><span className="nav-label">Profile</span>
-          </button>
+                );
+              })}
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
