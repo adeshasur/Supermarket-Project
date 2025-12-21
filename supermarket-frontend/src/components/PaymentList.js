@@ -7,7 +7,7 @@ function PaymentList({ refreshKey, searchTerm }) {
     const [selectedCustomer, setSelectedCustomer] = useState(null);
 
     // --- Microservice URLs ---
-    const PAYMENT_SERVICE_URL = "http://localhost:8085/payment";
+    const PAYMENT_SERVICE_URL = "http://localhost:8085/api/payment";
     const ORDER_SERVICE_URL = "http://localhost:8084/api/orders";
     const CUSTOMER_SERVICE_URL = "http://localhost:8083/customers";
 
@@ -18,11 +18,11 @@ function PaymentList({ refreshKey, searchTerm }) {
         left: 0,
         right: 0,
         bottom: 0,
-        background: 'rgba(0, 0, 0, 0.6)', 
+        background: 'rgba(0, 0, 0, 0.6)',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        zIndex: 1000, 
+        zIndex: 1000,
     };
 
     const modalContentStyle = {
@@ -71,42 +71,42 @@ function PaymentList({ refreshKey, searchTerm }) {
 
     // View customer details (FINAL FIXES APPLIED)
     const viewCustomer = async (orderId) => {
-        setSelectedCustomer(null); 
-        
+        setSelectedCustomer(null);
+
         console.log(`Attempting to fetch Order ID: ${orderId} for customer lookup.`);
 
         try {
             // 1. Fetch Order details
             const orderRes = await axios.get(`${ORDER_SERVICE_URL}/${orderId}`);
-            
+
             // 2. CRITICAL FIX: Extract customer ID using the correct JSON field name 'customerId'
-            const customerId = orderRes.data?.customerId; 
-            
+            const customerId = orderRes.data?.customerId;
+
             if (!customerId) {
                 alert(`Error: Order ID ${orderId} was found, but the customer ID field is missing or null in the Order Service response.`);
-                return; 
+                return;
             }
 
             // 3. Fetch Customer details
             console.log(`Found Customer ID: ${customerId}. Fetching customer details...`);
             const customerRes = await axios.get(`${CUSTOMER_SERVICE_URL}/${customerId}`);
-            
+
             // 4. Set the customer details to state to display the modal
             setSelectedCustomer(customerRes.data);
-            
+
         } catch (err) {
             console.error(`Failed to fetch details for order ID ${orderId}:`, err);
-            
+
             const status = err.response ? err.response.status : 'N/A';
             const url = err.config ? err.config.url : 'N/A';
-            
+
             if (status === 500) {
                 alert(`CRITICAL ERROR: Order ID ${orderId} does not exist in the Order Database (Status 500: Order Not Found). Check the console for the failing ID.`);
             } else if (status === 404) {
                 // If this triggers, the customer ID found in the order exists, but not in the Customer Service.
                 alert(`Customer ID not found in Customer Service (Status 404). Check customer data integrity.`);
             } else {
-                 alert(`Failed to fetch customer details. API Status: ${status}. Check service at ${url}.`);
+                alert(`Failed to fetch customer details. API Status: ${status}. Check service at ${url}.`);
             }
         }
     };
@@ -124,7 +124,7 @@ function PaymentList({ refreshKey, searchTerm }) {
             <table className="app-table" style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr style={{ background: '#f8f8f8' }}>
-                        <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Order ID</th>
+                        <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Payment ID</th>
                         {/* REMOVED: Order ID column was here */}
                         <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Amount (Rs.)</th>
                         <th style={{ padding: '12px 15px', borderBottom: '1px solid #ddd' }}>Payment Status</th>
@@ -139,11 +139,11 @@ function PaymentList({ refreshKey, searchTerm }) {
                             <td style={{ padding: '12px 15px' }}>{p.id}</td>
                             {/* REMOVED: p.orderId data cell was here */}
                             <td style={{ padding: '12px 15px' }}>{p.amount?.toFixed(2) || '0.00'}</td>
-                            <td 
-                                style={{ 
-                                    padding: '12px 15px', 
-                                    fontWeight: 'bold', 
-                                    color: p.paymentStatus === 'SUCCESS' ? 'green' : (p.paymentStatus === 'FAILED' ? 'red' : 'orange') 
+                            <td
+                                style={{
+                                    padding: '12px 15px',
+                                    fontWeight: 'bold',
+                                    color: p.paymentStatus === 'SUCCESS' ? 'green' : (p.paymentStatus === 'FAILED' ? 'red' : 'orange')
                                 }}
                             >
                                 {p.paymentStatus || 'PENDING'}
@@ -159,7 +159,7 @@ function PaymentList({ refreshKey, searchTerm }) {
                                 </button>
                                 <button
                                     // FINAL FIX: Using p.id (Payment ID) as the lookup Order ID
-                                    onClick={() => viewCustomer(p.id)} 
+                                    onClick={() => viewCustomer(p.id)}
                                     style={{ padding: '5px 10px', background: '#0d6efd', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer' }}
                                 >
                                     View Customer
