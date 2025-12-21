@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Package, Warehouse, ShoppingBag, Users, CreditCard, TrendingUp, AlertTriangle } from 'lucide-react';
+import { Package, Warehouse, ShoppingBag, Users, CreditCard, TrendingUp, TrendingDown, AlertTriangle, Clock, ArrowRight } from 'lucide-react';
 import axios from 'axios';
 
 function Dashboard() {
@@ -11,14 +11,9 @@ function Dashboard() {
         lowStock: 0
     });
 
+    const [recentOrders, setRecentOrders] = useState([]);
+    const [lowStockItems, setLowStockItems] = useState([]);
     const [loading, setLoading] = useState(true);
-
-    const currentDate = new Date().toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
 
     useEffect(() => {
         const fetchData = async () => {
@@ -31,9 +26,17 @@ function Dashboard() {
                 const successfulOrders = allOrders.filter(order => order.paymentStatus === 'SUCCESS');
                 const totalIncome = successfulOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
 
+                // Get recent 5 orders
+                const recent = allOrders.slice(0, 5);
+                setRecentOrders(recent);
+
                 const inventoryRes = await axios.get('http://localhost:8082/api/inventory/all');
                 const inventoryItems = inventoryRes.data;
                 const lowStockCount = inventoryItems.filter(item => (item.quantity || 0) < 20).length;
+
+                // Get low stock items
+                const lowStock = inventoryItems.filter(item => (item.quantity || 0) < 20).slice(0, 5);
+                setLowStockItems(lowStock);
 
                 const usersRes = await axios.get('http://localhost:8083/customers');
                 const userCount = usersRes.data.length;
@@ -57,245 +60,239 @@ function Dashboard() {
 
     const styles = {
         container: {
-            padding: '2rem',
+            minHeight: '100vh',
+            background: '#ffffff',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif',
+            padding: '1.5rem',
             maxWidth: '1400px',
-            margin: '0 auto',
-            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
-        },
-        header: {
-            marginBottom: '2.5rem'
-        },
-        title: {
-            fontSize: '2rem',
-            fontWeight: 600,
-            color: '#1d1d1f',
-            margin: '0 0 0.5rem 0',
-            letterSpacing: '-0.5px'
-        },
-        subtitle: {
-            fontSize: '0.9375rem',
-            color: '#86868b',
-            margin: 0,
-            fontWeight: 400
+            margin: '0 auto'
         },
         statsGrid: {
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-            gap: '1.5rem',
-            marginBottom: '3rem'
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: '1.25rem',
+            marginBottom: '1.25rem'
         },
         statCard: {
             background: 'white',
             borderRadius: '16px',
-            padding: '1.75rem',
-            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+            padding: '1.5rem',
+            boxShadow: '0 2px 16px rgba(0, 0, 0, 0.06)',
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            border: '0.5px solid rgba(0, 0, 0, 0.04)',
+            border: '1px solid rgba(0, 0, 0, 0.03)'
+        },
+        contentGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+            gap: '1.5rem',
+            marginBottom: '2rem'
+        },
+        card: {
+            background: 'white',
+            borderRadius: '16px',
+            padding: '1.5rem',
+            boxShadow: '0 2px 16px rgba(0, 0, 0, 0.06)',
+            border: '1px solid rgba(0, 0, 0, 0.03)'
+        },
+        cardTitle: {
+            fontSize: '1.125rem',
+            fontWeight: 600,
+            color: '#1d1d1f',
+            margin: '0 0 1rem 0',
             display: 'flex',
-            alignItems: 'center',
-            gap: '1.25rem'
+            justifyContent: 'space-between',
+            alignItems: 'center'
         },
         statIcon: {
-            width: '56px',
-            height: '56px',
-            borderRadius: '14px',
+            width: '48px',
+            height: '48px',
+            borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            flexShrink: 0,
-            color: 'white'
+            color: 'white',
+            marginBottom: '1rem'
         },
         statLabel: {
             fontSize: '0.875rem',
             color: '#86868b',
-            margin: '0 0 0.5rem 0',
+            margin: '0 0 0.375rem 0',
             fontWeight: 500
         },
         statValue: {
-            fontSize: '1.875rem',
+            fontSize: '1.75rem',
             fontWeight: 600,
             color: '#1d1d1f',
             margin: 0,
             letterSpacing: '-0.5px'
         },
-        sectionTitle: {
-            fontSize: '1.375rem',
+        trendBadge: {
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.25rem',
+            padding: '0.25rem 0.625rem',
+            borderRadius: '6px',
+            fontSize: '0.75rem',
             fontWeight: 600,
-            color: '#1d1d1f',
-            margin: '3rem 0 1.5rem 0',
-            letterSpacing: '-0.3px'
+            marginTop: '0.5rem'
         },
-        accessGrid: {
+        listItem: {
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '0.875rem 0',
+            borderBottom: '1px solid rgba(0,0,0,0.05)'
+        },
+        quickAccessGrid: {
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-            gap: '1.25rem',
-            justifyItems: 'center'
+            gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))',
+            gap: '1rem'
         },
         accessCard: {
             background: 'white',
-            borderRadius: '16px',
-            padding: '1.75rem 1.5rem',
+            borderRadius: '14px',
+            padding: '1.25rem',
             textDecoration: 'none',
-            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.05)',
             transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-            border: '0.5px solid rgba(0, 0, 0, 0.04)',
-            textAlign: 'center',
-            width: '100%',
-            maxWidth: '220px'
+            border: '1px solid rgba(0, 0, 0, 0.03)',
+            textAlign: 'center'
         },
         accessIcon: {
-            width: '60px',
-            height: '60px',
-            margin: '0 auto 1rem',
+            width: 48,
+            height: 48,
+            margin: '0 auto 0.75rem',
             background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)',
-            borderRadius: '14px',
+            borderRadius: '12px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             color: 'white',
-            boxShadow: '0 4px 12px rgba(0, 122, 255, 0.25)'
+            boxShadow: '0 4px 12px rgba(0, 122, 255, 0.2)'
         },
         accessTitle: {
-            fontSize: '1.125rem',
+            fontSize: '0.9375rem',
             fontWeight: 600,
             color: '#1d1d1f',
-            margin: '0 0 0.375rem 0',
-            letterSpacing: '-0.2px'
+            margin: '0 0 0.25rem 0'
         },
         accessDesc: {
-            fontSize: '0.875rem',
+            fontSize: '0.75rem',
             color: '#86868b',
-            margin: 0,
-            fontWeight: 400
+            margin: 0
         }
+    };
+
+    const StatCard = ({ icon, label, value, trend, color, gradientFrom, gradientTo }) => {
+        const [isHovered, setIsHovered] = useState(false);
+
+        return (
+            <div
+                style={{
+                    ...styles.statCard,
+                    transform: isHovered ? 'translateY(-4px)' : 'translateY(0)',
+                    boxShadow: isHovered ? '0 8px 24px rgba(0, 0, 0, 0.1)' : '0 2px 16px rgba(0, 0, 0, 0.06)'
+                }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                <div style={{
+                    ...styles.statIcon,
+                    background: `linear-gradient(135deg, ${gradientFrom} 0%, ${gradientTo} 100%)`,
+                    boxShadow: `0 4px 12px ${color}30`
+                }}>
+                    {icon}
+                </div>
+                <p style={styles.statLabel}>{label}</p>
+                <h2 style={styles.statValue}>
+                    {loading ? '...' : value}
+                </h2>
+                {trend && (
+                    <div style={{
+                        ...styles.trendBadge,
+                        background: trend > 0 ? '#d1f4e0' : '#ffe5e5',
+                        color: trend > 0 ? '#00a86b' : '#ff3b30'
+                    }}>
+                        {trend > 0 ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
+                        {Math.abs(trend)}%
+                    </div>
+                )}
+            </div>
+        );
     };
 
     return (
         <div style={styles.container}>
-            <div style={{ ...styles.header, marginBottom: '1.5rem' }}>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.75rem'
-                }}>
-                    <div style={{
-                        background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)',
-                        color: 'white',
-                        padding: '0.5rem 1rem',
-                        borderRadius: '10px',
-                        fontSize: '0.875rem',
-                        fontWeight: 600,
-                        boxShadow: '0 2px 8px rgba(0, 122, 255, 0.25)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                    }}>
-                        <span>📅</span>
-                        <span>{currentDate}</span>
-                    </div>
-                    <span style={{
-                        fontSize: '0.9375rem',
-                        color: '#86868b',
-                        fontWeight: 400
-                    }}>
-                        Here's your store overview
-                    </span>
-                </div>
-            </div>
-
             {/* Stats Cards */}
             <div style={styles.statsGrid}>
-                <div style={styles.statCard}>
-                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #30d158 0%, #28a745 100%)', boxShadow: '0 4px 12px rgba(48, 209, 88, 0.25)' }}>
-                        <TrendingUp size={24} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                        <p style={styles.statLabel}>Total Income</p>
-                        <h2 style={styles.statValue}>
-                            Rs. {loading ? '...' : stats.income.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                        </h2>
-                    </div>
-                </div>
-
-                <div style={styles.statCard}>
-                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)', boxShadow: '0 4px 12px rgba(0, 122, 255, 0.25)' }}>
-                        <ShoppingBag size={24} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                        <p style={styles.statLabel}>Total Orders</p>
-                        <h2 style={styles.statValue}>
-                            {loading ? '...' : stats.orders}
-                        </h2>
-                    </div>
-                </div>
-
-                <div style={styles.statCard}>
-                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #ff9500 0%, #ff6b00 100%)', boxShadow: '0 4px 12px rgba(255, 149, 0, 0.25)' }}>
-                        <AlertTriangle size={24} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                        <p style={styles.statLabel}>Low Stock Items</p>
-                        <h2 style={styles.statValue}>
-                            {loading ? '...' : stats.lowStock}
-                        </h2>
-                    </div>
-                </div>
-
-                <div style={styles.statCard}>
-                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #5e5ce6 0%, #4a4acb 100%)', boxShadow: '0 4px 12px rgba(94, 92, 230, 0.25)' }}>
-                        <Users size={24} />
-                    </div>
-                    <div style={{ flex: 1 }}>
-                        <p style={styles.statLabel}>Active Users</p>
-                        <h2 style={styles.statValue}>
-                            {loading ? '...' : stats.users}
-                        </h2>
-                    </div>
-                </div>
+                <StatCard
+                    icon={<TrendingUp size={22} />}
+                    label="Total Income"
+                    value={`Rs. ${stats.income.toLocaleString(undefined, { minimumFractionDigits: 2 })}`}
+                    trend={12}
+                    color="#30d158"
+                    gradientFrom="#30d158"
+                    gradientTo="#28a745"
+                />
+                <StatCard
+                    icon={<ShoppingBag size={22} />}
+                    label="Total Orders"
+                    value={stats.orders}
+                    trend={8}
+                    color="#007aff"
+                    gradientFrom="#007aff"
+                    gradientTo="#0051d5"
+                />
+                <StatCard
+                    icon={<AlertTriangle size={22} />}
+                    label="Low Stock Items"
+                    value={stats.lowStock}
+                    trend={-5}
+                    color="#ff9500"
+                    gradientFrom="#ff9500"
+                    gradientTo="#ff6b00"
+                />
+                <StatCard
+                    icon={<Users size={22} />}
+                    label="Active Users"
+                    value={stats.users}
+                    trend={15}
+                    color="#5e5ce6"
+                    gradientFrom="#5e5ce6"
+                    gradientTo="#4a4acb"
+                />
             </div>
 
             {/* Quick Access */}
-            <h3 style={styles.sectionTitle}>Quick Access</h3>
-            <div style={styles.accessGrid}>
-                <Link to="/admin/products" style={styles.accessCard}>
-                    <div style={styles.accessIcon}>
-                        <Package size={28} />
-                    </div>
-                    <h4 style={styles.accessTitle}>Products</h4>
-                    <p style={styles.accessDesc}>Manage Catalog</p>
-                </Link>
-
-                <Link to="/admin/inventory" style={styles.accessCard}>
-                    <div style={styles.accessIcon}>
-                        <Warehouse size={28} />
-                    </div>
-                    <h4 style={styles.accessTitle}>Inventory</h4>
-                    <p style={styles.accessDesc}>Update Stock</p>
-                </Link>
-
-                <Link to="/admin/orders" style={styles.accessCard}>
-                    <div style={styles.accessIcon}>
-                        <ShoppingBag size={28} />
-                    </div>
-                    <h4 style={styles.accessTitle}>Orders</h4>
-                    <p style={styles.accessDesc}>Process Orders</p>
-                </Link>
-
-                <Link to="/admin/users" style={styles.accessCard}>
-                    <div style={styles.accessIcon}>
-                        <Users size={28} />
-                    </div>
-                    <h4 style={styles.accessTitle}>Users</h4>
-                    <p style={styles.accessDesc}>Customer Details</p>
-                </Link>
-
-                <Link to="/admin/payment" style={styles.accessCard}>
-                    <div style={styles.accessIcon}>
-                        <CreditCard size={28} />
-                    </div>
-                    <h4 style={styles.accessTitle}>Payments</h4>
-                    <p style={styles.accessDesc}>Transactions</p>
-                </Link>
+            <h3 style={{ fontSize: '1.25rem', fontWeight: 600, color: '#1d1d1f', margin: '0 0 1rem 0' }}>Quick Access</h3>
+            <div style={styles.quickAccessGrid}>
+                {[
+                    { to: '/admin/products', icon: Package, title: 'Products', desc: 'Manage Catalog' },
+                    { to: '/admin/inventory', icon: Warehouse, title: 'Inventory', desc: 'Update Stock' },
+                    { to: '/admin/orders', icon: ShoppingBag, title: 'Orders', desc: 'Process Orders' },
+                    { to: '/admin/users', icon: Users, title: 'Users', desc: 'Customer Details' },
+                    { to: '/admin/payment', icon: CreditCard, title: 'Payments', desc: 'Transactions' }
+                ].map((item, idx) => (
+                    <Link
+                        key={idx}
+                        to={item.to}
+                        style={styles.accessCard}
+                        onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-4px)';
+                            e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.1)';
+                        }}
+                        onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 2px 12px rgba(0, 0, 0, 0.05)';
+                        }}
+                    >
+                        <div style={styles.accessIcon}>
+                            <item.icon size={24} />
+                        </div>
+                        <h4 style={styles.accessTitle}>{item.title}</h4>
+                        <p style={styles.accessDesc}>{item.desc}</p>
+                    </Link>
+                ))}
             </div>
         </div>
     );

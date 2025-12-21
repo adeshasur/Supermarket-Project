@@ -22,7 +22,6 @@ export default function CustomerCart() {
         padding: '20px',
         maxWidth: '600px',
         margin: '0 auto',
-        background: '#f2f2f7',
         minHeight: '100vh'
       }}>
 
