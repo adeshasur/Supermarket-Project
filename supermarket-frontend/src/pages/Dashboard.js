@@ -173,10 +173,36 @@ function Dashboard() {
     return (
         <div style={styles.container}>
             <div style={styles.header}>
-                <h1 style={styles.title}>Dashboard Overview</h1>
-                <p style={styles.subtitle}>
-                    📅 {currentDate} · Here is what's happening with your store today
-                </p>
+                <h1 style={styles.title}>Dashboard</h1>
+                <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    marginTop: '0.75rem'
+                }}>
+                    <div style={{
+                        background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)',
+                        color: 'white',
+                        padding: '0.5rem 1rem',
+                        borderRadius: '10px',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        boxShadow: '0 2px 8px rgba(0, 122, 255, 0.25)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem'
+                    }}>
+                        <span>📅</span>
+                        <span>{currentDate}</span>
+                    </div>
+                    <span style={{
+                        fontSize: '0.9375rem',
+                        color: '#86868b',
+                        fontWeight: 400
+                    }}>
+                        Here's your store overview
+                    </span>
+                </div>
             </div>
 
             {/* Stats Cards */}
