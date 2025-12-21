@@ -34,16 +34,31 @@ function Users() {
                     <UserForm onUserAdded={handleUserAdded} />
                 </div>
 
-                {/* Admin list */}
-                <div className="inventory-list-section">
-                    <h2>Admins</h2>
-                    <AdminList refreshKey={refreshKey} searchTerm={finalSearchTerm} />
-                </div>
+                {/* Tables container - stacked vertically */}
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '30px', minWidth: 0 }}>
+                    {/* Admin list */}
+                    <div style={{
+                        background: 'white',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                        border: '1px solid #e9ecef'
+                    }}>
+                        <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#1a1a1a' }}>Admins</h2>
+                        <AdminList refreshKey={refreshKey} searchTerm={finalSearchTerm} />
+                    </div>
 
-                {/* Customer list */}
-                <div className="inventory-list-section">
-                    <h2>Customers</h2>
-                    <UserList refreshKey={refreshKey} searchTerm={finalSearchTerm} />
+                    {/* Customer list */}
+                    <div style={{
+                        background: 'white',
+                        padding: '25px',
+                        borderRadius: '12px',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                        border: '1px solid #e9ecef'
+                    }}>
+                        <h2 style={{ marginTop: 0, marginBottom: '20px', color: '#1a1a1a' }}>Customers</h2>
+                        <UserList refreshKey={refreshKey} searchTerm={finalSearchTerm} />
+                    </div>
                 </div>
 
             </div>
