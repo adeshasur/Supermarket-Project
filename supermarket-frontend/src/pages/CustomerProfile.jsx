@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Edit2, Save, X, LogOut } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import CustomerSidebar from '../components/CustomerSidebar';
-import '../Styles/CustomerProfile.css';
 
 function CustomerProfile() {
   const navigate = useNavigate();
@@ -45,122 +44,134 @@ function CustomerProfile() {
   return (
     <>
       <CustomerSidebar />
-      <div className="customer-profile-page">
-        <div className="profile-container">
-          {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '30px' }}>
-            <button onClick={() => navigate('/customer-home')} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '15px', display: 'flex', alignItems: 'center' }}>
-              <ArrowLeft size={24} />
-            </button>
-            <h2 style={{ margin: 0, fontSize: '1.5rem', fontWeight: '600' }}>My Profile</h2>
-          </div>
+      <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto', marginLeft: '260px' }}>
 
-          {/* Profile Picture */}
-          <div className="profile-picture-section">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
-              alt="Customer"
-              className="profile-avatar-large"
-            />
-            {!isEditing && (
-              <>
-                <h2 className="profile-customer-name">{userData.name}</h2>
-                <p className="profile-customer-role">Customer</p>
-              </>
-            )}
-          </div>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '20px' }}>
+          <button onClick={() => navigate('/customer-home')} style={{ background: 'none', border: 'none', cursor: 'pointer', marginRight: '10px' }}>
+            <ArrowLeft size={24} />
+          </button>
+          <h2>My Profile</h2>
+        </div>
 
-          {/* Details Section */}
-          <div className="profile-details-section">
+        {/* Profile Picture */}
+        <div style={{ textAlign: 'center', marginBottom: '30px' }}>
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3135/3135768.png"
+            alt="Customer"
+            style={{
+              width: '120px',
+              height: '120px',
+              borderRadius: '50%',
+              border: '5px solid #16a34a'
+            }}
+          />
+          {!isEditing && (
+            <>
+              <h2 style={{ margin: '20px 0 5px 0' }}>{userData.name}</h2>
+              <p style={{ color: '#777' }}>Customer</p>
+            </>
+          )}
+        </div>
 
-            {/* Name Field */}
-            {isEditing && (
-              <div className="profile-field">
-                <label className="profile-label">Full Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={userData.name}
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-              </div>
-            )}
-
-            {/* Email Field */}
-            <div className="profile-field">
-              <label className="profile-label">Email Address</label>
-              {isEditing ? (
-                <input
-                  type="email"
-                  name="email"
-                  value={userData.email}
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-              ) : (
-                <div className="profile-read-only">{userData.email}</div>
-              )}
+        {/* Profile Form */}
+        <div>
+          {/* Name Field */}
+          {isEditing && (
+            <div style={{ marginBottom: '20px' }}>
+              <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Full Name</label>
+              <input
+                type="text"
+                name="name"
+                value={userData.name}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+              />
             </div>
+          )}
 
-            {/* Phone Field */}
-            <div className="profile-field">
-              <label className="profile-label">Phone Number</label>
-              {isEditing ? (
-                <input
-                  type="text"
-                  name="phone"
-                  value={userData.phone}
-                  onChange={handleChange}
-                  className="profile-input"
-                />
-              ) : (
-                <div className="profile-read-only">{userData.phone}</div>
-              )}
-            </div>
-
-            {/* Address Field */}
-            <div className="profile-field">
-              <label className="profile-label">Delivery Address</label>
-              {isEditing ? (
-                <textarea
-                  name="address"
-                  value={userData.address}
-                  onChange={handleChange}
-                  className="profile-textarea"
-                />
-              ) : (
-                <div className="profile-read-only">{userData.address}</div>
-              )}
-            </div>
-          </div>
-
-          {/* Action Buttons */}
-          <div className="profile-actions">
+          {/* Email Field */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Email Address</label>
             {isEditing ? (
-              <>
-                <button onClick={handleSave} className="profile-btn profile-btn-save">
-                  <Save size={18} />
-                  Save Changes
-                </button>
-                <button onClick={() => setIsEditing(false)} className="profile-btn profile-btn-cancel">
-                  <X size={18} />
-                  Cancel
-                </button>
-              </>
+              <input
+                type="email"
+                name="email"
+                value={userData.email}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+              />
             ) : (
-              <>
-                <button onClick={() => setIsEditing(true)} className="profile-btn profile-btn-edit">
-                  <Edit2 size={18} />
-                  Edit Profile
-                </button>
-                <button onClick={handleLogout} className="profile-btn profile-btn-logout">
-                  <LogOut size={18} />
-                  Logout
-                </button>
-              </>
+              <div style={{ padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>{userData.email}</div>
             )}
           </div>
+
+          {/* Phone Field */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Phone Number</label>
+            {isEditing ? (
+              <input
+                type="text"
+                name="phone"
+                value={userData.phone}
+                onChange={handleChange}
+                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd' }}
+              />
+            ) : (
+              <div style={{ padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>{userData.phone}</div>
+            )}
+          </div>
+
+          {/* Address Field */}
+          <div style={{ marginBottom: '20px' }}>
+            <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '8px' }}>Delivery Address</label>
+            {isEditing ? (
+              <textarea
+                name="address"
+                value={userData.address}
+                onChange={handleChange}
+                rows="3"
+                style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ddd', resize: 'vertical' }}
+              />
+            ) : (
+              <div style={{ padding: '10px', background: '#f9f9f9', borderRadius: '5px' }}>{userData.address}</div>
+            )}
+          </div>
+        </div>
+
+        {/* Action Buttons */}
+        <div style={{ marginTop: '30px', display: 'flex', gap: '15px' }}>
+          {isEditing ? (
+            <>
+              <button
+                onClick={handleSave}
+                style={{ flex: 1, padding: '12px', background: '#28a745', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                💾 Save Changes
+              </button>
+              <button
+                onClick={() => setIsEditing(false)}
+                style={{ flex: 1, padding: '12px', background: '#6c757d', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                ✖ Cancel
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={() => setIsEditing(true)}
+                style={{ flex: 1, padding: '12px', background: '#16a34a', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                ✏️ Edit Profile
+              </button>
+              <button
+                onClick={handleLogout}
+                style={{ flex: 1, padding: '12px', background: '#dc3545', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', fontWeight: 'bold' }}
+              >
+                🚪 Logout
+              </button>
+            </>
+          )}
         </div>
       </div>
     </>
