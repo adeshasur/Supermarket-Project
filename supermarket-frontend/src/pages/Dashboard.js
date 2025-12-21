@@ -1,159 +1,280 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Package, Warehouse, ShoppingBag, Users, CreditCard, TrendingUp, AlertTriangle } from 'lucide-react';
 import axios from 'axios';
 
 function Dashboard() {
-  // --- 1. Data States (Backend එකෙන් එන දත්ත) ---
-  const [stats, setStats] = useState({
-    income: 0,
-    orders: 0,
-    users: 0,
-    lowStock: 0
-  });
+    const [stats, setStats] = useState({
+        income: 0,
+        orders: 0,
+        users: 0,
+        lowStock: 0
+    });
 
-  const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true);
 
-  // --- Date Logic (අද දිනය) ---
-  const currentDate = new Date().toLocaleDateString('en-US', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+    const currentDate = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
 
-  // --- 2. Data Fetching Logic (FIXED) ---
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true);
 
-        // A. Orders Service (Port 8084)
-        const ordersRes = await axios.get('http://localhost:8084/api/orders');
-        const allOrders = ordersRes.data;
+                const ordersRes = await axios.get('http://localhost:8084/api/orders');
+                const allOrders = ordersRes.data;
 
-        // Income ගණනයට SUCCESSFUL Payment වූ Orders පමණක් ගන්නවා
-        const successfulOrders = allOrders.filter(order => order.paymentStatus === 'SUCCESS');
+                const successfulOrders = allOrders.filter(order => order.paymentStatus === 'SUCCESS');
+                const totalIncome = successfulOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
 
-        const totalIncome = successfulOrders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+                const inventoryRes = await axios.get('http://localhost:8082/api/inventory/all');
+                const inventoryItems = inventoryRes.data;
+                const lowStockCount = inventoryItems.filter(item => (item.quantity || 0) < 20).length;
 
-        // B. Inventory Service (Port 8082) for Low Stock Count
-        // Product Service වෙනුවට Inventory Service එකෙන් Stock ගන්නවා
-        const inventoryRes = await axios.get('http://localhost:8082/api/inventory/all');
-        const inventoryItems = inventoryRes.data;
+                const usersRes = await axios.get('http://localhost:8083/customers');
+                const userCount = usersRes.data.length;
 
-        // Stock 20ට අඩු Items ගණන් කරනවා
-        const lowStockCount = inventoryItems.filter(item => (item.quantity || 0) < 20).length;
+                setStats({
+                    income: totalIncome,
+                    orders: allOrders.length,
+                    lowStock: lowStockCount,
+                    users: userCount
+                });
 
-        // C. User Service (Port 8083)
-        const usersRes = await axios.get('http://localhost:8083/customers');
-        const userCount = usersRes.data.length;
+            } catch (error) {
+                console.error("Dashboard Data Loading Error:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
 
-        setStats({
-          income: totalIncome,
-          orders: allOrders.length,
-          lowStock: lowStockCount,
-          users: userCount
-        });
+        fetchData();
+    }, []);
 
-      } catch (error) {
-        console.error("Dashboard Data Loading Error:", error);
-      } finally {
-        setLoading(false);
-      }
+    const styles = {
+        container: {
+            padding: '2rem',
+            maxWidth: '1400px',
+            margin: '0 auto',
+            fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif'
+        },
+        header: {
+            marginBottom: '2.5rem'
+        },
+        title: {
+            fontSize: '2rem',
+            fontWeight: 600,
+            color: '#1d1d1f',
+            margin: '0 0 0.5rem 0',
+            letterSpacing: '-0.5px'
+        },
+        subtitle: {
+            fontSize: '0.9375rem',
+            color: '#86868b',
+            margin: 0,
+            fontWeight: 400
+        },
+        statsGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+            gap: '1.5rem',
+            marginBottom: '3rem'
+        },
+        statCard: {
+            background: 'white',
+            borderRadius: '16px',
+            padding: '1.75rem',
+            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.08)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            border: '0.5px solid rgba(0, 0, 0, 0.04)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '1.25rem'
+        },
+        statIcon: {
+            width: '56px',
+            height: '56px',
+            borderRadius: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+            color: 'white'
+        },
+        statLabel: {
+            fontSize: '0.875rem',
+            color: '#86868b',
+            margin: '0 0 0.5rem 0',
+            fontWeight: 500
+        },
+        statValue: {
+            fontSize: '1.875rem',
+            fontWeight: 600,
+            color: '#1d1d1f',
+            margin: 0,
+            letterSpacing: '-0.5px'
+        },
+        sectionTitle: {
+            fontSize: '1.375rem',
+            fontWeight: 600,
+            color: '#1d1d1f',
+            margin: '3rem 0 1.5rem 0',
+            letterSpacing: '-0.3px'
+        },
+        accessGrid: {
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+            gap: '1.25rem',
+            justifyItems: 'center'
+        },
+        accessCard: {
+            background: 'white',
+            borderRadius: '16px',
+            padding: '1.75rem 1.5rem',
+            textDecoration: 'none',
+            boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)',
+            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+            border: '0.5px solid rgba(0, 0, 0, 0.04)',
+            textAlign: 'center',
+            width: '100%',
+            maxWidth: '220px'
+        },
+        accessIcon: {
+            width: '60px',
+            height: '60px',
+            margin: '0 auto 1rem',
+            background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)',
+            borderRadius: '14px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            boxShadow: '0 4px 12px rgba(0, 122, 255, 0.25)'
+        },
+        accessTitle: {
+            fontSize: '1.125rem',
+            fontWeight: 600,
+            color: '#1d1d1f',
+            margin: '0 0 0.375rem 0',
+            letterSpacing: '-0.2px'
+        },
+        accessDesc: {
+            fontSize: '0.875rem',
+            color: '#86868b',
+            margin: 0,
+            fontWeight: 400
+        }
     };
 
-    fetchData();
-  }, []);
+    return (
+        <div style={styles.container}>
+            <div style={styles.header}>
+                <h1 style={styles.title}>Dashboard Overview</h1>
+                <p style={styles.subtitle}>
+                    📅 {currentDate} · Here is what's happening with your store today
+                </p>
+            </div>
 
-  // --- Styles Objects (Dark Mode Compatible) ---
-  const statCardStyle = {
-    background: 'var(--card-bg)',
-    padding: '20px',
-    borderRadius: '10px',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.05)',
-    flex: 1,
-    minWidth: '200px',
-    textAlign: 'center',
-    color: 'var(--text-color)'
-  };
+            {/* Stats Cards */}
+            <div style={styles.statsGrid}>
+                <div style={styles.statCard}>
+                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #30d158 0%, #28a745 100%)', boxShadow: '0 4px 12px rgba(48, 209, 88, 0.25)' }}>
+                        <TrendingUp size={24} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={styles.statLabel}>Total Income</p>
+                        <h2 style={styles.statValue}>
+                            Rs. {loading ? '...' : stats.income.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </h2>
+                    </div>
+                </div>
 
-  return (
-    <div>
-      <h1 className="page-title" style={{ marginBottom: '5px' }}>Dashboard Overview</h1>
+                <div style={styles.statCard}>
+                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #007aff 0%, #0051d5 100%)', boxShadow: '0 4px 12px rgba(0, 122, 255, 0.25)' }}>
+                        <ShoppingBag size={24} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={styles.statLabel}>Total Orders</p>
+                        <h2 style={styles.statValue}>
+                            {loading ? '...' : stats.orders}
+                        </h2>
+                    </div>
+                </div>
 
-      <p style={{ marginTop: '0', marginBottom: '30px', color: 'var(--text-color)', opacity: 0.7, fontSize: '0.95rem' }}>
-        📅 {currentDate} &nbsp;|&nbsp; Here is what's happening with your store today.
-      </p>
+                <div style={styles.statCard}>
+                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #ff9500 0%, #ff6b00 100%)', boxShadow: '0 4px 12px rgba(255, 149, 0, 0.25)' }}>
+                        <AlertTriangle size={24} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={styles.statLabel}>Low Stock Items</p>
+                        <h2 style={styles.statValue}>
+                            {loading ? '...' : stats.lowStock}
+                        </h2>
+                    </div>
+                </div>
 
-      {/* ================= STATS CARDS SECTION (Dynamic Data) ================= */}
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '40px', flexWrap: 'wrap' }}>
+                <div style={styles.statCard}>
+                    <div style={{ ...styles.statIcon, background: 'linear-gradient(135deg, #5e5ce6 0%, #4a4acb 100%)', boxShadow: '0 4px 12px rgba(94, 92, 230, 0.25)' }}>
+                        <Users size={24} />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <p style={styles.statLabel}>Active Users</p>
+                        <h2 style={styles.statValue}>
+                            {loading ? '...' : stats.users}
+                        </h2>
+                    </div>
+                </div>
+            </div>
 
-        {/* Total Income */}
-        <div style={{ ...statCardStyle, borderTop: '4px solid #28a745' }}>
-          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Total Income</h3>
-          <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#28a745' }}>
-            Rs. {loading ? '...' : stats.income.toLocaleString(undefined, { minimumFractionDigits: 2 })}
-          </h2>
+            {/* Quick Access */}
+            <h3 style={styles.sectionTitle}>Quick Access</h3>
+            <div style={styles.accessGrid}>
+                <Link to="/admin/products" style={styles.accessCard}>
+                    <div style={styles.accessIcon}>
+                        <Package size={28} />
+                    </div>
+                    <h4 style={styles.accessTitle}>Products</h4>
+                    <p style={styles.accessDesc}>Manage Catalog</p>
+                </Link>
+
+                <Link to="/admin/inventory" style={styles.accessCard}>
+                    <div style={styles.accessIcon}>
+                        <Warehouse size={28} />
+                    </div>
+                    <h4 style={styles.accessTitle}>Inventory</h4>
+                    <p style={styles.accessDesc}>Update Stock</p>
+                </Link>
+
+                <Link to="/admin/orders" style={styles.accessCard}>
+                    <div style={styles.accessIcon}>
+                        <ShoppingBag size={28} />
+                    </div>
+                    <h4 style={styles.accessTitle}>Orders</h4>
+                    <p style={styles.accessDesc}>Process Orders</p>
+                </Link>
+
+                <Link to="/admin/users" style={styles.accessCard}>
+                    <div style={styles.accessIcon}>
+                        <Users size={28} />
+                    </div>
+                    <h4 style={styles.accessTitle}>Users</h4>
+                    <p style={styles.accessDesc}>Customer Details</p>
+                </Link>
+
+                <Link to="/admin/payment" style={styles.accessCard}>
+                    <div style={styles.accessIcon}>
+                        <CreditCard size={28} />
+                    </div>
+                    <h4 style={styles.accessTitle}>Payments</h4>
+                    <p style={styles.accessDesc}>Transactions</p>
+                </Link>
+            </div>
         </div>
-
-        {/* Total Orders */}
-        <div style={{ ...statCardStyle, borderTop: '4px solid #007aff' }}>
-          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Total Orders</h3>
-          <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#007aff' }}>
-            {loading ? '...' : stats.orders}
-          </h2>
-        </div>
-
-        {/* Low Stock Items */}
-        <div style={{ ...statCardStyle, borderTop: '4px solid #dc3545' }}>
-          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Low Stock Items</h3>
-          <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#dc3545' }}>
-            {loading ? '...' : stats.lowStock}
-          </h2>
-        </div>
-
-        {/* Active Users */}
-        <div style={{ ...statCardStyle, borderTop: '4px solid #ffc107' }}>
-          <h3 style={{ margin: 0, color: 'var(--text-color)', fontSize: '0.9rem', opacity: 0.8 }}>Active Users</h3>
-          <h2 style={{ margin: '10px 0', fontSize: '2rem', color: '#ffc107' }}>
-            {loading ? '...' : stats.users}
-          </h2>
-        </div>
-
-      </div>
-
-      {/* ================= NAVIGATION CARDS (Quick Access Links Fixed) ================= */}
-      <h3 style={{ marginBottom: '20px', color: 'var(--text-color)' }}>Quick Access</h3>
-      <div className="dashboard-grid">
-        {/* ✅ FIX: /admin prefix එක එකතු කළා */}
-        <Link to="/admin/products" className="card">
-          <h2>📦</h2>
-          <h3>Products</h3>
-          <p>Manage Catalog</p>
-        </Link>
-        <Link to="/admin/inventory" className="card">
-          <h2>📋</h2>
-          <h3>Inventory</h3>
-          <p>Update Stock</p>
-        </Link>
-        <Link to="/admin/orders" className="card">
-          <h2>🛒</h2>
-          <h3>Orders</h3>
-          <p>Process Orders</p>
-        </Link>
-        <Link to="/admin/users" className="card">
-          <h2>👥</h2>
-          <h3>Users</h3>
-          <p>Customer Details</p>
-        </Link>
-        <Link to="/admin/payment" className="card">
-          <h2>💳</h2>
-          <h3>Payments</h3>
-          <p>Transactions</p>
-        </Link>
-      </div>
-    </div>
-  );
+    );
 }
 
 export default Dashboard;
